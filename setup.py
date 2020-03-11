@@ -1,0 +1,38 @@
+"""Setup"""
+
+import setuptools
+
+from os import path
+
+with open("README.md", "r") as fh:
+    long_description = fh.read()
+
+def get_package_version():
+    """Read the version of the package.
+    See https://packaging.python.org/guides/single-sourcing-package-version
+    """
+    version_exports = {}
+    file_directory = path.abspath(path.dirname(__file__))
+    with open(path.join(file_directory, "atotijdk", "version.py")) as file:
+        exec(file.read(), version_exports)  # pylint: disable=exec-used
+    return version_exports["VERSION"]
+
+setuptools.setup(
+    name="atoti-jdk",
+    version = get_package_version(),
+    author="ActiveViam",
+    author_email = 'dev@atoti.io',
+    description = 'Packaged JDK for atoti',
+    long_description=long_description,
+    long_description_content_type="text/markdown",
+    url="https://github.com/atoti/atoti-jdk",
+    packages=setuptools.find_packages(exclude=["tests"]),
+    package_data={"atotijdk": ["java-runtime/*/*/*/*/*"]},
+    classifiers=[
+        "Programming Language :: Python :: 3",
+        "Operating System :: OS Independent",
+        "Development Status :: 4 - Beta",
+    ],
+    keywords = ['atoti', 'jdk', 'java', 'jvm'], 
+    python_requires='>=3.7',
+)
