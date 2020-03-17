@@ -8,6 +8,7 @@ setuptools = "*"
 twine = "*"
 wheel = "*"
 pytest = "*"
+atomicwrites = "*"
 
 [requires]
 python_version = "3.8"

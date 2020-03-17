@@ -2,6 +2,9 @@
 
 This is a packaged JDK for Atoti.
 
+[![PyPI version](https://badge.fury.io/py/atoti-jdk.svg)](https://badge.fury.io/py/atoti-jdk)  
+
+
 ## Use the library
 
 ```bash

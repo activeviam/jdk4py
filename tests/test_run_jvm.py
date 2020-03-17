@@ -18,6 +18,6 @@ def test_run_hello_world_jar():
     path = Path(__file__).parent / "resources" / "hello.jar"
     process = java_run(path.absolute(), stdout=PIPE, stderr=PIPE)
     out, err = process.communicate()
-    assert out == b"Hello, World\n"
+    assert out == b"Hello, World\n" or out == b"Hello, World\r\n"
     assert err == b""
     assert process.returncode == 0

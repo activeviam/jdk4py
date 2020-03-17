@@ -1,4 +1,4 @@
-name: Test and deploy
+name: Test and deploy - MacOS
 on:
   push:
     branches:
@@ -6,11 +6,8 @@ on:
 
 jobs:
   build:
-    strategy:
-      matrix:
-        os: ["ubuntu-latest", "macOS-latest", "windows-latest"]
-    runs-on: ${{ matrix.os }}
-    name: Deployment on ${{ matrix.os }}
+    runs-on: macos-latest
+    name: Deployment on MacOS
     steps:
       - uses: actions/checkout@v1
       - uses: actions/setup-python@v1
@@ -23,16 +20,8 @@ jobs:
           java-package: jdk # (jre, jdk, or jdk+fx) - defaults to jdk
           architecture: x64
 
-      # Install pipenv
-      - if: matrix.os == 'ubuntu-latest'
-        name: Install pipenv Linux
+      - name: Install pipenv Linux
         run: pip3 install pipenv
-      - if: matrix.os == 'windows-latest'
-        name: Install pipenv Windows
-        run: pip install pipenv
-      - if: matrix.os == 'macOS-latest'
-        name: Install pipenv MacOS
-        run: brew install pipenv
 
       - name: Build JDK
         run: jlink --no-header-files --no-man-pages --compress=2 --strip-debug --add-modules java.se,jdk.unsupported --output atotijdk/java-runtime
@@ -43,15 +32,7 @@ jobs:
       - name: Test
         run: pipenv run pytest
 
-      # Build wheel
-      - if: matrix.os == 'ubuntu-latest'
-        name: Build Linux wheel
-        run: pipenv run python setup.py bdist_wheel --plat-name manylinux1_x86_64
-      - if: matrix.os == 'windows-latest'
-        name: Build Windows wheel
-        run: pipenv run python setup.py bdist_wheel --plat-name win_amd64
-      - if: matrix.os == 'macOS-latest'
-        name: Build MacOS wheel
+      - name: Build MacOS wheel
         run: pipenv run python setup.py bdist_wheel --plat-name macosx_10_9_x86_64
 
       - name: Deploy to Pypi
