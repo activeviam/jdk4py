@@ -11,9 +11,17 @@ This is a packaged JDK for Atoti.
 pip install atoti-jdk
 ```
 
+Launch a JAR
+
 ```python
 from atotijdk import java
 java("myJar.jar")
+```
+
+Additional JVM and Popen arguments can be passed.
+
+```python
+java_run("myJar.jar", jvm_args=["-xmx=16G"], stdout=PIPE, stderr=PIPE)
 ```
 
 ## Build, test and deploy

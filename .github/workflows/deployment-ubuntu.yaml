@@ -19,6 +19,8 @@ jobs:
           java-version: "11.0.2"
           java-package: jdk # (jre, jdk, or jdk+fx) - defaults to jdk
           architecture: x64
+      - name: Java check
+        run: java --version 
 
       - name: Install pipenv Linux
         run: pip3 install pipenv
