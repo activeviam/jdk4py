@@ -1,25 +1,25 @@
-# Atoti JDK
+# Jdk4py
 
-This is a packaged JDK for Atoti.
+This is a packaged JDK for Python.
 
-[![PyPI version](https://badge.fury.io/py/atoti-jdk.svg)](https://badge.fury.io/py/atoti-jdk)  
+[![PyPI version](https://badge.fury.io/py/jdk4py.svg)](https://badge.fury.io/py/jdk4py)  
 
 
 ## Use the library
 
 ```bash
-pip install atoti-jdk
+pip install jdk4py
 ```
 
 Launch a JAR
 
 ```python
-from atotijdk import java
-java("myJar.jar")
+from jdk4py import java_jar
+java_jar("myJar.jar")
 ```
 
 Some JVM arguments can be provided, any additional argument will be passed to Popen:
 
 ```python
-java_run("myJar.jar", jvm_args=["-xmx=16G"], stdout=PIPE, stderr=PIPE)
+java_jar("myJar.jar", jvm_args=["-xmx=16G"], stdout=PIPE, stderr=PIPE)
 ```

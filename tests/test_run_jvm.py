@@ -13,10 +13,10 @@ def test_run_hello_world_jar():
         jar cfe resources/hello.jar resources.HelloWorld resources/HelloWorld.class
         jar tf resources/hello.jar
     """
-    from atotijdk import java_run
+    from jdk4py import java_jar
 
     path = Path(__file__).parent / "resources" / "hello.jar"
-    process = java_run(path.absolute(), stdout=PIPE, stderr=PIPE)
+    process = java_jar(path.absolute(), stdout=PIPE, stderr=PIPE)
     out, err = process.communicate()
     assert out == b"Hello, World\n" or out == b"Hello, World\r\n"
     assert err == b""

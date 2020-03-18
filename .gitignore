@@ -1,0 +1,10 @@
+# Python
+build
+dist
+*.egg-info
+
+# Java
+java-runtime
+
+# IDE
+.vscode
