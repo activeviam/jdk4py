@@ -6,8 +6,13 @@ from subprocess import Popen
 
 from .version import VERSION as __version__
 
-PACKAGED_JAVA_HOME = Path(__file__).parent.absolute() /  "java-runtime"
-PACKAGED_JAVA = PACKAGED_JAVA_HOME  / "bin" / "java"
+_PARENT = Path(__file__).parent
+
+JAVA_HOME = _PARENT.absolute() /  "java-runtime"
+JAVA = JAVA_HOME  / "bin" / "java"
+
+with open(_PARENT / "java_version") as f:
+    JAVA_VERSION = f.read()
 
 def java_jar(
     jar_path: Union[Path, str],
@@ -18,11 +23,9 @@ def java_jar(
 
     Args:
         jar_path: The path to the jar
-        jvm_args: The JVM arguments
+        jvm_args: The JVM arguments, for instance ["-Xmx16G", "-Xms2G"]
         popen_args: Additional arguments to pass to the Popen
     """
     if jvm_args is None:
         jvm_args = []
-    return Popen(
-        [PACKAGED_JAVA, "-jar", jar_path, *jvm_args], **popen_args
-    )
+    return Popen([JAVA, "-jar", jar_path, *jvm_args], **popen_args)

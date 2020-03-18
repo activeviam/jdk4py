@@ -19,17 +19,14 @@ jobs:
           java-version: "11.0.2"
           java-package: jdk # (jre, jdk, or jdk+fx) - defaults to jdk
           architecture: x64
-      - name: Java check
-        run: java --version 
-
       - name: Install pipenv Linux
         run: pip3 install pipenv
 
-      - name: Build JDK
-        run: jlink --no-header-files --no-man-pages --compress=2 --strip-debug --add-modules java.se,jdk.unsupported --output jdk4py/java-runtime
-
       - name: Install python dependencies
         run: pipenv install --dev --python 3.8
+
+      - name: Build JDK
+        run: pipenv run python scripts/build_jdk.py
 
       - name: Test
         run: pipenv run pytest

@@ -2,6 +2,7 @@
 
 from pathlib import Path
 from subprocess import PIPE
+from jdk4py import java_jar
 
 def test_run_hello_world_jar():
     """Test running the JDK with a hello world JAR.
@@ -13,7 +14,6 @@ def test_run_hello_world_jar():
         jar cfe resources/hello.jar resources.HelloWorld resources/HelloWorld.class
         jar tf resources/hello.jar
     """
-    from jdk4py import java_jar
 
     path = Path(__file__).parent / "resources" / "hello.jar"
     process = java_jar(path.absolute(), stdout=PIPE, stderr=PIPE)
