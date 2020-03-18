@@ -10,7 +10,7 @@ JAVA_PATH = PROJECT_FOLDER / "jdk4py" / "java-runtime"
 
 
 def main():
-    rmtree(JAVA_PATH)
+    rmtree(JAVA_PATH, ignore_errors=True)
     process = Popen(
         [
             "jlink",
