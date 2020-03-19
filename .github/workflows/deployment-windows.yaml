@@ -33,7 +33,9 @@ jobs:
         run: pipenv run pytest
 
       - name: Build Windows wheel
-        run: pipenv run python setup.py bdist_wheel --plat-name win_amd64
+        env:
+          PLATFORM: windows-latest
+        run: pipenv run python setup.py bdist_wheel
 
       - name: Deploy to Pypi
         env:

@@ -2,9 +2,9 @@
 
 import glob
 import setuptools
+import sys
 
-from distutils.dir_util import copy_tree
-from os import path, walk
+from os import path, environ
 from pathlib import Path
 
 _NAME = "jdk4py"
@@ -31,6 +31,18 @@ def get_java_files():
             recursive=True
         )
     ]
+
+_PLATFORMS = {
+    "macos-latest": "macosx_10_9_x86_64",
+    "ubuntu-latest": "manylinux1_x86_64",
+    "windows-latest": "win_amd64"
+}
+
+if "--plat-name" not in sys.argv:
+    machine = environ["PLATFORM"]
+    platform = _PLATFORMS[machine]
+    sys.argv.append("--plat-name")
+    sys.argv.append(platform)
 
 setuptools.setup(
     name=_NAME,
