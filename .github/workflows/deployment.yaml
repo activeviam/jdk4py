@@ -10,7 +10,7 @@ jobs:
     strategy:
       matrix:
         os: [macos-latest, windows-latest, ubuntu-latest]
-        java: ["11.0.6"]
+        java: ["11.0.5"]
       fail-fast: false # To not cancel other platforms when one fails
     name: Deploy JDK ${{ matrix.java }} on ${{ matrix.os }}
     steps:

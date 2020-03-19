@@ -8,6 +8,8 @@ from os import path, environ
 from pathlib import Path
 
 _NAME = "jdk4py"
+_PROJECT_DIR = Path(__file__).parent
+
 
 with open("README.md", "r") as fh:
     long_description = fh.read()
@@ -18,10 +20,12 @@ def get_package_version():
     """Read the version of the package.
     See https://packaging.python.org/guides/single-sourcing-package-version
     """
-    version_exports = {}
-    with open(path.join(file_directory, _NAME, "version.py")) as file:
-        exec(file.read(), version_exports)  # pylint: disable=exec-used
-    return version_exports["VERSION"]
+    with open(_PROJECT_DIR / _NAME / "java_version") as f:
+        java_version = f.read()
+
+    with open(_PROJECT_DIR / _NAME / "version") as f:
+        lib_version = f.read()
+    return f"{java_version}.{lib_version}"
 
 def get_java_files():
     return [
@@ -54,7 +58,7 @@ setuptools.setup(
     long_description_content_type="text/markdown",
     url="https://github.com/atoti/jdk4py",
     packages=setuptools.find_packages(exclude=["tests"]),
-    package_data={_NAME: [ *get_java_files(), "java_version"] },
+    package_data={_NAME: [ *get_java_files(), "java_version", "version"] },
     classifiers=[
         "Programming Language :: Python :: 3",
         "Operating System :: OS Independent",

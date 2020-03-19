@@ -4,8 +4,6 @@ from typing import Union, List, Optional, Any
 from pathlib import Path
 from subprocess import Popen
 
-from .version import VERSION as __version__
-
 _PARENT = Path(__file__).parent
 
 JAVA_HOME = _PARENT.absolute() /  "java-runtime"
@@ -13,6 +11,11 @@ JAVA = JAVA_HOME  / "bin" / "java"
 
 with open(_PARENT / "java_version") as f:
     JAVA_VERSION = f.read()
+
+with open(_PARENT / "version") as f:
+    LIB_VERSION = f.read()
+
+__version__ = f"{JAVA_VERSION}.{LIB_VERSION}"
 
 def java(
     java_args: List[str],
