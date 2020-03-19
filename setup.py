@@ -42,7 +42,7 @@ setuptools.setup(
     long_description_content_type="text/markdown",
     url="https://github.com/atoti/jdk4py",
     packages=setuptools.find_packages(exclude=["tests"]),
-    package_data={_NAME: get_java_files()},
+    package_data={_NAME: [ *get_java_files(), "java_version"] },
     classifiers=[
         "Programming Language :: Python :: 3",
         "Operating System :: OS Independent",

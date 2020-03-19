@@ -2,7 +2,7 @@
 
 from pathlib import Path
 from subprocess import PIPE
-from jdk4py import java_jar
+from jdk4py import execute_jar
 
 def test_run_hello_world_jar():
     """Test running the JDK with a hello world JAR.
@@ -16,7 +16,7 @@ def test_run_hello_world_jar():
     """
 
     path = Path(__file__).parent / "resources" / "hello.jar"
-    process = java_jar(path.absolute(), stdout=PIPE, stderr=PIPE)
+    process = execute_jar(path.absolute(), stdout=PIPE, stderr=PIPE)
     out, err = process.communicate()
     assert out == b"Hello, World\n" or out == b"Hello, World\r\n"
     assert err == b""

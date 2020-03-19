@@ -14,7 +14,24 @@ JAVA = JAVA_HOME  / "bin" / "java"
 with open(_PARENT / "java_version") as f:
     JAVA_VERSION = f.read()
 
-def java_jar(
+def java(
+    java_args: List[str],
+    **popen_args: Any,
+) -> Popen:
+    """Run a java process with the given arguments.
+
+    Args:
+        jvm_args: The java arguments, for instance ["HelloWorls.class", "-Xmx16G"]
+        popen_args: Additional arguments to pass to the Popen
+
+    Returns:
+        The Popen process
+    """
+    return Popen([JAVA, *java_args], **popen_args)
+
+
+
+def execute_jar(
     jar_path: Union[Path, str],
     jvm_args: Optional[List[str]] = None,
     **popen_args: Any,
@@ -25,7 +42,11 @@ def java_jar(
         jar_path: The path to the jar
         jvm_args: The JVM arguments, for instance ["-Xmx16G", "-Xms2G"]
         popen_args: Additional arguments to pass to the Popen
+
+    Returns:
+        The Popen process
     """
     if jvm_args is None:
         jvm_args = []
-    return Popen([JAVA, "-jar", jar_path, *jvm_args], **popen_args)
+    return java(["-jar", str(jar_path), *jvm_args], **popen_args)
+

@@ -24,7 +24,7 @@ jobs:
         run: pip install pipenv
 
       - name: Install python dependencies
-        run: pipenv install --dev --python 3.8
+        run: pipenv install --dev --python 3.8 -v
 
       - name: Build JDK
         run: pipenv run python scripts/build_jdk.py

@@ -17,14 +17,14 @@ pip install jdk4py
 ### Execute a JAR
 
 ```python
-from jdk4py import java_jar
-java_jar("myJar.jar")
+from jdk4py import execute_jar
+execute_jar("myJar.jar")
 ```
 
 Some JVM arguments can be provided, any additional argument will be passed to Popen:
 
 ```python
-java_jar("myJar.jar", jvm_args=["-xmx=16G"], stdout=PIPE, stderr=PIPE)
+execute_jar("myJar.jar", jvm_args=["-xmx=16G"], stdout=PIPE, stderr=PIPE)
 ```
 
 ### Java home and executable
