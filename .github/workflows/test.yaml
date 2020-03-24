@@ -1,6 +1,6 @@
-name: Test and deploy
+name: Test
 on:
-  push:
+  pull_request:
     branches:
       - master
 
@@ -12,7 +12,7 @@ jobs:
         os: [macos-latest, windows-latest, ubuntu-latest]
         java: ["11.0.5"]
       fail-fast: false # To not cancel other platforms when one fails
-    name: Deploy JDK ${{ matrix.java }} on ${{ matrix.os }}
+    name: Test JDK ${{ matrix.java }} on ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v1
       - uses: actions/setup-python@v1
@@ -24,7 +24,7 @@ jobs:
           java-version: ${{ matrix.java }}
           java-package: jdk # (jre, jdk, or jdk+fx) - defaults to jdk
           architecture: x64
-
+      
       # Install pipenv
       - if: matrix.os == 'windows-latest'
         name: Install pipenv [Windows]
@@ -42,19 +42,5 @@ jobs:
       - name: Build JDK
         run: pipenv run python scripts/build_jdk.py
 
-      - name: Build wheel
-        env:
-          PLATFORM: ${{ matrix.os }}
-        run: pipenv run python setup.py bdist_wheel
-
-      # Deploy to Pypi
-      - if: matrix.os == 'windows-latest'
-        name: Deploy to Pypi [Windows]
-        env:
-          TWINE_PASSWORD: ${{ secrets.TWINE_PASSWORD }}
-        run: pipenv run twine upload dist/* --username __token__ --password ${env:TWINE_PASSWORD}
-      - if: matrix.os != 'windows-latest'
-        name: Deploy to Pypi [Ubuntu/Macos]
-        env:
-          TWINE_PASSWORD: ${{ secrets.TWINE_PASSWORD }}
-        run: pipenv run twine upload dist/* --username __token__ --password $TWINE_PASSWORD
+      - name: Test
+        run: pipenv run pytest
