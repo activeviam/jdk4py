@@ -21,7 +21,7 @@ def main():
             "--add-modules",
             "java.se,jdk.unsupported",
             "--output",
-            JAVA_PATH
+            str(JAVA_PATH)
         ],
         stdout=PIPE,
         stderr=PIPE)
