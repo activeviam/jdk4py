@@ -42,7 +42,7 @@ _PLATFORMS = {
     "windows-latest": "win_amd64"
 }
 
-if "--plat-name" not in sys.argv:
+if "--plat-name" not in sys.argv and "PLATFORM" in environ:
     machine = environ["PLATFORM"]
     platform = _PLATFORMS[machine]
     sys.argv.append("--plat-name")
@@ -65,5 +65,5 @@ setuptools.setup(
         "Development Status :: 4 - Beta",
     ],
     keywords = ['jdk', 'java', 'jvm', 'jre'], 
-    python_requires='>=3.7',
+    python_requires='>=3.6',
 )
