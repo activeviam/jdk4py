@@ -10,7 +10,7 @@ jobs:
     strategy:
       matrix:
         os: [macos-latest, windows-latest, ubuntu-latest]
-        java: ["11.0.5"]
+        java: ["11.0.7"]
       fail-fast: false # To not cancel other platforms when one fails
     name: Deploy JDK ${{ matrix.java }} on ${{ matrix.os }}
     steps:
@@ -40,9 +40,7 @@ jobs:
         run: pipenv run python scripts/set_version.py ${{ matrix.java }}
 
       - if: matrix.os == 'ubuntu-latest'
-        name: Build wheel
-        env:
-          PLATFORM: ${{ matrix.os }}
+        name: Build source wheel
         run: pipenv run python setup.py sdist
 
       - name: Build JDK
