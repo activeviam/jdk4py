@@ -39,6 +39,12 @@ jobs:
       - name: Set Java version
         run: pipenv run python scripts/set_version.py ${{ matrix.java }}
 
+      - if: matrix.os == 'ubuntu-latest'
+        name: Build wheel
+        env:
+          PLATFORM: ${{ matrix.os }}
+        run: pipenv run python setup.py sdist
+
       - name: Build JDK
         run: pipenv run python scripts/build_jdk.py
 

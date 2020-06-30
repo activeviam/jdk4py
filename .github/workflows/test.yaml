@@ -10,7 +10,7 @@ jobs:
     strategy:
       matrix:
         os: [macos-latest, windows-latest, ubuntu-latest]
-        java: ["11.0.5"]
+        java: ["11.0.7"]
         python: ["3.6", "3.7", "3.8"]
       fail-fast: false # To not cancel other platforms when one fails
     name: Test JDK ${{ matrix.java }} on ${{ matrix.os }} with Python ${{ matrix.python }}
