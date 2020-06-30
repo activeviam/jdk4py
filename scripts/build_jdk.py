@@ -19,7 +19,7 @@ def main():
             "--compress=2",
             "--strip-debug",
             "--add-modules",
-            "java.se,jdk.unsupported",
+            "java.se,jdk.unsupported,jdk.security.auth",
             "--output",
             str(JAVA_PATH)
         ],
