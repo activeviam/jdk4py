@@ -13,6 +13,8 @@ jobs:
         python: ["3.6", "3.7", "3.8"]
       fail-fast: false # To not cancel other platforms when one fails
     name: Test on ${{ matrix.os }} with Python ${{ matrix.python }}
+    env:
+      CONDA_REPO: https://activeviam.jfrog.io/artifactory/jdk4py-conda-release
     steps:
       - uses: actions/checkout@v1
 
@@ -22,7 +24,7 @@ jobs:
           architecture: "x64"
 
       - name: Set Java version
-        run: python scripts/set_java_version.py
+        run: python scripts/set_versions.py
 
       - uses: actions/setup-java@v1
         with:

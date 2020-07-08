@@ -16,6 +16,7 @@ _PROJECT_DIR = Path(__file__).parent
 
 _JAVA_VERSION_FILENAME = "java_version.txt"
 _LIB_VERSION_FILENAME = "lib_version.txt"
+_PLATFORM_ENV_VARIABLE = "JDK4PY_BUILD_PLATFORM"
 
 _VERSION = ".".join(
     [
@@ -30,8 +31,8 @@ _PLATFORMS = {
     "windows-latest": "win_amd64",
 }
 
-if "--plat-name" not in sys.argv and "PLATFORM" in environ:
-    machine = environ["PLATFORM"]
+if "--plat-name" not in sys.argv and _PLATFORM_ENV_VARIABLE in environ:
+    machine = environ[_PLATFORM_ENV_VARIABLE]
     platform = _PLATFORMS[machine]
     sys.argv.append("--plat-name")
     sys.argv.append(platform)
