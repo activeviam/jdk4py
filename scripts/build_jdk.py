@@ -8,6 +8,7 @@ from shutil import rmtree
 PROJECT_FOLDER = Path(__file__).parent.parent
 JAVA_PATH = PROJECT_FOLDER / "jdk4py" / "java-runtime"
 
+_MODULES = ["java.se","jdk.unsupported","jdk.security.auth","jdk.crypto.ec"]
 
 def main():
     rmtree(JAVA_PATH, ignore_errors=True)
@@ -19,7 +20,7 @@ def main():
             "--compress=2",
             "--strip-debug",
             "--add-modules",
-            "java.se,jdk.unsupported,jdk.security.auth",
+            ",".join(_MODULES),
             "--output",
             str(JAVA_PATH)
         ],
