@@ -4,14 +4,14 @@ from typing import Union, List, Optional, Any
 from pathlib import Path
 from subprocess import Popen
 
-_PARENT = Path(__file__).parent
+_PACKAGE_DIRECTORY = Path(__file__).parent
 
-JAVA_HOME = _PARENT.absolute() / "java-runtime"
+JAVA_HOME = _PACKAGE_DIRECTORY.absolute() / "java-runtime"
 JAVA = JAVA_HOME / "bin" / "java"
 
 JAVA_VERSION, LIB_VERSION = (
-    (_PARENT / filename).read_text().strip()
-    for filename in ["java_version.txt", "lib_version.txt"]
+    (_PACKAGE_DIRECTORY / filename).read_text().strip()
+    for filename in ("java_version.txt", "lib_version.txt")
 )
 
 __version__ = ".".join((JAVA_VERSION, LIB_VERSION))

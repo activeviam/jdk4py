@@ -10,19 +10,23 @@ jobs:
     strategy:
       matrix:
         os: [macos-latest, windows-latest, ubuntu-latest]
-        java: ["11.0.7"]
         python: ["3.6", "3.7", "3.8"]
       fail-fast: false # To not cancel other platforms when one fails
-    name: Test JDK ${{ matrix.java }} on ${{ matrix.os }} with Python ${{ matrix.python }}
+    name: Test on ${{ matrix.os }} with Python ${{ matrix.python }}
     steps:
       - uses: actions/checkout@v1
+
       - uses: actions/setup-python@v1
         with:
           python-version: ${{ matrix.python }}
           architecture: "x64"
+
+      - name: Set Java version
+        run: python scripts/set_java_version.py
+
       - uses: actions/setup-java@v1
         with:
-          java-version: ${{ matrix.java }}
+          java-version: ${{ env.JAVA_VERSION }}
           java-package: jdk # (jre, jdk, or jdk+fx) - defaults to jdk
           architecture: x64
 
@@ -35,10 +39,7 @@ jobs:
         run: pip3 install pipenv
 
       - name: Install python dependencies
-        run: pipenv install --dev --python ${{ matrix.python }} -v
-
-      - name: Set Java version
-        run: pipenv run python scripts/set_version.py ${{ matrix.java }}
+        run: pipenv install --dev --python ${{ matrix.python }} --verbose
 
       - name: Build JDK
         run: pipenv run python scripts/build_jdk.py
