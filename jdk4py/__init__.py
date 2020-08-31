@@ -6,32 +6,31 @@ from subprocess import Popen
 
 _PARENT = Path(__file__).parent
 
-JAVA_HOME = _PARENT.absolute() /  "java-runtime"
-JAVA = JAVA_HOME  / "bin" / "java"
+JAVA_HOME = _PARENT.absolute() / "java-runtime"
+JAVA = JAVA_HOME / "bin" / "java"
 
-with open(_PARENT / "java_version") as f:
-    JAVA_VERSION = f.read()
+JAVA_VERSION, LIB_VERSION = (
+    (_PARENT / filename).read_text().strip()
+    for filename in ["java_version.txt", "lib_version.txt"]
+)
 
-with open(_PARENT / "version") as f:
-    LIB_VERSION = f.read()
+__version__ = ".".join((JAVA_VERSION, LIB_VERSION))
 
-__version__ = f"{JAVA_VERSION}.{LIB_VERSION}"
 
 def java(
     java_args: List[str],
     **popen_args: Any,
 ) -> Popen:
-    """Run a java process with the given arguments.
+    """Run a Java process with the given arguments.
 
     Args:
-        jvm_args: The java arguments, for instance ["HelloWorls.class", "-Xmx16G"]
+        jvm_args: The Java arguments, for instance ["HelloWorls.class", "-Xmx16G"]
         popen_args: Additional arguments to pass to the Popen
 
     Returns:
         The Popen process
     """
     return Popen([str(JAVA), *java_args], **popen_args)
-
 
 
 def execute_jar(
@@ -42,7 +41,7 @@ def execute_jar(
     """Execute a JAR file.
 
     Args:
-        jar_path: The path to the jar
+        jar_path: The path to the JAR file
         jvm_args: The JVM arguments, for instance ["-Xmx16G", "-Xms2G"]
         popen_args: Additional arguments to pass to the Popen
 
@@ -52,4 +51,3 @@ def execute_jar(
     if jvm_args is None:
         jvm_args = []
     return java(["-jar", str(jar_path), *jvm_args], **popen_args)
-

@@ -25,15 +25,15 @@ jobs:
           java-package: jdk # (jre, jdk, or jdk+fx) - defaults to jdk
           architecture: x64
 
-      # Install pipenv
+      # Install Pipenv
       - if: matrix.os == 'windows-latest'
-        name: Install pipenv [Windows]
+        name: Install Pipenv [Windows]
         run: pip install pipenv
       - if: matrix.os != 'windows-latest'
-        name: Install pipenv [Ubuntu/Macos]
+        name: Install Pipenv [Ubuntu/macOS]
         run: pip3 install pipenv
 
-      - name: Install python dependencies
+      - name: Install Python dependencies
         run: pipenv install --dev --python 3.8 -v
 
       - name: Set Java version
@@ -51,14 +51,14 @@ jobs:
           PLATFORM: ${{ matrix.os }}
         run: pipenv run python setup.py bdist_wheel
 
-      # Deploy to Pypi
+      # Deploy to PyPI
       - if: matrix.os == 'windows-latest'
-        name: Deploy to Pypi [Windows]
+        name: Deploy to PyPI [Windows]
         env:
           TWINE_PASSWORD: ${{ secrets.TWINE_PASSWORD }}
         run: pipenv run twine upload dist/* --username __token__ --password ${env:TWINE_PASSWORD}
       - if: matrix.os != 'windows-latest'
-        name: Deploy to Pypi [Ubuntu/Macos]
+        name: Deploy to PyPI [Ubuntu/macOS]
         env:
           TWINE_PASSWORD: ${{ secrets.TWINE_PASSWORD }}
         run: pipenv run twine upload dist/* --username __token__ --password $TWINE_PASSWORD

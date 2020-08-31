@@ -2,7 +2,7 @@
 
 A packaged JDK for Python.
 
-[![PyPI version](https://badge.fury.io/py/jdk4py.svg)](https://badge.fury.io/py/jdk4py)  
+[![PyPI version](https://badge.fury.io/py/jdk4py.svg)](https://badge.fury.io/py/jdk4py)
 
 ## Install
 
@@ -27,15 +27,15 @@ Some JVM arguments can be provided, any additional argument will be passed to Po
 execute_jar("myJar.jar", jvm_args=["-xmx=16G"], stdout=PIPE, stderr=PIPE)
 ```
 
-### Java home and executable
+### Home and executable paths
 
-The path to the packaged Java home folder and to java executable are also accessible:
+The paths to the packaged Java home directory and to the Java executable are also accessible:
 
 ```python
 from jdk4py import JAVA, JAVA_HOME
 ```
 
-The Java version can be checked with
+The Java version can be checked with:
 
 ```python
 >>> from jdk4py import JAVA_VERSION
