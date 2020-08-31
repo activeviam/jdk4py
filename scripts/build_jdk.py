@@ -7,6 +7,7 @@ PROJECT_FOLDER = Path(__file__).parent.parent
 JAVA_PATH = PROJECT_FOLDER / "jdk4py" / "java-runtime"
 
 _MODULES = [
+    "jdk.management.agent",
     "java.se",
     "jdk.unsupported",
     "jdk.security.auth",
