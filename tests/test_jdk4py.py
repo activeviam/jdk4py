@@ -1,6 +1,8 @@
 from pathlib import Path
 from subprocess import PIPE
 
+_TESTS_DIRECTORY = Path(__file__).parent
+
 
 def test_java_version():
     from jdk4py import JAVA_VERSION
@@ -23,7 +25,7 @@ def test_hello_world_jar():
     #    javac resources/HelloWorld.java
     #    jar cfe resources/hello.jar resources.HelloWorld resources/HelloWorld.class
     #    jar tf resources/hello.jar
-    path = Path(__file__).parent / "resources" / "hello.jar"
+    path = _TESTS_DIRECTORY / "resources" / "hello.jar"
     process = execute_jar(path.absolute(), stdout=PIPE, stderr=PIPE)
     out, err = process.communicate()
     assert out == b"Hello, World\n" or out == b"Hello, World\r\n"

@@ -10,18 +10,22 @@ jobs:
     strategy:
       matrix:
         os: [macos-latest, windows-latest, ubuntu-latest]
-        java: ["11.0.7"]
       fail-fast: false # To not cancel other platforms when one fails
-    name: Deploy JDK ${{ matrix.java }} on ${{ matrix.os }}
+    name: Deploy on ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v1
+
       - uses: actions/setup-python@v1
         with:
           python-version: "3.8"
           architecture: "x64"
+
+      - name: Set Java version
+        run: python scripts/set_java_version.py
+
       - uses: actions/setup-java@v1
         with:
-          java-version: ${{ matrix.java }}
+          java-version: ${{ env.JAVA_VERSION }}
           java-package: jdk # (jre, jdk, or jdk+fx) - defaults to jdk
           architecture: x64
 
@@ -34,10 +38,7 @@ jobs:
         run: pip3 install pipenv
 
       - name: Install Python dependencies
-        run: pipenv install --dev --python 3.8 -v
-
-      - name: Set Java version
-        run: pipenv run python scripts/set_version.py ${{ matrix.java }}
+        run: pipenv install --dev --python 3.8 --verbose
 
       - if: matrix.os == 'ubuntu-latest'
         name: Build source wheel

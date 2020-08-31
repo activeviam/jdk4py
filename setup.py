@@ -14,10 +14,13 @@ _JAVA_FILES = [
 
 _PROJECT_DIR = Path(__file__).parent
 
+_JAVA_VERSION_FILENAME = "java_version.txt"
+_LIB_VERSION_FILENAME = "lib_version.txt"
+
 _VERSION = ".".join(
     [
         (_PROJECT_DIR / _NAME / filename).read_text().strip()
-        for filename in ["java_version.txt", "lib_version.txt"]
+        for filename in (_JAVA_VERSION_FILENAME, _LIB_VERSION_FILENAME)
     ]
 )
 
@@ -43,7 +46,7 @@ setuptools.setup(
     long_description_content_type="text/markdown",
     url="https://github.com/atoti/jdk4py",
     packages=setuptools.find_packages(exclude=["tests"]),
-    package_data={_NAME: [*_JAVA_FILES, "java_version", "version"]},
+    package_data={_NAME: [*_JAVA_FILES, _JAVA_VERSION_FILENAME, _LIB_VERSION_FILENAME]},
     classifiers=[
         "Programming Language :: Python :: 3",
         "Operating System :: OS Independent",
