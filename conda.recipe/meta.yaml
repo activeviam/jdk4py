@@ -1,0 +1,40 @@
+{% set data = load_setup_py_data() %}
+
+package:
+  name: jdk4py
+  version: {{ data['version'] }}
+
+source:
+  path: ../
+
+build:
+  number: 0
+  include_recipe: False
+  ignore_run_exports:
+    - python_abi # we don't want to pin the python version
+
+requirements:
+  build:
+    - python
+    - setuptools
+
+test:
+  source_files:
+    - tests/**
+  requires:
+    - pytest
+  commands:
+    - pytest tests
+  imports:
+    - jdk4py
+
+about:
+  home: https://github.com/atoti/jdk4py
+  license: GNU General Public License v2.0
+  license_file: LICENSE
+  summary: 'Packaged JDK for Python.'
+  dev_url: https://github.com/atoti/jdk4py
+
+extra:
+  recipe-maintainers:
+    - fabiencelier

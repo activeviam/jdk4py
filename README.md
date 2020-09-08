@@ -12,6 +12,13 @@ Java is made easy to install as a single pip library:
 pip install jdk4py
 ```
 
+or as a Conda package:
+
+```bash
+conda config --add channels https://conda.atoti.io
+conda install jdk4py
+```
+
 ## API
 
 ### Execute a JAR
