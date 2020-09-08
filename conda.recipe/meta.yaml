@@ -1,8 +1,7 @@
-{% set name = "jdk4py" %}
 {% set data = load_setup_py_data() %}
 
 package:
-  name: {{ name|lower }}
+  name: jdk4py
   version: {{ data['version'] }}
 
 source:

@@ -13,7 +13,7 @@ jobs:
       fail-fast: false # To not cancel other platforms when one fails
     name: Deploy on ${{ matrix.os }}
     env:
-      CONDA_REPO: https://activeviam.jfrog.io/artifactory/jdk4py-conda-release
+      CONDA_CHANNEL: https://activeviam.jfrog.io/artifactory/jdk4py-conda-release
     steps:
       - uses: actions/checkout@v1
 
@@ -64,7 +64,7 @@ jobs:
           channels: conda-forge
           conda-build-version: 3.20.0
 
-      - name: Build conda package
+      - name: Build Conda package
         run: conda build --output-folder dist . --no-anaconda-upload --debug
 
       - uses: actions/upload-artifact@v2
@@ -72,27 +72,27 @@ jobs:
           name: jdk4py-${{ matrix.os }}.tar.bz2
           path: dist/*/jdk4py-*.bz2
 
-      # Deploy conda packaage to artifactory.
-      - name: Upload conda package [Linux]
+      # Deploy Conda package to artifactory.
+      - name: Upload Conda package [Linux]
         if: matrix.os == 'ubuntu-latest'
         env:
           ARTIFACTORY_USERNAME: ${{ secrets.ARTIFACTORY_USERNAME }}
           ARTIFACTORY_PASSWORD: ${{ secrets.ARTIFACTORY_PASSWORD }}
-        run: curl --fail --user $ARTIFACTORY_USERNAME:$ARTIFACTORY_PASSWORD --upload-file dist/linux-64/jdk4py-*.tar.bz2 "$CONDA_REPO/linux-64/"
+        run: curl --fail --user $ARTIFACTORY_USERNAME:$ARTIFACTORY_PASSWORD --upload-file dist/linux-64/jdk4py-*.tar.bz2 "$CONDA_CHANNEL/linux-64/"
 
-      - name: Upload conda package [macOS]
+      - name: Upload Conda package [macOS]
         if: matrix.os == 'macos-latest'
         env:
           ARTIFACTORY_USERNAME: ${{ secrets.ARTIFACTORY_USERNAME }}
           ARTIFACTORY_PASSWORD: ${{ secrets.ARTIFACTORY_PASSWORD }}
-        run: curl --fail --user $ARTIFACTORY_USERNAME:$ARTIFACTORY_PASSWORD --upload-file dist/osx-64/jdk4py-*.tar.bz2 "$CONDA_REPO/osx-64/"
+        run: curl --fail --user $ARTIFACTORY_USERNAME:$ARTIFACTORY_PASSWORD --upload-file dist/osx-64/jdk4py-*.tar.bz2 "$CONDA_CHANNEL/osx-64/"
 
-      - name: Upload conda package [Windows]
+      - name: Upload Conda package [Windows]
         if: matrix.os == 'windows-latest'
         env:
           ARTIFACTORY_USERNAME: ${{ secrets.ARTIFACTORY_USERNAME }}
           ARTIFACTORY_PASSWORD: ${{ secrets.ARTIFACTORY_PASSWORD }}
-        run: curl --fail --user ${env:ARTIFACTORY_USERNAME}:${env:ARTIFACTORY_PASSWORD} "${env:CONDA_REPO}/win-64/" --upload-file "dist\win-64\jdk4py-${env:JDK4PY_VERSION}-0.tar.bz2"
+        run: curl --fail --user ${env:ARTIFACTORY_USERNAME}:${env:ARTIFACTORY_PASSWORD} "${env:CONDA_CHANNEL}/win-64/" --upload-file "dist\win-64\jdk4py-${env:JDK4PY_VERSION}-0.tar.bz2"
 
       # Deploy to PyPI
       - if: matrix.os == 'windows-latest'
