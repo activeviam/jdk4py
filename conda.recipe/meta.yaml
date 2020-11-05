@@ -10,13 +10,13 @@ source:
 build:
   number: 0
   include_recipe: False
-  ignore_run_exports:
-    - python_abi # we don't want to pin the python version
 
 requirements:
   build:
-    - python
-    - setuptools
+    - python {{ python }}
+    - pip
+  run:
+    - python {{ python }}
 
 test:
   source_files:

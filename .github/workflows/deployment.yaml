@@ -1,11 +1,11 @@
-name: Test and deploy
+name: Deploy Conda and PyPI packages
 on:
   push:
     branches:
       - master
 
 jobs:
-  build:
+  deploy:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
@@ -78,21 +78,34 @@ jobs:
         env:
           ARTIFACTORY_USERNAME: ${{ secrets.ARTIFACTORY_USERNAME }}
           ARTIFACTORY_PASSWORD: ${{ secrets.ARTIFACTORY_PASSWORD }}
-        run: curl --fail --user $ARTIFACTORY_USERNAME:$ARTIFACTORY_PASSWORD --upload-file dist/linux-64/jdk4py-*.tar.bz2 "$JDK4PY_CONDA_CHANNEL/linux-64/"
+        run: |
+          ls dist/linux-64/jdk4py-*.tar.bz2 | \
+          while read filepath; do
+            echo Uploading ${filepath}
+            curl --fail --user $ARTIFACTORY_USERNAME:$ARTIFACTORY_PASSWORD --upload-file ${filepath} "$JDK4PY_CONDA_CHANNEL/linux-64/"
+          done
 
       - name: Upload Conda package [macOS]
         if: matrix.os == 'macos-latest'
         env:
           ARTIFACTORY_USERNAME: ${{ secrets.ARTIFACTORY_USERNAME }}
           ARTIFACTORY_PASSWORD: ${{ secrets.ARTIFACTORY_PASSWORD }}
-        run: curl --fail --user $ARTIFACTORY_USERNAME:$ARTIFACTORY_PASSWORD --upload-file dist/osx-64/jdk4py-*.tar.bz2 "$JDK4PY_CONDA_CHANNEL/osx-64/"
+        run: |
+          ls dist/osx-64/jdk4py-*.tar.bz2 | \
+          while read filepath; do
+            echo Uploading ${filepath}
+            curl --fail --user $ARTIFACTORY_USERNAME:$ARTIFACTORY_PASSWORD --upload-file ${filepath} "$JDK4PY_CONDA_CHANNEL/osx-64/"
+          done
 
       - name: Upload Conda package [Windows]
         if: matrix.os == 'windows-latest'
         env:
           ARTIFACTORY_USERNAME: ${{ secrets.ARTIFACTORY_USERNAME }}
           ARTIFACTORY_PASSWORD: ${{ secrets.ARTIFACTORY_PASSWORD }}
-        run: curl --fail --user ${env:ARTIFACTORY_USERNAME}:${env:ARTIFACTORY_PASSWORD} "${env:JDK4PY_CONDA_CHANNEL}/win-64/" --upload-file "dist\win-64\jdk4py-${env:JDK4PY_VERSION}-0.tar.bz2"
+        run: |
+          curl --fail --user ${env:ARTIFACTORY_USERNAME}:${env:ARTIFACTORY_PASSWORD} "${env:JDK4PY_CONDA_CHANNEL}/win-64/" --upload-file "dist\win-64\jdk4py-${env:JDK4PY_VERSION}-py37_0.tar.bz2"
+          curl --fail --user ${env:ARTIFACTORY_USERNAME}:${env:ARTIFACTORY_PASSWORD} "${env:JDK4PY_CONDA_CHANNEL}/win-64/" --upload-file "dist\win-64\jdk4py-${env:JDK4PY_VERSION}-py38_0.tar.bz2"
+          curl --fail --user ${env:ARTIFACTORY_USERNAME}:${env:ARTIFACTORY_PASSWORD} "${env:JDK4PY_CONDA_CHANNEL}/win-64/" --upload-file "dist\win-64\jdk4py-${env:JDK4PY_VERSION}-py39_0.tar.bz2"
 
       # Deploy to PyPI
       - if: matrix.os == 'windows-latest'
@@ -101,7 +114,7 @@ jobs:
           TWINE_PASSWORD: ${{ secrets.TWINE_PASSWORD }}
         run: pipenv run twine upload dist/* --username __token__ --password ${env:TWINE_PASSWORD}
       - if: matrix.os != 'windows-latest'
-        name: Deploy to PyPI [Ubuntu/macOS]
+        name: Deploy to PyPI [Linux/macOS]
         env:
           TWINE_PASSWORD: ${{ secrets.TWINE_PASSWORD }}
         run: pipenv run twine upload dist/* --username __token__ --password $TWINE_PASSWORD
