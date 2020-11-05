@@ -54,5 +54,5 @@ setuptools.setup(
         "Development Status :: 4 - Beta",
     ],
     keywords=["jdk", "java", "jvm", "jre"],
-    python_requires=">=3.6",
+    python_requires=">=3.7",
 )
