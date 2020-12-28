@@ -22,13 +22,14 @@ jobs:
           architecture: "x64"
 
       - name: Set Java version
-        run: |
-          python scripts/set_versions.py
-          echo $JAVA_VERSION
+        run: python scripts/set_versions.py
+
+       - name: Bug Fix
+        run: echo $JAVA_VERSION
 
       - uses: actions/setup-java@v1
         with:
-          java-version: ${{ env.JAVA_VERSION }}
+          java-version: $JAVA_VERSION
           java-package: jdk # (jre, jdk, or jdk+fx) - defaults to jdk
           architecture: x64
 
