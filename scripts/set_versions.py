@@ -6,8 +6,8 @@ _JAVA_VERSION_FILENAME = "java_version.txt"
 _LIB_VERSION_FILENAME = "lib_version.txt"
 
 def set_env_variable_in_github_job(name: str, value: str):
-    # See https://docs.github.com/en/actions/reference/workflow-commands-for-github-actions#setting-an-environment-variable.
-    print(f"::set-env name={name}::{value}")
+    # See https://docs.github.com/en/free-pro-team@latest/actions/reference/workflow-commands-for-github-actions#setting-an-environment-variable
+    print(f"{name}={value} >> $GITHUB_ENV")
 
 
 def set_java_version_env_variable_in_github_job():
