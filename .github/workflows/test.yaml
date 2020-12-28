@@ -22,8 +22,9 @@ jobs:
           architecture: "x64"
 
       - name: Set Java version
-        run: python scripts/set_versions.py
-        run: echo $JAVA_VERSION
+        run: |
+          python scripts/set_versions.py
+          echo $JAVA_VERSION
 
       - uses: actions/setup-java@v1
         with:
