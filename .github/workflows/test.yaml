@@ -27,6 +27,12 @@ jobs:
       - name: Bug Fix
         run: echo $JAVA_VERSION
 
+      - name: SET
+        run: echo "TEST=value >> $GITHUB_ENV"
+
+      - name: GET
+        run: echo $TEST
+
       - uses: actions/setup-java@v1
         with:
           java-version: $JAVA_VERSION
