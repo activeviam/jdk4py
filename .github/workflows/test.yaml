@@ -28,10 +28,10 @@ jobs:
         run: echo $JAVA_VERSION
 
       - name: SET
-        run: echo "TEST=value >> $GITHUB_ENV"
+        run: echo "test=value >> $GITHUB_ENV"
 
       - name: GET
-        run: echo $TEST
+        run: echo $test
 
       - uses: actions/setup-java@v1
         with:
