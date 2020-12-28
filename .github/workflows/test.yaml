@@ -24,7 +24,7 @@ jobs:
       - name: Set Java version
         run: python scripts/set_versions.py
 
-       - name: Bug Fix
+      - name: Bug Fix
         run: echo $JAVA_VERSION
 
       - uses: actions/setup-java@v1
