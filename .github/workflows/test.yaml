@@ -14,9 +14,9 @@ jobs:
       fail-fast: false # To not cancel other platforms when one fails
     name: Test on ${{ matrix.os }} with Python ${{ matrix.python }}
     steps:
-      - uses: actions/checkout@v1
+      - uses: actions/checkout@v2
 
-      - uses: actions/setup-python@v1
+      - uses: actions/setup-python@v2
         with:
           python-version: ${{ matrix.python }}
           architecture: "x64"
@@ -33,7 +33,7 @@ jobs:
       - name: GET
         run: echo $test
 
-      - uses: actions/setup-java@v1
+      - uses: actions/setup-java@v2
         with:
           java-version: $JAVA_VERSION
           java-package: jdk # (jre, jdk, or jdk+fx) - defaults to jdk
