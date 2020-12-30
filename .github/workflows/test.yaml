@@ -25,13 +25,13 @@ jobs:
         run: python scripts/set_versions.py
 
       - name: Bug Fix
-        run: echo ${{ env.JAVA_VERSION }}
+        run: echo env.JAVA_VERSION
 
       - name: SET
         run: echo "test=value >> $GITHUB_ENV"
 
       - name: GET
-        run: echo ${{ env.test }}
+        run: echo env.test
 
       - uses: actions/setup-java@v1
         with:
