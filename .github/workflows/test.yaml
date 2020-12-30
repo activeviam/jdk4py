@@ -25,7 +25,7 @@ jobs:
         run: python scripts/set_versions.py
 
       - name: Bug Fix
-        run: echo env.JAVA_VERSION
+        run: echo $JAVA_VERSION
 
       - name: SET
         run: echo "test=value" >> $GITHUB_ENV
