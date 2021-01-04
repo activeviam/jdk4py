@@ -15,9 +15,9 @@ jobs:
     env:
       JDK4PY_CONDA_CHANNEL: https://activeviam.jfrog.io/artifactory/jdk4py-conda-release
     steps:
-      - uses: actions/checkout@v1
+      - uses: actions/checkout@v2
 
-      - uses: actions/setup-python@v1
+      - uses: actions/setup-python@v2
         with:
           python-version: "3.8"
           architecture: "x64"
@@ -59,7 +59,7 @@ jobs:
           name: jdk4py-${{ matrix.os }}.whl
           path: dist/jdk4py-*.whl
 
-      - uses: goanpeca/setup-miniconda@v1
+      - uses: goanpeca/setup-miniconda@v2
         with:
           channels: conda-forge
           conda-build-version: 3.20.0
