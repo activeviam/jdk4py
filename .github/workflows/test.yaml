@@ -33,6 +33,9 @@ jobs:
       - name: GET
         run: echo $test
 
+      - name: GET2
+        run: echo $GITHUB_ENV
+
       - uses: actions/setup-java@v1
         with:
           java-version: ${{ env.JAVA_VERSION }}
