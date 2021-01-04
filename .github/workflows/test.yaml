@@ -24,18 +24,6 @@ jobs:
       - name: Set Java version
         run: python scripts/set_versions.py
 
-      - name: Bug Fix
-        run: echo $JAVA_VERSION
-
-      - name: SET
-        run: echo "test=value" >> $GITHUB_ENV
-
-      - name: GET
-        run: echo $test
-
-      - name: GET2
-        run: echo $GITHUB_ENV
-
       - uses: actions/setup-java@v1
         with:
           java-version: ${{ env.JAVA_VERSION }}
