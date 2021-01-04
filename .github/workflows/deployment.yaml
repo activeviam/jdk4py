@@ -40,10 +40,7 @@ jobs:
         run: pip3 install poetry
 
       - name: Install Python dependencies
-        run: |
-          poetry env list
-          poetry env use 3.8
-          poetry install
+        run: poetry install
 
       - if: matrix.os == 'ubuntu-latest'
         name: Build source wheel
