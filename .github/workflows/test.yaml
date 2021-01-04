@@ -39,7 +39,10 @@ jobs:
         run: pip3 install poetry
 
       - name: Install python dependencies
-        run: poetry install --dev --python ${{ matrix.python }} --verbose
+        run: |
+          poetry env list
+          poetry env use ${{ matrix.python }}
+          poetry install
 
       - name: Build JDK
         run: poetry run python scripts/build_jdk.py
