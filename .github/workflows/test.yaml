@@ -30,19 +30,19 @@ jobs:
           java-package: jdk # (jre, jdk, or jdk+fx) - defaults to jdk
           architecture: x64
 
-      # Install Pipenv
+      # Install Poetry
       - if: matrix.os == 'windows-latest'
-        name: Install pipenv [Windows]
-        run: pip install pipenv
+        name: Install poetry [Windows]
+        run: pip install poetry
       - if: matrix.os != 'windows-latest'
-        name: Install pipenv [Ubuntu/macOS]
-        run: pip3 install pipenv
+        name: Install poetry [Ubuntu/macOS]
+        run: pip3 install poetry
 
       - name: Install python dependencies
-        run: pipenv install --dev --python ${{ matrix.python }} --verbose
+        run: poetry install --dev --python ${{ matrix.python }} --verbose
 
       - name: Build JDK
-        run: pipenv run python scripts/build_jdk.py
+        run: poetry run python scripts/build_jdk.py
 
       - name: Test
-        run: pipenv run pytest
+        run: poetry run pytest

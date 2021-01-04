@@ -31,28 +31,28 @@ jobs:
           java-package: jdk # (jre, jdk, or jdk+fx) - defaults to jdk
           architecture: x64
 
-      # Install Pipenv
+      # Install Poetry
       - if: matrix.os == 'windows-latest'
-        name: Install Pipenv [Windows]
-        run: pip install pipenv
+        name: Install Poetry [Windows]
+        run: pip install poetry
       - if: matrix.os != 'windows-latest'
-        name: Install Pipenv [Ubuntu/macOS]
-        run: pip3 install pipenv
+        name: Install Poetry [Ubuntu/macOS]
+        run: pip3 install poetry
 
       - name: Install Python dependencies
-        run: pipenv install --dev --python 3.8 --verbose
+        run: poetry install --dev --python 3.8 --verbose
 
       - if: matrix.os == 'ubuntu-latest'
         name: Build source wheel
-        run: pipenv run python setup.py sdist
+        run: poetry run python setup.py sdist
 
       - name: Build JDK
-        run: pipenv run python scripts/build_jdk.py
+        run: poetry run python scripts/build_jdk.py
 
       - name: Build wheel
         env:
           JDK4PY_BUILD_PLATFORM: ${{ matrix.os }}
-        run: pipenv run python setup.py bdist_wheel
+        run: poetry run python setup.py bdist_wheel
 
       - uses: actions/upload-artifact@v2
         with:
@@ -112,9 +112,9 @@ jobs:
         name: Deploy to PyPI [Windows]
         env:
           TWINE_PASSWORD: ${{ secrets.TWINE_PASSWORD }}
-        run: pipenv run twine upload dist/* --username __token__ --password ${env:TWINE_PASSWORD}
+        run: poetry run twine upload dist/* --username __token__ --password ${env:TWINE_PASSWORD}
       - if: matrix.os != 'windows-latest'
         name: Deploy to PyPI [Linux/macOS]
         env:
           TWINE_PASSWORD: ${{ secrets.TWINE_PASSWORD }}
-        run: pipenv run twine upload dist/* --username __token__ --password $TWINE_PASSWORD
+        run: poetry run twine upload dist/* --username __token__ --password $TWINE_PASSWORD
