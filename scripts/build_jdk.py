@@ -13,6 +13,7 @@ _MODULES = [
     "jdk.security.auth",
     "jdk.crypto.ec",
     "jdk.jfr",
+    "jdk.management.jfr"
 ]
 
 
