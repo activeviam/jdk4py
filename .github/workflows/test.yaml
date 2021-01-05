@@ -24,7 +24,7 @@ jobs:
       - name: Set Java version
         run: python scripts/set_versions.py
 
-      - uses: actions/setup-java@v1
+      - uses: joschi/setup-jdk@v2
         with:
           java-version: ${{ env.JAVA_VERSION }}
           java-package: jdk # (jre, jdk, or jdk+fx) - defaults to jdk
