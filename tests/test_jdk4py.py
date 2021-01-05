@@ -7,7 +7,7 @@ _TESTS_DIRECTORY = Path(__file__).parent
 def test_java_version():
     from jdk4py import JAVA_VERSION
 
-    assert JAVA_VERSION.startswith("11.")
+    assert JAVA_VERSION == "11"
 
 
 def test_java_home():
