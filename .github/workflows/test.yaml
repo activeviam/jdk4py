@@ -24,9 +24,9 @@ jobs:
       - name: Set Java version
         run: python scripts/set_versions.py
 
-      - uses: actions/setup-java@v1
+      - uses: joschi/setup-jdk@v2 # We must use to the official action once https://github.com/actions/setup-java/pull/97 is closed
         with:
-          java-version: ${{ env.JAVA_VERSION }}
+          java-version: ${{ env.MAJOR_JAVA_VERSION }}
           java-package: jdk # (jre, jdk, or jdk+fx) - defaults to jdk
           architecture: x64
 

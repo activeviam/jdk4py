@@ -5,10 +5,18 @@ _TESTS_DIRECTORY = Path(__file__).parent
 
 
 def test_java_version():
-    from jdk4py import JAVA_VERSION
+    from jdk4py import java, JAVA_VERSION
 
-    assert JAVA_VERSION.startswith("11.")
+    process = java(["--version"], stdout=PIPE, stderr=PIPE)
+    out, err = process.communicate()
+    version = str(out).split("\n")[0].split(" ")[1]
+    assert version[:version.rindex(".")] == JAVA_VERSION
+    assert err == b""
 
+def test_major_java_version():
+    from jdk4py import MAJOR_JAVA_VERSION
+
+    assert MAJOR_JAVA_VERSION == "11"
 
 def test_java_home():
     from jdk4py import JAVA, JAVA_HOME
