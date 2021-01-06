@@ -15,6 +15,7 @@ _JAVA_FILES = [
 _PROJECT_DIR = Path(__file__).parent
 
 _JAVA_VERSION_FILENAME = "java_version.txt"
+_JAVA_MAJOR_FILENAME = "major_java_version.txt"
 _LIB_VERSION_FILENAME = "lib_version.txt"
 _PLATFORM_ENV_VARIABLE = "JDK4PY_BUILD_PLATFORM"
 
@@ -47,7 +48,7 @@ setuptools.setup(
     long_description_content_type="text/markdown",
     url="https://github.com/atoti/jdk4py",
     packages=setuptools.find_packages(exclude=["tests"]),
-    package_data={_NAME: [*_JAVA_FILES, _JAVA_VERSION_FILENAME, _LIB_VERSION_FILENAME]},
+    package_data={_NAME: [*_JAVA_FILES, _JAVA_VERSION_FILENAME, _JAVA_MAJOR_FILENAME, _LIB_VERSION_FILENAME]},
     classifiers=[
         "Programming Language :: Python :: 3",
         "Operating System :: OS Independent",
