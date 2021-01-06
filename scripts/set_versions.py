@@ -3,6 +3,7 @@ from pathlib import Path
 
 _PROJECT_DIRECTORY = Path(__file__).parent.parent
 _JDK4PY_DIRECTORY = _PROJECT_DIRECTORY / "jdk4py"
+_MAJOR_JAVA_VERSION_FILENAME = "major_java_version.txt"
 _JAVA_VERSION_FILENAME = "java_version.txt"
 _LIB_VERSION_FILENAME = "lib_version.txt"
 
@@ -16,6 +17,9 @@ def set_java_version_env_variable_in_github_job():
     java_version = (_JDK4PY_DIRECTORY / _JAVA_VERSION_FILENAME).read_text().strip()
     set_env_variable_in_github_job("JAVA_VERSION", java_version)
 
+def set_major_java_version_env_variable_in_github_job(): # To be removed after https://github.com/actions/setup-java/pull/97 is closed
+    java_version = (_JDK4PY_DIRECTORY / _MAJOR_JAVA_VERSION_FILENAME).read_text().strip()
+    set_env_variable_in_github_job("MAJOR_JAVA_VERSION", java_version)
 
 def set_jdk4py_version_env_variable_in_github_job():
     version = ".".join(
@@ -29,3 +33,4 @@ def set_jdk4py_version_env_variable_in_github_job():
 if __name__ == "__main__":
     set_java_version_env_variable_in_github_job()
     set_jdk4py_version_env_variable_in_github_job()
+    set_major_java_version_env_variable_in_github_job()
