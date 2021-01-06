@@ -21,9 +21,9 @@ conda install jdk4py
 
 ## Versioning
 
-jdk4py versions contains 4 figures:
+jdk4py version contains 4 figures:
 
-  - The first 3 figures is the Java version
+  - The first 3 figures are the Java version
   - The fourth is jdk4py specific: it starts at 0 for each Java version and then increases.
 
 ## API
