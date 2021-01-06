@@ -12,6 +12,8 @@ _MODULES = [
     "jdk.unsupported",
     "jdk.security.auth",
     "jdk.crypto.ec",
+    "jdk.jfr",
+    "jdk.management.jfr"
 ]
 
 
