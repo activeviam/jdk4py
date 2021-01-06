@@ -9,9 +9,9 @@ def test_java_version():
 
     process = java(["--version"], stdout=PIPE, stderr=PIPE)
     out, err = process.communicate()
+    assert err == b""
     version = str(out).split("\n")[0].split(" ")[1]
     assert version[:version.rindex(".")] == JAVA_VERSION
-    assert err == b""
 
 def test_major_java_version():
     from jdk4py import MAJOR_JAVA_VERSION
@@ -36,6 +36,6 @@ def test_hello_world_jar():
     path = _TESTS_DIRECTORY / "resources" / "hello.jar"
     process = execute_jar(path.absolute(), stdout=PIPE, stderr=PIPE)
     out, err = process.communicate()
-    assert out == b"Hello, World\n" or out == b"Hello, World\r\n"
     assert err == b""
+    assert out == b"Hello, World\n" or out == b"Hello, World\r\n"
     assert process.returncode == 0

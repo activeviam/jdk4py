@@ -9,8 +9,8 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        os: [macos-latest, windows-latest, ubuntu-latest]
-        python: ["3.6", "3.7", "3.8"]
+        os: [macos-latest]
+        python: ["3.9"]
       fail-fast: false # To not cancel other platforms when one fails
     name: Test on ${{ matrix.os }} with Python ${{ matrix.python }}
     steps:
@@ -48,7 +48,7 @@ jobs:
         run: poetry run pytest
 
   package: # only on latest Ubuntu and Python
-    runs-on: ubuntu-latest
+    runs-on: macos-latest
     name: Test packaging wheel and Conda
     steps:
       - uses: actions/checkout@v2
@@ -78,7 +78,7 @@ jobs:
 
       - name: Build wheel
         env:
-          JDK4PY_BUILD_PLATFORM: ubuntu-latest
+          JDK4PY_BUILD_PLATFORM: macos-latest
         run: poetry run python setup.py bdist_wheel
 
       - uses: conda-incubator/setup-miniconda@v2
@@ -88,3 +88,9 @@ jobs:
 
       - name: Build Conda package on ubuntu and latest Python
         run: conda build --output-folder dist . --no-anaconda-upload --debug
+
+      - uses: actions/upload-artifact@v2
+        if: failure()
+        with:
+          name: jdk4py.tar.bz2
+          path: /usr/local/miniconda/conda-bld/broken/*
