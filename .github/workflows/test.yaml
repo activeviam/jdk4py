@@ -67,7 +67,7 @@ jobs:
           java-package: jdk
           architecture: x64
 
-      name: Install Poetry [Windows]
+      name: Install Poetry Windows
         run: pip install poetry
 
       - name: Install python dependencies
@@ -83,9 +83,6 @@ jobs:
 
       - name: Check python
         run: poetry run python -c "import sys; print('\n'.join(sys.path))"
-
-      - name: Check python
-        run: poetry run python -c "from subprocess import Popen; print('\n'.join(sys.path))"
 
       - uses: conda-incubator/setup-miniconda@v2
         with:
