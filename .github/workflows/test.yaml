@@ -27,9 +27,6 @@ jobs:
       - name: print java
         run: echo $JAVA_EXEC
 
-      - name: Run java
-        run: $JAVA_EXEC --version
-
       - uses: joschi/setup-jdk@v2 # We must use to the official action once https://github.com/actions/setup-java/pull/97 is closed
         with:
           java-version: ${{ env.MAJOR_JAVA_VERSION }}
@@ -50,11 +47,14 @@ jobs:
       - name: Build JDK
         run: poetry run python scripts/build_jdk.py
 
+      - name: Run java
+        run: $JAVA_EXEC --version
+
       - name: Test
         run: poetry run pytest
 
   package: # only on latest Ubuntu and Python
-    runs-on: ubuntu-latest
+    runs-on: macos-latest
     name: Test packaging wheel and Conda
     steps:
       - uses: actions/checkout@v2
@@ -84,7 +84,7 @@ jobs:
 
       - name: Build wheel
         env:
-          JDK4PY_BUILD_PLATFORM: ubuntu-latest
+          JDK4PY_BUILD_PLATFORM: macos-latest
         run: poetry run python setup.py bdist_wheel
 
       - uses: conda-incubator/setup-miniconda@v2
@@ -94,3 +94,6 @@ jobs:
 
       - name: Build Conda package on ubuntu and latest Python
         run: conda build --output-folder dist . --no-anaconda-upload --debug
+
+      - name: display
+        run: ls ./dist/
