@@ -9,8 +9,8 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        os: [macos-latest, windows-latest, ubuntu-latest]
-        python: ["3.6", "3.7", "3.8"]
+        os: [macos-latest]
+        python: ["3.8"]
       fail-fast: false # To not cancel other platforms when one fails
     name: Test on ${{ matrix.os }} with Python ${{ matrix.python }}
     steps:
@@ -60,6 +60,12 @@ jobs:
 
       - name: Set Java version
         run: python scripts/set_versions.py
+
+      - name: print java
+        run: echo ${{ env.JAVA_EXEC }}
+
+      - name: Run java
+        run: ${{ env.JAVA_EXEC }} --version
 
       - uses: joschi/setup-jdk@v2 # We must use to the official action once https://github.com/actions/setup-java/pull/97 is closed
         with:

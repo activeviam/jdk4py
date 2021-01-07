@@ -6,6 +6,7 @@ _JDK4PY_DIRECTORY = _PROJECT_DIRECTORY / "jdk4py"
 _MAJOR_JAVA_VERSION_FILENAME = "major_java_version.txt"
 _JAVA_VERSION_FILENAME = "java_version.txt"
 _LIB_VERSION_FILENAME = "lib_version.txt"
+_JAVA_EXEC = _JDK4PY_DIRECTORY / "java-runtime" / "bin" / "java"
 
 def set_env_variable_in_github_job(name: str, value: str):
     # See https://docs.github.com/en/free-pro-team@latest/actions/reference/workflow-commands-for-github-actions#setting-an-environment-variable.
@@ -20,6 +21,9 @@ def set_java_version_env_variable_in_github_job():
 def set_major_java_version_env_variable_in_github_job(): # To be removed after https://github.com/actions/setup-java/pull/97 is closed
     java_version = (_JDK4PY_DIRECTORY / _MAJOR_JAVA_VERSION_FILENAME).read_text().strip()
     set_env_variable_in_github_job("MAJOR_JAVA_VERSION", java_version)
+
+def set_java_exec_in_github_job(): # To be removed after https://github.com/actions/setup-java/pull/97 is closed
+    set_env_variable_in_github_job("JAVA_EXEC", str(_JAVA_EXEC.absolute()))
 
 def set_jdk4py_version_env_variable_in_github_job():
     version = ".".join(
