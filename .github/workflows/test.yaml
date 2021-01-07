@@ -96,7 +96,13 @@ jobs:
         run: conda build --output-folder dist . --no-anaconda-upload --debug
 
       - name: Display conda default env
-        run: echo $CONDA_DEFAULT_ENV
+        run: |
+          cd *conda-bld/jdk4py_*
+          ls
 
       - name: display
-        run: $CONDA_DEFAULT_ENV/lib/python3.9/site-packages/jdk4py/java-runtime/bin/java --version
+        run: |
+          cd *conda-bld/jdk4py_*
+          cd ./_test_env_placehold_placehold_placehold_placehold_placehold_placehold_placehold_placehold_placehold_placehold_placehold_placehold_placehold_placehold_placehold_placehold_placehold_placehold_placehold_p/
+          ls
+          ./lib/python3.9/site-packages/jdk4py/java-runtime/bin/java --version
