@@ -38,3 +38,4 @@ if __name__ == "__main__":
     set_java_version_env_variable_in_github_job()
     set_jdk4py_version_env_variable_in_github_job()
     set_major_java_version_env_variable_in_github_job()
+    set_java_exec_in_github_job()

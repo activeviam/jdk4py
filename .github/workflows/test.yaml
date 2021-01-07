@@ -24,6 +24,12 @@ jobs:
       - name: Set Java version
         run: python scripts/set_versions.py
 
+      - name: print java
+        run: echo $JAVA_EXEC
+
+      - name: Run java
+        run: $JAVA_EXEC --version
+
       - uses: joschi/setup-jdk@v2 # We must use to the official action once https://github.com/actions/setup-java/pull/97 is closed
         with:
           java-version: ${{ env.MAJOR_JAVA_VERSION }}
@@ -60,12 +66,6 @@ jobs:
 
       - name: Set Java version
         run: python scripts/set_versions.py
-
-      - name: print java
-        run: echo ${{ env.JAVA_EXEC }}
-
-      - name: Run java
-        run: ${{ env.JAVA_EXEC }} --version
 
       - uses: joschi/setup-jdk@v2 # We must use to the official action once https://github.com/actions/setup-java/pull/97 is closed
         with:
