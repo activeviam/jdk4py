@@ -1,6 +1,6 @@
 name: Deploy Conda and PyPI packages
 on:
-  push:
+  pull_request:
     branches:
       - master
 
@@ -9,7 +9,7 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        os: [macos-latest, windows-latest, ubuntu-latest]
+        os: [macos-latest]
       fail-fast: false # To not cancel other platforms when one fails
     name: Deploy on ${{ matrix.os }}
     env:
@@ -65,7 +65,7 @@ jobs:
           conda-build-version: 3.20.0
 
       - name: Build Conda package
-        run: conda build --output-folder dist . --no-anaconda-upload --debug
+        run: conda build --output-folder dist . --no-anaconda-upload --debug --no-long-test-prefix
 
       - uses: actions/upload-artifact@v2
         with:
