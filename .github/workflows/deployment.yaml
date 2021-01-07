@@ -115,10 +115,10 @@ jobs:
           TWINE_PASSWORD: ${{ secrets.TWINE_PASSWORD }}
         run: |
           conda install twine
-          twine upload dist/* --username __token__ --password ${env:TWINE_PASSWORD}
+          twine upload dist/jdk4py-*.whl --username __token__ --password ${env:TWINE_PASSWORD}
 
       - if: matrix.os != 'windows-latest'
         name: Deploy to PyPI [Linux/macOS]
         env:
           TWINE_PASSWORD: ${{ secrets.TWINE_PASSWORD }}
-        run: poetry run twine upload dist/* --username __token__ --password $TWINE_PASSWORD
+        run: poetry run twine upload dist/jdk4py-*.whl --username __token__ --password $TWINE_PASSWORD
