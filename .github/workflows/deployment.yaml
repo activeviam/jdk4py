@@ -9,7 +9,7 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        os: [macos-latest]
+        os: [ubuntu-latest]
       fail-fast: false # To not cancel other platforms when one fails
     name: Deploy on ${{ matrix.os }}
     env:
