@@ -95,5 +95,8 @@ jobs:
       - name: Build Conda package on ubuntu and latest Python
         run: conda build --output-folder dist . --no-anaconda-upload --debug
 
+      - name: Display conda default env
+        run: echo $CONDA_DEFAULT_ENV
+
       - name: display
-        run: ls ./dist/
+        run: $CONDA_DEFAULT_ENV/lib/python3.9/site-packages/jdk4py/java-runtime/bin/java --version
