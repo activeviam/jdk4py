@@ -30,6 +30,7 @@ def java(
     Returns:
         The Popen process
     """
+    print([str(JAVA), *java_args])
     return Popen([str(JAVA), *java_args], **popen_args)
 
 

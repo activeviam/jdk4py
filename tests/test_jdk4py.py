@@ -1,8 +1,13 @@
 from pathlib import Path
-from subprocess import PIPE
+from subprocess import Popen, PIPE
 
 _TESTS_DIRECTORY = Path(__file__).parent
 
+def test_output():
+    process = Popen(["echo \"test\""], stdout=PIPE, stderr=PIPE)
+    out, err = process.communicate()
+    assert err == b""
+    assert out == "test"
 
 def test_java_version():
     from jdk4py import java, JAVA_VERSION
