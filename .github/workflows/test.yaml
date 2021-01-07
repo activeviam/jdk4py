@@ -92,6 +92,12 @@ jobs:
       - name: Check python2
         run: poetry run python -c "import sys; print('\n'.join(sys.path))"
 
+      - name: Install python dependencies2
+        run: poetry install
+
+      - name: Check python3
+        run: poetry run python -c "import sys; print('\n'.join(sys.path))"
+
       - name: Build Conda package on ubuntu and latest Python
         run: conda build --output-folder dist . --no-anaconda-upload --debug
 
