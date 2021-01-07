@@ -1,5 +1,5 @@
 from pathlib import Path
-from subprocess import PIPE
+from subprocess import PIPE, Popen
 
 _TESTS_DIRECTORY = Path(__file__).parent
 
@@ -23,6 +23,23 @@ def test_java_home():
 
     assert JAVA == JAVA_HOME / "bin" / "java"
 
+def test_debug_java():
+    from jdk4py import JAVA, JAVA_HOME
+
+    assert JAVA.absolute() == "test"
+
+def test_debug_process():
+    process = Popen(["echo", "hello, world"], stdout=PIPE, stderr=PIPE)
+    out, err = process.communicate()
+    assert err == b""
+    assert out == b"hello, world\n"
+
+def test_debug_java_process():
+    from jdk4py import JAVA
+    process = Popen([str(JAVA.absolute()), "--version"], stdout=PIPE, stderr=PIPE)
+    out, err = process.communicate()
+    assert err == b""
+    assert out == b"11.0.9.1\n"
 
 def test_hello_world_jar():
     from jdk4py import execute_jar
