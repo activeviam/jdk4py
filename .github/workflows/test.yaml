@@ -9,7 +9,7 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        os: [macos-latest]
+        os: [windows-latest]
         python: ["3.7"]
       fail-fast: false # To not cancel other platforms when one fails
     name: Test on ${{ matrix.os }} with Python ${{ matrix.python }}
@@ -48,7 +48,7 @@ jobs:
         run: poetry run pytest
 
   package: # only on latest Ubuntu and Python
-    runs-on: macos-latest
+    runs-on: windows-latest
     name: Test packaging wheel and Conda
     steps:
       - uses: actions/checkout@v2
@@ -67,8 +67,8 @@ jobs:
           java-package: jdk
           architecture: x64
 
-      - name: Install poetry
-        run: pip3 install poetry
+      name: Install Poetry [Windows]
+        run: pip install poetry
 
       - name: Install python dependencies
         run: poetry install
@@ -78,13 +78,22 @@ jobs:
 
       - name: Build wheel
         env:
-          JDK4PY_BUILD_PLATFORM: macos-latest
+          JDK4PY_BUILD_PLATFORM: windows-latest
         run: poetry run python setup.py bdist_wheel
+
+      - name: Check python
+        run: poetry run python -c "import sys; print('\n'.join(sys.path))"
+
+      - name: Check python
+        run: poetry run python -c "from subprocess import Popen; print('\n'.join(sys.path))"
 
       - uses: conda-incubator/setup-miniconda@v2
         with:
           channels: conda-forge
           conda-build-version: 3.20.0
+
+      - name: Check python2
+        run: poetry run python -c "import sys; print('\n'.join(sys.path))"
 
       - name: Build Conda package on ubuntu and latest Python
         run: conda build --output-folder dist . --no-anaconda-upload --debug
