@@ -1,6 +1,6 @@
 name: Deploy Conda and PyPI packages
 on:
-  push:
+  pull_request:
     branches:
       - master
 
@@ -111,10 +111,11 @@ jobs:
       - if: matrix.os == 'windows-latest'
         name: Deploy to PyPI [Windows]
         env:
+          PYTHONIOENCODING: utf-8
           TWINE_PASSWORD: ${{ secrets.TWINE_PASSWORD }}
-        run: poetry run twine upload dist/* --username __token__ --password ${env:TWINE_PASSWORD}
+        run: poetry run twine upload dist/jdk4py*.whl --username __token__ --password ${env:TWINE_PASSWORD}
       - if: matrix.os != 'windows-latest'
         name: Deploy to PyPI [Linux/macOS]
         env:
           TWINE_PASSWORD: ${{ secrets.TWINE_PASSWORD }}
-        run: poetry run twine upload dist/* --username __token__ --password $TWINE_PASSWORD
+        run: poetry run twine upload dist/jdk4py*.whl --username __token__ --password $TWINE_PASSWORD
