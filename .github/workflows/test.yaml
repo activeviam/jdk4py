@@ -89,14 +89,16 @@ jobs:
           channels: conda-forge
           conda-build-version: 3.20.0
 
-      - name: Build Conda package on ubuntu and latest Python
-        run: conda build --output-folder dist . --no-anaconda-upload --debug
+      # - name: Build Conda package on ubuntu and latest Python
+      #   run: conda build --output-folder dist . --no-anaconda-upload --debug
 
       - name: Check python2
         run: poetry run python -c "import sys; print('\n'.join(sys.path))"
 
       - name: deactivate conda
-        run: conda env remove -n test
+        run: |
+          conda deactivate
+          conda env remove -n test
 
       - name: Install python dependencies2
         run: poetry install
