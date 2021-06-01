@@ -50,9 +50,10 @@ setuptools.setup(
     packages=setuptools.find_packages(exclude=["tests"]),
     package_data={_NAME: [*_JAVA_FILES, _JAVA_VERSION_FILENAME, _JAVA_MAJOR_FILENAME, _LIB_VERSION_FILENAME]},
     classifiers=[
-        "Programming Language :: Python :: 3",
-        "Operating System :: OS Independent",
         "Development Status :: 4 - Beta",
+        "License :: OSI Approved :: GNU General Public License v2 (GPLv2)",
+        "Operating System :: OS Independent",
+        "Programming Language :: Python :: 3",
     ],
     keywords=["jdk", "java", "jvm", "jre"],
     python_requires=">=3.7",
