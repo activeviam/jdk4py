@@ -30,17 +30,17 @@ jobs:
           java-version: ${{ env.JAVA_VERSION }}
 
       # Install Poetry
-      - if: matrix.os == 'windows-latest'
+      - if: matrix.os == "windows-latest"
         name: Install Poetry [Windows]
         run: pip install poetry
-      - if: matrix.os != 'windows-latest'
+      - if: matrix.os != "windows-latest"
         name: Install Poetry [Ubuntu/macOS]
         run: pip3 install poetry
 
       - name: Install Python dependencies
         run: poetry install
 
-      - if: matrix.os == 'ubuntu-latest'
+      - if: matrix.os == "ubuntu-latest"
         name: Build source wheel
         run: poetry run python setup.py sdist
 
@@ -72,7 +72,7 @@ jobs:
 
       # Deploy Conda package to artifactory.
       - name: Upload Conda package [Linux]
-        if: matrix.os == 'ubuntu-latest'
+        if: matrix.os == "ubuntu-latest"
         env:
           ARTIFACTORY_USERNAME: ${{ secrets.ARTIFACTORY_USERNAME }}
           ARTIFACTORY_PASSWORD: ${{ secrets.ARTIFACTORY_PASSWORD }}
@@ -84,7 +84,7 @@ jobs:
           done
 
       - name: Upload Conda package [macOS]
-        if: matrix.os == 'macos-latest'
+        if: matrix.os == "macos-latest"
         env:
           ARTIFACTORY_USERNAME: ${{ secrets.ARTIFACTORY_USERNAME }}
           ARTIFACTORY_PASSWORD: ${{ secrets.ARTIFACTORY_PASSWORD }}
@@ -96,7 +96,7 @@ jobs:
           done
 
       - name: Upload Conda package [Windows]
-        if: matrix.os == 'windows-latest'
+        if: matrix.os == "windows-latest"
         env:
           ARTIFACTORY_USERNAME: ${{ secrets.ARTIFACTORY_USERNAME }}
           ARTIFACTORY_PASSWORD: ${{ secrets.ARTIFACTORY_PASSWORD }}
@@ -106,7 +106,7 @@ jobs:
           curl --fail --user ${env:ARTIFACTORY_USERNAME}:${env:ARTIFACTORY_PASSWORD} "${env:JDK4PY_CONDA_CHANNEL}/win-64/" --upload-file "dist\win-64\jdk4py-${env:JDK4PY_VERSION}-py39_0.tar.bz2"
 
       # Deploy to PyPI
-      - if: matrix.os == 'windows-latest'
+      - if: matrix.os == "windows-latest"
         name: Deploy to PyPI [Windows]
         env:
           TWINE_PASSWORD: ${{ secrets.TWINE_PASSWORD }}
@@ -114,7 +114,7 @@ jobs:
           | # Install twine with conda as poetry is broken after installing conda
           conda install twine
           twine upload dist/jdk4py-*.whl --username __token__ --password ${env:TWINE_PASSWORD}
-      - if: matrix.os != 'windows-latest'
+      - if: matrix.os != "windows-latest"
         name: Deploy to PyPI [Linux/macOS]
         env:
           TWINE_PASSWORD: ${{ secrets.TWINE_PASSWORD }}
