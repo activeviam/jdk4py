@@ -53,7 +53,7 @@ jobs:
 
       - uses: actions/upload-artifact@v2
         with:
-          name: jdk4py-${{ matrix.os }}.whl
+          name: jdk4py-${{ matrix.os }}-${{ matrix.python }}.whl
           path: dist/jdk4py-*.whl
 
   conda-package:
