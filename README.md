@@ -54,5 +54,5 @@ The Java version can be checked with:
 ```python
 >>> from jdk4py import JAVA_VERSION
 >>> JAVA_VERSION
-'11.0.2'
+'11.0.9'
 ```

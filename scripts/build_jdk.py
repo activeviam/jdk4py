@@ -1,10 +1,10 @@
-from subprocess import Popen, PIPE
 from pathlib import Path
 from shutil import rmtree
+from subprocess import PIPE, Popen
 
 
-PROJECT_FOLDER = Path(__file__).parent.parent
-JAVA_PATH = PROJECT_FOLDER / "jdk4py" / "java-runtime"
+_PROJECT_DIRECTORY = Path(__file__).parent.parent
+_JAVA_PATH = _PROJECT_DIRECTORY / "jdk4py" / "java-runtime"
 
 _MODULES = [
     "jdk.management.agent",
@@ -13,12 +13,13 @@ _MODULES = [
     "jdk.security.auth",
     "jdk.crypto.ec",
     "jdk.jfr",
-    "jdk.management.jfr"
+    "jdk.management.jfr",
 ]
 
 
 def build_java_executable_files():
-    rmtree(JAVA_PATH, ignore_errors=True)
+    rmtree(_JAVA_PATH, ignore_errors=True)
+
     process = Popen(
         [
             "jlink",
@@ -29,12 +30,13 @@ def build_java_executable_files():
             "--add-modules",
             ",".join(_MODULES),
             "--output",
-            str(JAVA_PATH),
+            str(_JAVA_PATH),
         ],
         stdout=PIPE,
         stderr=PIPE,
     )
     out, err = process.communicate()
+
     if process.returncode == 0:
         print("Successfully built the Java executables.")
         return

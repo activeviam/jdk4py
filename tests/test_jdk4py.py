@@ -1,7 +1,7 @@
 from pathlib import Path
 from subprocess import PIPE
 
-from jdk4py import JAVA, JAVA_HOME, JAVA_VERSION, MAJOR_JAVA_VERSION, execute_jar, java
+from jdk4py import JAVA, JAVA_HOME, JAVA_VERSION, execute_jar, java
 
 _TESTS_DIRECTORY = Path(__file__).parent
 
@@ -13,8 +13,6 @@ def test_java_version():
     version = str(out).split("\n")[0].split(" ")[1]
     assert version == JAVA_VERSION
 
-def test_major_java_version():
-    assert MAJOR_JAVA_VERSION == JAVA_VERSION.split('.')[0]
 
 def test_java_home():
     assert JAVA == JAVA_HOME / "bin" / "java"
