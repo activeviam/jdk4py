@@ -10,7 +10,6 @@ def test_java_version():
     process = java(["--version"], stdout=PIPE, stderr=PIPE)
     out, err = process.communicate()
     assert not err
-    assert out == "bim"
     version = str(out).split("\n")[0].split(" ")[1]
     assert version[:version.rindex(".")] == JAVA_VERSION
 
