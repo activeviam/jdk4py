@@ -10,7 +10,7 @@ jobs:
     strategy:
       matrix:
         os: [macos-latest, windows-latest, ubuntu-latest]
-        python: ["3.7", "3.8", "3.9"]
+        python: ["3.6", "3.7", "3.8", "3.9"]
       fail-fast: false
     name: Test on ${{ matrix.os }} with Python ${{ matrix.python }}
     steps:
@@ -30,10 +30,10 @@ jobs:
           java-version: ${{ env.JAVA_VERSION }}
 
       # Install Poetry
-      - if: matrix.os == "windows-latest"
+      - if: matrix.os == 'windows-latest'
         name: Install poetry [Windows]
         run: pip install poetry
-      - if: matrix.os != "windows-latest"
+      - if: matrix.os != 'windows-latest'
         name: Install poetry [Ubuntu/macOS]
         run: pip3 install poetry
 
@@ -51,11 +51,9 @@ jobs:
       - name: Test
         run: poetry run pytest
 
-      # No need to upload the package for each Python version
-      - if: matrix.python == "3.8"
-        uses: actions/upload-artifact@v2
+      - uses: actions/upload-artifact@v2
         with:
-          name: jdk4py-${{ matrix.os }}.whl
+          name: jdk4py-${{ matrix.os }}-${{ matrix.python }}.whl
           path: dist/jdk4py-*.whl
 
   conda-package:
