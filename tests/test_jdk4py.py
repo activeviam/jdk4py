@@ -11,7 +11,8 @@ def test_java_version():
     out, err = process.communicate()
     assert not err
     version = str(out).split("\n")[0].split(" ")[1]
-    assert version == JAVA_VERSION
+    semver_version = version[: version.rindex(".")]
+    assert semver_version == JAVA_VERSION
 
 
 def test_java_home():
