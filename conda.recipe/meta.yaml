@@ -33,9 +33,10 @@ about:
   home: https://github.com/atoti/jdk4py
   license: GNU General Public License v2.0
   license_file: LICENSE
-  summary: 'Packaged JDK for Python.'
+  summary: Packaged JDK for Python.
   dev_url: https://github.com/atoti/jdk4py
 
 extra:
   recipe-maintainers:
     - fabiencelier
+    - tibdex

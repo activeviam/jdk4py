@@ -2,7 +2,7 @@ name: Deploy Conda and PyPI packages
 on:
   push:
     branches:
-      - master
+      - main
 
 jobs:
   deploy:
@@ -112,7 +112,8 @@ jobs:
         name: Deploy to PyPI [Windows]
         env:
           TWINE_PASSWORD: ${{ secrets.TWINE_PASSWORD }}
-        run: | # Install twine with conda as poetry is broken after installing conda
+        run:
+          | # Install twine with conda as poetry is broken after installing conda
           conda install twine
           twine upload dist/jdk4py-*.whl --username __token__ --password ${env:TWINE_PASSWORD}
       - if: matrix.os != 'windows-latest'
