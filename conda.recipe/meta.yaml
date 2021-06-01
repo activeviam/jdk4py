@@ -8,7 +8,6 @@ source:
   path: ../
 
 build:
-  number: 0
   include_recipe: False
   binary_relocation: False # Without that binaries are broken on Mac OS.
 
