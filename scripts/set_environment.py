@@ -4,8 +4,6 @@ from typing import Mapping
 
 _PROJECT_DIRECTORY = Path(__file__).parent.parent
 _SOURCE_DIRECTORY = _PROJECT_DIRECTORY / "jdk4py"
-_JAVA_VERSION_FILENAME = "java_version.txt"
-_LIB_VERSION_FILENAME = "lib_version.txt"
 
 
 def set_env_variables_in_github_job(variables: Mapping[str, str]):
@@ -16,14 +14,15 @@ def set_env_variables_in_github_job(variables: Mapping[str, str]):
 
 
 if __name__ == "__main__":
-    java_version, lib_version = (
+    build_number, java_version, lib_version = (
         (_SOURCE_DIRECTORY / filename).read_text().strip()
-        for filename in (_JAVA_VERSION_FILENAME, _LIB_VERSION_FILENAME)
+        for filename in ("build_number.txt", "java_version.txt", "lib_version.txt")
     )
 
     set_env_variables_in_github_job(
         {
             "JAVA_VERSION": java_version,
+            "JDK4PY_BUILD_NUMBER": build_number,
             "JDK4PY_VERSION": ".".join((java_version, lib_version)),
         }
     )

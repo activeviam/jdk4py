@@ -8,8 +8,9 @@ source:
   path: ../
 
 build:
+  binary_relocation: False # Without that, binaries are broken on macOS.
   include_recipe: False
-  binary_relocation: False # Without that binaries are broken on Mac OS.
+  number: {{ environ.get('JDK4PY_BUILD_NUMBER') }}
 
 requirements:
   build:
