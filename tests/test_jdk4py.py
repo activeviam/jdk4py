@@ -11,10 +11,10 @@ def test_java_version():
     out, err = process.communicate()
     assert not err
     version = str(out).split("\n")[0].split(" ")[1]
-    assert version[:version.rindex(".")] == JAVA_VERSION
+    assert version == JAVA_VERSION
 
 def test_major_java_version():
-    assert MAJOR_JAVA_VERSION == "11"
+    assert MAJOR_JAVA_VERSION == JAVA_VERSION.split('.')[0]
 
 def test_java_home():
     assert JAVA == JAVA_HOME / "bin" / "java"
