@@ -8,9 +8,9 @@ source:
   path: ../
 
 build:
-  number: 0
+  binary_relocation: False # Without that, binaries are broken on macOS.
   include_recipe: False
-  binary_relocation: False # Without that binaries are broken on Mac OS.
+  number: {{ environ.get('JDK4PY_BUILD_NUMBER') }}
 
 requirements:
   build:
@@ -33,9 +33,10 @@ about:
   home: https://github.com/atoti/jdk4py
   license: GNU General Public License v2.0
   license_file: LICENSE
-  summary: 'Packaged JDK for Python.'
+  summary: Packaged JDK for Python.
   dev_url: https://github.com/atoti/jdk4py
 
 extra:
   recipe-maintainers:
     - fabiencelier
+    - tibdex

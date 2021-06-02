@@ -2,7 +2,7 @@ name: Test
 on:
   pull_request:
     branches:
-      - master
+      - main
 
 jobs:
   test:
@@ -10,8 +10,8 @@ jobs:
     strategy:
       matrix:
         os: [macos-latest, windows-latest, ubuntu-latest]
-        python: ["3.6", "3.7", "3.8"]
-      fail-fast: false # To not cancel other platforms when one fails
+        python: ["3.7", "3.8", "3.9"]
+      fail-fast: false
     name: Test on ${{ matrix.os }} with Python ${{ matrix.python }}
     steps:
       - uses: actions/checkout@v2
@@ -21,14 +21,13 @@ jobs:
           python-version: ${{ matrix.python }}
           architecture: "x64"
 
-      - name: Set Java version
-        run: python scripts/set_versions.py
+      - name: Set environment variables
+        run: python scripts/set_environment.py
 
-      - uses: joschi/setup-jdk@v2 # We must use to the official action once https://github.com/actions/setup-java/pull/97 is closed
+      - uses: actions/setup-java@v2
         with:
-          java-version: ${{ env.MAJOR_JAVA_VERSION }}
-          java-package: jdk # (jre, jdk, or jdk+fx) - defaults to jdk
-          architecture: x64
+          distribution: adopt
+          java-version: ${{ env.JAVA_VERSION }}
 
       # Install Poetry
       - if: matrix.os == 'windows-latest'
@@ -44,12 +43,24 @@ jobs:
       - name: Build JDK
         run: poetry run python scripts/build_jdk.py
 
+      - name: Build wheel
+        env:
+          JDK4PY_BUILD_PLATFORM: ubuntu-latest
+        run: poetry run python setup.py bdist_wheel --build-number ${{ env.JDK4PY_BUILD_NUMBER }}
+
       - name: Test
         run: poetry run pytest
 
-  package: # only on latest Ubuntu and Python
+      # No need to upload the package for each Python version
+      - if: matrix.python == '3.8'
+        uses: actions/upload-artifact@v2
+        with:
+          name: jdk4py-${{ matrix.os }}.whl
+          path: dist/jdk4py-*.whl
+
+  conda-package:
     runs-on: ubuntu-latest
-    name: Test packaging wheel and Conda
+    name: Test Conda packaging
     steps:
       - uses: actions/checkout@v2
 
@@ -58,14 +69,13 @@ jobs:
           python-version: 3.8
           architecture: "x64"
 
-      - name: Set Java version
-        run: python scripts/set_versions.py
+      - name: Set environment variables
+        run: python scripts/set_environment.py
 
-      - uses: joschi/setup-jdk@v2 # We must use to the official action once https://github.com/actions/setup-java/pull/97 is closed
+      - uses: actions/setup-java@v2
         with:
-          java-version: ${{ env.MAJOR_JAVA_VERSION }}
-          java-package: jdk
-          architecture: x64
+          distribution: adopt
+          java-version: ${{ env.JAVA_VERSION }}
 
       - name: Install poetry
         run: pip3 install poetry
@@ -76,15 +86,10 @@ jobs:
       - name: Build JDK
         run: poetry run python scripts/build_jdk.py
 
-      - name: Build wheel
-        env:
-          JDK4PY_BUILD_PLATFORM: ubuntu-latest
-        run: poetry run python setup.py bdist_wheel
-
       - uses: conda-incubator/setup-miniconda@v2
         with:
           channels: conda-forge
           conda-build-version: 3.20.0
 
-      - name: Build Conda package on ubuntu and latest Python
-        run: conda build --output-folder dist . --no-anaconda-upload --debug
+      - name: Build Conda package
+        run: conda build --debug --no-anaconda-upload --output-folder dist .
