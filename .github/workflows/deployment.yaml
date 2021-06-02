@@ -48,7 +48,7 @@ jobs:
         env:
           TWINE_PASSWORD: ${{ secrets.TWINE_PASSWORD }}
         shell: bash
-        run: poetry run twine upload dist/jdk4py-*.whl --username __token__ --password $TWINE_PASSWORD
+        run: poetry run twine upload dist/jdk4py-*.whl --username __token__ --password "$TWINE_PASSWORD"
 
       - uses: conda-incubator/setup-miniconda@v2
         with:
