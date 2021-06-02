@@ -18,8 +18,14 @@ jobs:
 
       - uses: actions/setup-python@v2
         with:
+          architecture: x64
           python-version: 3.8
-          architecture: "x64"
+
+      - name: Install Poetry
+        run: pip install poetry
+
+      - name: Install Python dependencies
+        run: poetry install
 
       - name: Set environment variables
         run: python scripts/set_environment.py
@@ -29,33 +35,20 @@ jobs:
           distribution: adopt
           java-version: ${{ env.JAVA_VERSION }}
 
-      # Install Poetry
-      - if: matrix.os == 'windows-latest'
-        name: Install Poetry [Windows]
-        run: pip install poetry
-      - if: matrix.os != 'windows-latest'
-        name: Install Poetry [Ubuntu/macOS]
-        run: pip3 install poetry
-
-      - name: Install Python dependencies
-        run: poetry install
-
-      - if: matrix.os == 'ubuntu-latest'
-        name: Build source wheel
-        run: poetry run python setup.py sdist
-
       - name: Build JDK
         run: poetry run python scripts/build_jdk.py
 
-      - name: Build wheel
+      - name: Build Python wheel
         env:
           JDK4PY_BUILD_PLATFORM: ${{ matrix.os }}
-        run: poetry run python setup.py bdist_wheel --build-number ${{ env.JDK4PY_BUILD_NUMBER }}
+        shell: bash
+        run: poetry run python setup.py bdist_wheel --build-number $JDK4PY_BUILD_NUMBER
 
-      - uses: actions/upload-artifact@v2
-        with:
-          name: jdk4py-${{ matrix.os }}.whl
-          path: dist/jdk4py-*.whl
+      - name: Deploy to PyPI
+        env:
+          TWINE_PASSWORD: ${{ secrets.TWINE_PASSWORD }}
+        shell: bash
+        run: poetry run twine upload dist/jdk4py-*.whl --username __token__ --password "$TWINE_PASSWORD"
 
       - uses: conda-incubator/setup-miniconda@v2
         with:
@@ -63,59 +56,16 @@ jobs:
           conda-build-version: 3.20.0
 
       - name: Build Conda package
-        run: conda build --output-folder dist . --no-anaconda-upload --debug
+        run: conda build --no-anaconda-upload --output-folder dist .
 
-      - uses: actions/upload-artifact@v2
-        with:
-          name: jdk4py-${{ matrix.os }}.tar.bz2
-          path: dist/*/jdk4py-*.bz2
-
-      # Deploy Conda package to artifactory.
-      - name: Upload Conda package [Linux]
-        if: matrix.os == 'ubuntu-latest'
+      - name: Upload Conda package
         env:
           ARTIFACTORY_USERNAME: ${{ secrets.ARTIFACTORY_USERNAME }}
           ARTIFACTORY_PASSWORD: ${{ secrets.ARTIFACTORY_PASSWORD }}
+        shell: bash
         run: |
-          ls dist/linux-64/jdk4py-*.tar.bz2 | \
+          ls dist/$CONDA_ARCH/jdk4py-*.tar.bz2 | \
           while read filepath; do
             echo Uploading ${filepath}
-            curl --fail --user $ARTIFACTORY_USERNAME:$ARTIFACTORY_PASSWORD --upload-file ${filepath} "$JDK4PY_CONDA_CHANNEL/linux-64/"
+            curl --fail --user "$ARTIFACTORY_USERNAME":"$ARTIFACTORY_PASSWORD" --upload-file ${filepath} "$JDK4PY_CONDA_CHANNEL/$CONDA_ARCH/"
           done
-
-      - name: Upload Conda package [macOS]
-        if: matrix.os == 'macos-latest'
-        env:
-          ARTIFACTORY_USERNAME: ${{ secrets.ARTIFACTORY_USERNAME }}
-          ARTIFACTORY_PASSWORD: ${{ secrets.ARTIFACTORY_PASSWORD }}
-        run: |
-          ls dist/osx-64/jdk4py-*.tar.bz2 | \
-          while read filepath; do
-            echo Uploading ${filepath}
-            curl --fail --user $ARTIFACTORY_USERNAME:$ARTIFACTORY_PASSWORD --upload-file ${filepath} "$JDK4PY_CONDA_CHANNEL/osx-64/"
-          done
-
-      - name: Upload Conda package [Windows]
-        if: matrix.os == 'windows-latest'
-        env:
-          ARTIFACTORY_USERNAME: ${{ secrets.ARTIFACTORY_USERNAME }}
-          ARTIFACTORY_PASSWORD: ${{ secrets.ARTIFACTORY_PASSWORD }}
-        run: |
-          curl --fail --user ${env:ARTIFACTORY_USERNAME}:${env:ARTIFACTORY_PASSWORD} "${env:JDK4PY_CONDA_CHANNEL}/win-64/" --upload-file "dist\win-64\jdk4py-${env:JDK4PY_VERSION}-py37_0.tar.bz2"
-          curl --fail --user ${env:ARTIFACTORY_USERNAME}:${env:ARTIFACTORY_PASSWORD} "${env:JDK4PY_CONDA_CHANNEL}/win-64/" --upload-file "dist\win-64\jdk4py-${env:JDK4PY_VERSION}-py38_0.tar.bz2"
-          curl --fail --user ${env:ARTIFACTORY_USERNAME}:${env:ARTIFACTORY_PASSWORD} "${env:JDK4PY_CONDA_CHANNEL}/win-64/" --upload-file "dist\win-64\jdk4py-${env:JDK4PY_VERSION}-py39_0.tar.bz2"
-
-      # Deploy to PyPI
-      - if: matrix.os == 'windows-latest'
-        name: Deploy to PyPI [Windows]
-        env:
-          TWINE_PASSWORD: ${{ secrets.TWINE_PASSWORD }}
-        run:
-          | # Install twine with conda as poetry is broken after installing conda
-          conda install twine
-          twine upload dist/jdk4py-*.whl --username __token__ --password ${env:TWINE_PASSWORD}
-      - if: matrix.os != 'windows-latest'
-        name: Deploy to PyPI [Linux/macOS]
-        env:
-          TWINE_PASSWORD: ${{ secrets.TWINE_PASSWORD }}
-        run: poetry run twine upload dist/jdk4py-*.whl --username __token__ --password $TWINE_PASSWORD
