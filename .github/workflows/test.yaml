@@ -18,8 +18,14 @@ jobs:
 
       - uses: actions/setup-python@v2
         with:
+          architecture: x64
           python-version: ${{ matrix.python }}
-          architecture: "x64"
+
+      - name: Install Poetry
+        run: pip install poetry
+
+      - name: Install Python dependencies
+        run: poetry install
 
       - name: Set environment variables
         run: python scripts/set_environment.py
@@ -29,24 +35,14 @@ jobs:
           distribution: adopt
           java-version: ${{ env.JAVA_VERSION }}
 
-      # Install Poetry
-      - if: matrix.os == 'windows-latest'
-        name: Install poetry [Windows]
-        run: pip install poetry
-      - if: matrix.os != 'windows-latest'
-        name: Install poetry [Ubuntu/macOS]
-        run: pip3 install poetry
-
-      - name: Install python dependencies
-        run: poetry install
-
       - name: Build JDK
         run: poetry run python scripts/build_jdk.py
 
-      - name: Build wheel
+      - name: Build Python wheel
         env:
-          JDK4PY_BUILD_PLATFORM: ubuntu-latest
-        run: poetry run python setup.py bdist_wheel --build-number ${{ env.JDK4PY_BUILD_NUMBER }}
+          JDK4PY_BUILD_PLATFORM: ${{ matrix.os }}
+        shell: bash
+        run: poetry run python setup.py bdist_wheel --build-number $JDK4PY_BUILD_NUMBER
 
       - name: Test
         run: poetry run pytest
@@ -55,6 +51,7 @@ jobs:
       - if: matrix.python == '3.8'
         uses: actions/upload-artifact@v2
         with:
+          if-no-files-found: error
           name: jdk4py-${{ matrix.os }}.whl
           path: dist/jdk4py-*.whl
 
@@ -66,8 +63,15 @@ jobs:
 
       - uses: actions/setup-python@v2
         with:
+          architecture: x64
           python-version: 3.8
-          architecture: "x64"
+
+      - name: Install Poetry
+        shell: bash
+        run: pip install poetry
+
+      - name: Install Python dependencies
+        run: poetry install
 
       - name: Set environment variables
         run: python scripts/set_environment.py
@@ -76,12 +80,6 @@ jobs:
         with:
           distribution: adopt
           java-version: ${{ env.JAVA_VERSION }}
-
-      - name: Install poetry
-        run: pip3 install poetry
-
-      - name: Install python dependencies
-        run: poetry install
 
       - name: Build JDK
         run: poetry run python scripts/build_jdk.py
@@ -92,4 +90,10 @@ jobs:
           conda-build-version: 3.20.0
 
       - name: Build Conda package
-        run: conda build --debug --no-anaconda-upload --output-folder dist .
+        run: conda build --no-anaconda-upload --output-folder dist .
+
+      - uses: actions/upload-artifact@v2
+        with:
+          if-no-files-found: error
+          name: conda-packages
+          path: dist/${{ env.CONDA_ARCH }}/jdk4py-*.tar.bz2
