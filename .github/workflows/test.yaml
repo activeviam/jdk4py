@@ -10,7 +10,10 @@ jobs:
     strategy:
       matrix:
         os: [macos-latest, windows-latest, ubuntu-latest]
-        python: ["3.7", "3.8", "3.9"]
+        python:
+          - "3.7"
+          - "3.8"
+          - "3.9"
       fail-fast: false
     name: Test on ${{ matrix.os }} with Python ${{ matrix.python }}
     steps:
@@ -28,27 +31,30 @@ jobs:
         run: poetry install
 
       - name: Set environment variables
-        run: python scripts/set_environment.py
+        run: poetry run python scripts/set_environment.py
 
       - uses: actions/setup-java@v2
         with:
           distribution: adopt
-          java-version: ${{ env.JAVA_VERSION }}
+          java-version: ${{ env.JDK4PY_JAVA_VERSION }}
 
       - name: Build JDK
         run: poetry run python scripts/build_jdk.py
 
       - name: Build Python wheel
-        env:
-          JDK4PY_BUILD_PLATFORM: ${{ matrix.os }}
         shell: bash
         run: poetry run python setup.py bdist_wheel --build-number $JDK4PY_BUILD_NUMBER
+
+      # No need to lint for each Python version
+      - if: matrix.python == '3.9'
+        name: Check formatting
+        run: poetry run black --check .
 
       - name: Test
         run: poetry run pytest
 
       # No need to upload the package for each Python version
-      - if: matrix.python == '3.8'
+      - if: matrix.python == '3.9'
         uses: actions/upload-artifact@v2
         with:
           if-no-files-found: error
@@ -64,22 +70,21 @@ jobs:
       - uses: actions/setup-python@v2
         with:
           architecture: x64
-          python-version: 3.8
+          python-version: "3.9"
 
       - name: Install Poetry
-        shell: bash
         run: pip install poetry
 
       - name: Install Python dependencies
         run: poetry install
 
       - name: Set environment variables
-        run: python scripts/set_environment.py
+        run: poetry run python scripts/set_environment.py
 
       - uses: actions/setup-java@v2
         with:
           distribution: adopt
-          java-version: ${{ env.JAVA_VERSION }}
+          java-version: ${{ env.JDK4PY_JAVA_VERSION }}
 
       - name: Build JDK
         run: poetry run python scripts/build_jdk.py
@@ -87,7 +92,7 @@ jobs:
       - uses: conda-incubator/setup-miniconda@v2
         with:
           channels: conda-forge
-          conda-build-version: 3.20.0
+          conda-build-version: "3.21.5"
 
       - name: Build Conda package
         run: conda build --no-anaconda-upload --output-folder dist .
@@ -96,4 +101,4 @@ jobs:
         with:
           if-no-files-found: error
           name: conda-packages
-          path: dist/${{ env.CONDA_ARCH }}/jdk4py-*.tar.bz2
+          path: dist/${{ env.JDK4PY_CONDA_ARCH }}/jdk4py-*.tar.bz2

@@ -1,4 +1,4 @@
-# Jdk4py
+# jdk4py
 
 A packaged JDK for Python.
 
@@ -19,40 +19,25 @@ conda config --add channels https://conda.atoti.io
 conda install jdk4py
 ```
 
+## Usage
+
+```python
+>>> from jdk4py import JAVA, JAVA_HOME, JAVA_VERSION
+>>> JAVA_HOME
+PosixPath('/Users/johndoe/dev/jdk4py/jdk4py/java-runtime')
+>>> JAVA
+PosixPath('/Users/johndoe/dev/jdk4py/jdk4py/java-runtime/bin/java')
+>>> JAVA_VERSION
+(11, 0, 10)
+>>> from subprocess import check_output
+>>> some_java_options = ["-Xmx16G", "-Xms2G"]
+>>> check_output([str(JAVA), "-jar", "HelloWorld.jar",  *some_java_options])
+b"Hello, World!"
+```
+
 ## Versioning
 
-jdk4py version contains 4 figures:
+`jdk4py` version contains 4 figures:
 
-- The first 3 figures are the Java version
-- The fourth is jdk4py specific: it starts at 0 for each Java version and then increases.
-
-## API
-
-### Execute a JAR
-
-```python
-from jdk4py import execute_jar
-execute_jar("myJar.jar")
-```
-
-Some JVM arguments can be provided, any additional argument will be passed to `Popen`:
-
-```python
-execute_jar("myJar.jar", jvm_args=["-xmx=16G"], stdout=PIPE, stderr=PIPE)
-```
-
-### Home and executable paths
-
-The paths to the packaged Java home directory and to the Java executable are also accessible:
-
-```python
-from jdk4py import JAVA, JAVA_HOME
-```
-
-The Java version can be checked with:
-
-```python
->>> from jdk4py import JAVA_VERSION
->>> JAVA_VERSION
-'11.0.9'
-```
+- The first 3 figures are the Java version.
+- The fourth is `jdk4py` specific: it starts at 0 for each Java version and then increases.
