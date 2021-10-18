@@ -1,4 +1,6 @@
+import platform
 from pathlib import Path
+from sys import argv
 
 from setuptools import find_packages, setup
 
@@ -25,6 +27,14 @@ _VERSION = ".".join(
     )
 )
 
+_PLATFORM_NAME_ARGUMENT_NAME = "--plat-name"
+
+_SYSTEM_TO_PLATFORM_NAME = {
+    "Darwin": "macosx_10_9_x86_64",
+    "Linux": "manylinux1_x86_64",
+    "Windows": "win_amd64",
+}
+
 
 setup_args = dict(
     name=_NAME,
@@ -48,4 +58,8 @@ setup_args = dict(
 )
 
 if __name__ == "__main__":
+    if _PLATFORM_NAME_ARGUMENT_NAME not in argv:
+        argv.append(_PLATFORM_NAME_ARGUMENT_NAME)
+        argv.append(_SYSTEM_TO_PLATFORM_NAME[platform.system()])
+
     setup(**setup_args)
