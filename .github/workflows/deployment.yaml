@@ -7,19 +7,18 @@ on:
 jobs:
   deploy:
     runs-on: ${{ matrix.os }}
+    environment: deployment
     strategy:
       matrix:
         os: [macos-latest, windows-latest, ubuntu-latest]
     name: Deploy on ${{ matrix.os }}
-    env:
-      JDK4PY_CONDA_CHANNEL: https://activeviam.jfrog.io/artifactory/jdk4py-conda-release
     steps:
       - uses: actions/checkout@v2
 
       - uses: actions/setup-python@v2
         with:
           architecture: x64
-          python-version: 3.8
+          python-version: "3.9"
 
       - name: Install Poetry
         run: pip install poetry
@@ -28,19 +27,17 @@ jobs:
         run: poetry install
 
       - name: Set environment variables
-        run: python scripts/set_environment.py
+        run: python run python scripts/set_environment.py
 
       - uses: actions/setup-java@v2
         with:
           distribution: adopt
-          java-version: ${{ env.JAVA_VERSION }}
+          java-version: ${{ env.JDK4PY_JAVA_VERSION }}
 
       - name: Build JDK
         run: poetry run python scripts/build_jdk.py
 
       - name: Build Python wheel
-        env:
-          JDK4PY_BUILD_PLATFORM: ${{ matrix.os }}
         shell: bash
         run: poetry run python setup.py bdist_wheel --build-number $JDK4PY_BUILD_NUMBER
 
@@ -53,19 +50,20 @@ jobs:
       - uses: conda-incubator/setup-miniconda@v2
         with:
           channels: conda-forge
-          conda-build-version: 3.20.0
+          conda-build-version: "3.21.5"
 
       - name: Build Conda package
         run: conda build --no-anaconda-upload --output-folder dist .
 
       - name: Upload Conda package
         env:
-          ARTIFACTORY_USERNAME: ${{ secrets.ARTIFACTORY_USERNAME }}
-          ARTIFACTORY_PASSWORD: ${{ secrets.ARTIFACTORY_PASSWORD }}
+          JDK4PY_CONDA_CHANNEL_PASSWORD: ${{ secrets.CONDA_CHANNEL_PASSWORD }}
+          JDK4PY_CONDA_CHANNEL_URL: ${{ secrets.CONDA_CHANNEL_URL }}
+          JDK4PY_CONDA_CHANEL_USERNAME: ${{ secrets.CONDA_CHANEL_USERNAME }}
         shell: bash
         run: |
-          ls dist/$CONDA_ARCH/jdk4py-*.tar.bz2 | \
+          ls dist/$JDK4PY_CONDA_ARCH/jdk4py-*.tar.bz2 | \
           while read filepath; do
             echo Uploading ${filepath}
-            curl --fail --user "$ARTIFACTORY_USERNAME":"$ARTIFACTORY_PASSWORD" --upload-file ${filepath} "$JDK4PY_CONDA_CHANNEL/$CONDA_ARCH/"
+            curl --fail --user "$JDK4PY_CONDA_CHANNEL_URL":"$JDK4PY_CONDA_CHANNEL_PASSWORD" --upload-file ${filepath} "$JDK4PY_CONDA_CHANNEL_URL/$JDK4PY_CONDA_ARCH/"
           done
