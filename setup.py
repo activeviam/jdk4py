@@ -36,6 +36,12 @@ _SYSTEM_TO_PLATFORM_NAME = {
 }
 
 
+def _add_platform_name_argument_when_building_python_wheel():
+    if "bdist_wheel" in argv and _PLATFORM_NAME_ARGUMENT_NAME not in argv:
+        argv.append(_PLATFORM_NAME_ARGUMENT_NAME)
+        argv.append(_SYSTEM_TO_PLATFORM_NAME[platform.system()])
+
+
 setup_args = dict(
     name=_NAME,
     version=_VERSION,
@@ -58,8 +64,5 @@ setup_args = dict(
 )
 
 if __name__ == "__main__":
-    if _PLATFORM_NAME_ARGUMENT_NAME not in argv:
-        argv.append(_PLATFORM_NAME_ARGUMENT_NAME)
-        argv.append(_SYSTEM_TO_PLATFORM_NAME[platform.system()])
-
+    _add_platform_name_argument_when_building_python_wheel()
     setup(**setup_args)
