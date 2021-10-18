@@ -27,7 +27,7 @@ jobs:
         run: poetry install
 
       - name: Set environment variables
-        run: python run python scripts/set_environment.py
+        run: poetry run python scripts/set_environment.py
 
       - uses: actions/setup-java@v2
         with:
