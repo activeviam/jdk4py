@@ -4,7 +4,7 @@ from typing import Mapping
 
 from jdk4py import JAVA_VERSION
 
-_BUILD_VERSION = 1
+_BUILD_VERSION = 2
 
 _SYSTEM_TO_CONDA_ARCH = {
     "Darwin": "osx-64",

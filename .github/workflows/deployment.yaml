@@ -59,11 +59,11 @@ jobs:
         env:
           JDK4PY_CONDA_CHANNEL_PASSWORD: ${{ secrets.CONDA_CHANNEL_PASSWORD }}
           JDK4PY_CONDA_CHANNEL_URL: ${{ secrets.CONDA_CHANNEL_URL }}
-          JDK4PY_CONDA_CHANEL_USERNAME: ${{ secrets.CONDA_CHANEL_USERNAME }}
+          JDK4PY_CONDA_CHANNEL_USERNAME: ${{ secrets.CONDA_CHANNEL_USERNAME }}
         shell: bash
         run: |
           ls dist/$JDK4PY_CONDA_ARCH/jdk4py-*.tar.bz2 | \
           while read filepath; do
             echo Uploading ${filepath}
-            curl --fail --user "$JDK4PY_CONDA_CHANNEL_URL":"$JDK4PY_CONDA_CHANNEL_PASSWORD" --upload-file ${filepath} "$JDK4PY_CONDA_CHANNEL_URL/$JDK4PY_CONDA_ARCH/"
+            curl --fail --user "$JDK4PY_CONDA_CHANNEL_USERNAME":"$JDK4PY_CONDA_CHANNEL_PASSWORD" --upload-file ${filepath} "$JDK4PY_CONDA_CHANNEL_URL/$JDK4PY_CONDA_ARCH/"
           done
