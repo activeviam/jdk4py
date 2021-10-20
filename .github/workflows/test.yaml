@@ -19,7 +19,7 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
-      - uses: ./.github/actions/build-python-wheel
+      - uses: ./.github/actions/build-jdk
         with:
           python-version: ${{ matrix.python }}
 
@@ -30,6 +30,8 @@ jobs:
 
       - name: Test
         run: poetry run pytest
+
+      - uses: ./.github/actions/create-python-wheel
 
       # No need to upload the package for each Python version
       - if: matrix.python == '3.9'
@@ -45,35 +47,11 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
-      - uses: actions/setup-python@v2
+      - uses: ./.github/actions/build-jdk
         with:
-          architecture: x64
           python-version: "3.9"
 
-      - name: Install Poetry
-        run: pip install poetry
-
-      - name: Install Python dependencies
-        run: poetry install
-
-      - name: Set environment variables
-        run: poetry run python scripts/set_environment.py
-
-      - uses: actions/setup-java@v2
-        with:
-          distribution: adopt
-          java-version: ${{ env.JDK4PY_JAVA_VERSION }}
-
-      - name: Build JDK
-        run: poetry run python scripts/build_jdk.py
-
-      - uses: conda-incubator/setup-miniconda@v2
-        with:
-          channels: conda-forge
-          conda-build-version: "3.21.5"
-
-      - name: Build Conda package
-        run: conda build --no-anaconda-upload --output-folder dist .
+      - uses: ./.github/actions/create-conda-package
 
       - uses: actions/upload-artifact@v2
         with:
