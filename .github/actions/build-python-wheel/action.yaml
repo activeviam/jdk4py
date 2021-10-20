@@ -13,12 +13,15 @@ runs:
         python-version: ${{ inputs.python-version }}
 
     - name: Install Poetry
+      shell: bash
       run: pip install poetry
 
     - name: Install Python dependencies
+      shell: bash
       run: poetry install
 
     - name: Set environment variables
+      shell: bash
       run: poetry run python scripts/set_environment.py
 
     - uses: actions/setup-java@v2
@@ -27,6 +30,7 @@ runs:
         java-version: ${{ env.JDK4PY_JAVA_VERSION }}
 
     - name: Build JDK
+      shell: bash
       run: poetry run python scripts/build_jdk.py
 
     - name: Build Python wheel
