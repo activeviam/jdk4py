@@ -1,0 +1,13 @@
+name: Create Conda package
+description: Create a Conda package
+runs:
+  using: "composite"
+  steps:
+    - uses: conda-incubator/setup-miniconda@v2
+      with:
+        channels: conda-forge
+        conda-build-version: "3.21.5"
+
+    - name: Create Conda package
+      shell: bash
+      run: conda build --no-anaconda-upload --output-folder dist .

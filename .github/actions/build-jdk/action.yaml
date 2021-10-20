@@ -1,0 +1,34 @@
+name: Build JDK
+description: Install the dependencies and build the JDK
+inputs:
+  python-version:
+    description: The version of Python to set up.
+    required: true
+runs:
+  using: "composite"
+  steps:
+    - uses: actions/setup-python@v2
+      with:
+        architecture: x64
+        python-version: ${{ inputs.python-version }}
+
+    - name: Install Poetry
+      shell: bash
+      run: pip install poetry
+
+    - name: Install Python dependencies
+      shell: bash
+      run: poetry install
+
+    - name: Set environment variables
+      shell: bash
+      run: poetry run python scripts/set_environment.py
+
+    - uses: actions/setup-java@v2
+      with:
+        distribution: adopt
+        java-version: ${{ env.JDK4PY_JAVA_VERSION }}
+
+    - name: Build JDK
+      shell: bash
+      run: poetry run python scripts/build_jdk.py
