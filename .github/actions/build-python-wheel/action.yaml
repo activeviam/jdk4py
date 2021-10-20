@@ -1,0 +1,34 @@
+name: Build Python wheel
+description: Install the dependencies, build the JDK and then the Python wheel.
+inputs:
+  python-version:
+    description: The version of Python to set up.
+    required: true
+runs:
+  using: "composite"
+  steps:
+    - uses: actions/setup-python@v2
+      with:
+        architecture: x64
+        python-version: ${{ inputs.python-version }}
+
+    - name: Install Poetry
+      run: pip install poetry
+
+    - name: Install Python dependencies
+      run: poetry install
+
+    - name: Set environment variables
+      run: poetry run python scripts/set_environment.py
+
+    - uses: actions/setup-java@v2
+      with:
+        distribution: adopt
+        java-version: ${{ env.JDK4PY_JAVA_VERSION }}
+
+    - name: Build JDK
+      run: poetry run python scripts/build_jdk.py
+
+    - name: Build Python wheel
+      shell: bash
+      run: poetry run python setup.py bdist_wheel --build-number $JDK4PY_BUILD_NUMBER
