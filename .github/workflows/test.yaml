@@ -60,5 +60,5 @@ jobs:
       - uses: actions/upload-artifact@v2
         with:
           if-no-files-found: error
-          name: jdk4py-${{ matrix.os }}-conda-packages.zip
+          name: jdk4py-${{ matrix.os }}-conda-packages
           path: dist/${{ env.JDK4PY_CONDA_ARCH }}/jdk4py-*.tar.bz2
