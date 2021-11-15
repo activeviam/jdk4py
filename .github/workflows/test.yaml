@@ -14,6 +14,7 @@ jobs:
           - "3.7"
           - "3.8"
           - "3.9"
+          - "3.10"
       fail-fast: false
     name: Test on ${{ matrix.os }} with Python ${{ matrix.python }}
     steps:
@@ -24,7 +25,7 @@ jobs:
           python-version: ${{ matrix.python }}
 
       # No need to lint for each OS and Python version
-      - if: matrix.os == 'ubuntu-latest' && matrix.python == '3.9'
+      - if: matrix.os == 'ubuntu-latest' && matrix.python == '3.10'
         name: Check formatting
         run: poetry run black --check .
 
@@ -34,7 +35,7 @@ jobs:
       - uses: ./.github/actions/create-python-wheel
 
       # No need to upload the package for each Python version
-      - if: matrix.python == '3.9'
+      - if: matrix.python == '3.10'
         uses: actions/upload-artifact@v2
         with:
           if-no-files-found: error
@@ -42,19 +43,22 @@ jobs:
           path: dist/jdk4py-*.whl
 
   conda-package:
-    runs-on: ubuntu-latest
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [macos-latest, windows-latest, ubuntu-latest]
     name: Test Conda packaging
     steps:
       - uses: actions/checkout@v2
 
       - uses: ./.github/actions/build-jdk
         with:
-          python-version: "3.9"
+          python-version: "3.10"
 
       - uses: ./.github/actions/create-conda-package
 
       - uses: actions/upload-artifact@v2
         with:
           if-no-files-found: error
-          name: conda-packages
+          name: jdk4py-${{ matrix.os }}-conda-packages
           path: dist/${{ env.JDK4PY_CONDA_ARCH }}/jdk4py-*.tar.bz2

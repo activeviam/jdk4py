@@ -6,8 +6,9 @@ runs:
     - uses: conda-incubator/setup-miniconda@v2
       with:
         channels: conda-forge
-        conda-build-version: "3.21.5"
+        conda-build-version: "3.21.6"
 
     - name: Create Conda package
-      shell: bash
+      # See https://github.com/conda-incubator/setup-miniconda/blame/059455a698430d8b68fa317268fa2e3da3492a98/README.md#L609-L610.
+      shell: bash -l {0}
       run: conda build --no-anaconda-upload --output-folder dist .
