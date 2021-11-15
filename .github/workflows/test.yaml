@@ -43,7 +43,10 @@ jobs:
           path: dist/jdk4py-*.whl
 
   conda-package:
-    runs-on: ubuntu-latest
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [macos-latest, windows-latest, ubuntu-latest]
     name: Test Conda packaging
     steps:
       - uses: actions/checkout@v2
@@ -57,5 +60,5 @@ jobs:
       - uses: actions/upload-artifact@v2
         with:
           if-no-files-found: error
-          name: conda-packages
+          name: jdk4py-${{ matrix.os }}-conda-packages.zip
           path: dist/${{ env.JDK4PY_CONDA_ARCH }}/jdk4py-*.tar.bz2

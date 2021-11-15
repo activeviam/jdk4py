@@ -6,7 +6,7 @@ runs:
     - uses: conda-incubator/setup-miniconda@v2
       with:
         channels: conda-forge
-        conda-build-version: "3.21.5"
+        conda-build-version: "3.21.6"
 
     - name: Create Conda package
       shell: bash
