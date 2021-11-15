@@ -9,5 +9,4 @@ runs:
         conda-build-version: "3.21.6"
 
     - name: Create Conda package
-      shell: bash
       run: conda build --no-anaconda-upload --output-folder dist .
