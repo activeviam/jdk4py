@@ -19,21 +19,26 @@ def test_java_version():
     version = match.group("version")
     assert version == ".".join(str(number) for number in JAVA_VERSION)
 
-def test_java_locale():
+
+def test_locales():
     # The JAR can be regenerated like that:
-    #    rm resources/*.jar
-    #    javac resources/GetLocale.java
-    #    jar cfe resources/GetLocale.jar resources.GetLocale resources/GetLocale.class
-    #    jar tf resources/GetLocale.jar
-    path = _TESTS_DIRECTORY / "resources" / "GetLocale.jar"
+    #    rm resources/GetLocales.jar
+    #    javac resources/GetLocales.java
+    #    jar cfe resources/GetLocales.jar resources.GetLocales resources/GetLocales.class
+    #    jar tf resources/GetLocales.jar
+    path = _TESTS_DIRECTORY / "resources" / "GetLocales.jar"
     output = check_output(
         [str(JAVA), "-jar", str(path.absolute())], stderr=STDOUT, text=True
     )
-    assert output.strip().strip('][').replace(", ", "", 1).split(", ") == ['en_US_POSIX', 'en', 'en_US']
+    expected_locales = open(_TESTS_DIRECTORY / "resources" / "locales.txt", "r")
+    embedded_locales = output.strip().strip("][").replace(", ", "", 1).split(", ")
+    for locale in expected_locales.readlines():
+        assert locale.replace("\n", "") in embedded_locales
+
 
 def test_jar_execution():
     # The JAR can be regenerated like that:
-    #    rm resources/*.jar
+    #    rm resources/HelloWorld.jar
     #    javac resources/HelloWorld.java
     #    jar cfe resources/HelloWorld.jar resources.HelloWorld resources/HelloWorld.class
     #    jar tf resources/HelloWorld.jar

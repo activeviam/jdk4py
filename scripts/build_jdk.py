@@ -15,6 +15,7 @@ _MODULES = [
     "jdk.jcmd",
     "jdk.jfr",
     "jdk.management.jfr",
+    "jdk.localedata",
 ]
 
 
@@ -30,6 +31,7 @@ def build_java_executable_files():
             "--strip-debug",
             "--add-modules",
             ",".join(_MODULES),
+            "--include-locales=*",
             "--output",
             str(_JAVA_PATH),
         ],
