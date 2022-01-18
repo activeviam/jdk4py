@@ -8,7 +8,11 @@ runs:
         channels: conda-forge
         conda-build-version: "3.21.6"
 
+    - name: Install mamba and boa
+      shell: bash -l {0}
+      run: conda install mamba=0.12.0 &&  mamba install --no-update-deps boa=0.5.0
+
     - name: Create Conda package
       # See https://github.com/conda-incubator/setup-miniconda/blame/059455a698430d8b68fa317268fa2e3da3492a98/README.md#L609-L610.
       shell: bash -l {0}
-      run: conda build --no-anaconda-upload --output-folder dist .
+      run: conda mambabuild --no-anaconda-upload --output-folder dist .
