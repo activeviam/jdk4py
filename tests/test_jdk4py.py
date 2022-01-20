@@ -22,6 +22,7 @@ _LOCALES = [
     "zh_CN",
 ]
 
+
 def test_java_home():
     assert JAVA == JAVA_HOME / "bin" / "java"
 
