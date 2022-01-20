@@ -1,9 +1,9 @@
 import re
 from pathlib import Path
 from subprocess import STDOUT, check_output
-import json
 
 from jdk4py import JAVA, JAVA_HOME, JAVA_VERSION
+from ..scripts.build_jdk import _LOCALES
 
 _TESTS_DIRECTORY = Path(__file__).parent
 
@@ -30,10 +30,9 @@ def test_locales():
     output = check_output(
         [str(JAVA), "-jar", str(path.absolute())], stderr=STDOUT, text=True
     )
-    expected_locales = open(_TESTS_DIRECTORY / "resources" / "locales.txt", "r")
     embedded_locales = output.strip().strip("][").replace(", ", "", 1).split(", ")
-    for locale in expected_locales.readlines():
-        assert locale.replace("\n", "") in embedded_locales
+    for locale in _LOCALES:
+        assert locale in embedded_locales
 
 
 def test_jar_execution():

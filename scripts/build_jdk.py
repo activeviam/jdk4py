@@ -18,6 +18,22 @@ _MODULES = [
     "jdk.localedata",
 ]
 
+_LOCALES = [
+    "bn-IN",
+    "da-DK",
+    "de-DE",
+    "en-US",
+    "en-GB",
+    "es-ES",
+    "es-MX",
+    "fr-FR",
+    "it-IT",
+    "ja-JP",
+    "pt-BR",
+    "ru-RU",
+    "zh-CN",
+]
+
 
 def build_java_executable_files():
     rmtree(_JAVA_PATH, ignore_errors=True)
@@ -31,7 +47,8 @@ def build_java_executable_files():
             "--strip-debug",
             "--add-modules",
             ",".join(_MODULES),
-            "--include-locales=*",
+            "--include-locales=",
+            ",".join(_LOCALES),
             "--output",
             str(_JAVA_PATH),
         ],
