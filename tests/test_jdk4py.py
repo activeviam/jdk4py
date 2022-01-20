@@ -3,10 +3,24 @@ from pathlib import Path
 from subprocess import STDOUT, check_output
 
 from jdk4py import JAVA, JAVA_HOME, JAVA_VERSION
-from ..scripts.build_jdk import _LOCALES
 
 _TESTS_DIRECTORY = Path(__file__).parent
 
+_LOCALES = [
+    "bn-IN",
+    "da-DK",
+    "de-DE",
+    "en-US",
+    "en-GB",
+    "es-ES",
+    "es-MX",
+    "fr-FR",
+    "it-IT",
+    "ja-JP",
+    "pt-BR",
+    "ru-RU",
+    "zh-CN",
+]
 
 def test_java_home():
     assert JAVA == JAVA_HOME / "bin" / "java"
