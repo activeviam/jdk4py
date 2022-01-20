@@ -1,26 +1,13 @@
+import json
 import re
 from pathlib import Path
 from subprocess import STDOUT, check_output
 
 from jdk4py import JAVA, JAVA_HOME, JAVA_VERSION
 
-_TESTS_DIRECTORY = Path(__file__).parent
-
-_LOCALES = [
-    "bn_IN",
-    "da_DK",
-    "de_DE",
-    "en_US",
-    "en_GB",
-    "es_ES",
-    "es_MX",
-    "fr_FR",
-    "it_IT",
-    "ja_JP",
-    "pt_BR",
-    "ru_RU",
-    "zh_CN",
-]
+TESTS_DIRECTORY = Path(__file__).parent
+TEST_RESOURCES_DIRECTORY = TESTS_DIRECTORY / "resources"
+LOCALES_PATH = TESTS_DIRECTORY.parent / "scripts" / "locales.json"
 
 
 def test_java_home():
@@ -35,29 +22,21 @@ def test_java_version():
     assert version == ".".join(str(number) for number in JAVA_VERSION)
 
 
-def test_locales():
-    # The JAR can be regenerated like that:
-    #    rm resources/GetLocales.jar
-    #    javac resources/GetLocales.java
-    #    jar cfe resources/GetLocales.jar resources.GetLocales resources/GetLocales.class
-    #    jar tf resources/GetLocales.jar
-    path = _TESTS_DIRECTORY / "resources" / "GetLocales.jar"
-    output = check_output(
-        [str(JAVA), "-jar", str(path.absolute())], stderr=STDOUT, text=True
-    )
-    embedded_locales = output.strip().strip("][").replace(", ", "", 1).split(", ")
-    for locale in _LOCALES:
-        assert locale in embedded_locales
-
-
 def test_jar_execution():
-    # The JAR can be regenerated like that:
-    #    rm resources/HelloWorld.jar
-    #    javac resources/HelloWorld.java
-    #    jar cfe resources/HelloWorld.jar resources.HelloWorld resources/HelloWorld.class
-    #    jar tf resources/HelloWorld.jar
-    path = _TESTS_DIRECTORY / "resources" / "HelloWorld.jar"
+    jar_path = TEST_RESOURCES_DIRECTORY / "HelloWorld.jar"
     output = check_output(
-        [str(JAVA), "-jar", str(path.absolute())], stderr=STDOUT, text=True
+        [str(JAVA), "-jar", str(jar_path.absolute())], stderr=STDOUT, text=True
     )
     assert output.strip() == "Hello, World"
+
+
+def test_available_locales():
+    path = TEST_RESOURCES_DIRECTORY / "PrintAvailableLocales.jar"
+    output = check_output(
+        [str(JAVA), "-jar", str(path.absolute())], stderr=STDOUT, text=True
+    )
+    actual_locales = set(
+        locale.replace("_", "-") for locale in output.strip().splitlines()
+    )
+    expected_locales = set(json.loads(LOCALES_PATH.read_bytes()))
+    assert expected_locales.issubset(actual_locales)
