@@ -7,19 +7,19 @@ from jdk4py import JAVA, JAVA_HOME, JAVA_VERSION
 _TESTS_DIRECTORY = Path(__file__).parent
 
 _LOCALES = [
-    "bn-IN",
-    "da-DK",
-    "de-DE",
-    "en-US",
-    "en-GB",
-    "es-ES",
-    "es-MX",
-    "fr-FR",
-    "it-IT",
-    "ja-JP",
-    "pt-BR",
-    "ru-RU",
-    "zh-CN",
+    "bn_IN",
+    "da_DK",
+    "de_DE",
+    "en_US",
+    "en_GB",
+    "es_ES",
+    "es_MX",
+    "fr_FR",
+    "it_IT",
+    "ja_JP",
+    "pt_BR",
+    "ru_RU",
+    "zh_CN",
 ]
 
 def test_java_home():
