@@ -25,9 +25,9 @@ jobs:
 
       - name: Upload Python wheel
         env:
-          TWINE_PASSWORD: ${{ secrets.TWINE_PASSWORD }}
+          TWINE_PASSWORD: ${{ secrets.PYPI_TOKEN }}
         shell: bash
-        run: poetry run twine upload dist/jdk4py-*.whl --username __token__ --password "$TWINE_PASSWORD"
+        run: poetry run twine upload dist/jdk4py-*.whl --username __token__ --password "$PYPI_TOKEN"
 
       - name: Upload Conda package
         env:
