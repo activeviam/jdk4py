@@ -1,10 +1,13 @@
+import json
 import re
 from pathlib import Path
 from subprocess import STDOUT, check_output
 
 from jdk4py import JAVA, JAVA_HOME, JAVA_VERSION
 
-_TESTS_DIRECTORY = Path(__file__).parent
+TESTS_DIRECTORY = Path(__file__).parent
+TEST_RESOURCES_DIRECTORY = TESTS_DIRECTORY / "resources"
+LOCALES_PATH = TESTS_DIRECTORY.parent / "scripts" / "locales.json"
 
 
 def test_java_home():
@@ -20,14 +23,20 @@ def test_java_version():
 
 
 def test_jar_execution():
-    # The JAR can be regenerated like that:
-    #    rm resources/*.class
-    #    rm resources/*.jar
-    #    javac resources/HelloWorld.java
-    #    jar cfe resources/HelloWorld.jar resources.HelloWorld resources/HelloWorld.class
-    #    jar tf resources/HelloWorld.jar
-    path = _TESTS_DIRECTORY / "resources" / "HelloWorld.jar"
+    jar_path = TEST_RESOURCES_DIRECTORY / "HelloWorld.jar"
+    output = check_output(
+        [str(JAVA), "-jar", str(jar_path.absolute())], stderr=STDOUT, text=True
+    )
+    assert output.strip() == "Hello, World"
+
+
+def test_available_locales():
+    path = TEST_RESOURCES_DIRECTORY / "PrintAvailableLocales.jar"
     output = check_output(
         [str(JAVA), "-jar", str(path.absolute())], stderr=STDOUT, text=True
     )
-    assert output.strip() == "Hello, World"
+    actual_locales = set(
+        locale.replace("_", "-") for locale in output.strip().splitlines()
+    )
+    expected_locales = set(json.loads(LOCALES_PATH.read_bytes()))
+    assert expected_locales.issubset(actual_locales)

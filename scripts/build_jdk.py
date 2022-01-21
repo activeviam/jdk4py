@@ -1,9 +1,11 @@
+import json
 from pathlib import Path
 from shutil import rmtree
 from subprocess import check_call
 
 
-_PROJECT_DIRECTORY = Path(__file__).parent.parent
+_SCRIPTS_DIRECTORY = Path(__file__).parent
+_PROJECT_DIRECTORY = _SCRIPTS_DIRECTORY.parent
 _JAVA_PATH = _PROJECT_DIRECTORY / "jdk4py" / "java-runtime"
 
 _MODULES = [
@@ -15,11 +17,14 @@ _MODULES = [
     "jdk.jcmd",
     "jdk.jfr",
     "jdk.management.jfr",
+    "jdk.localedata",
 ]
 
 
 def build_java_executable_files():
     rmtree(_JAVA_PATH, ignore_errors=True)
+
+    locales = json.loads((_SCRIPTS_DIRECTORY / "locales.json").read_bytes())
 
     check_call(
         [
@@ -30,6 +35,7 @@ def build_java_executable_files():
             "--strip-debug",
             "--add-modules",
             ",".join(_MODULES),
+            f"--include-locales={','.join(locales)}",
             "--output",
             str(_JAVA_PATH),
         ],
