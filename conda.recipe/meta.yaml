@@ -22,6 +22,7 @@ requirements:
 test:
   source_files:
     - tests/**
+    - scripts/locales.json
   requires:
     - pytest
   commands:
