@@ -10,6 +10,7 @@ _JAVA_PATH = _PROJECT_DIRECTORY / "jdk4py" / "java-runtime"
 
 _MODULES = [
     "jdk.management.agent",
+    "java.base",
     "java.se",
     "jdk.unsupported",
     "jdk.security.auth",
