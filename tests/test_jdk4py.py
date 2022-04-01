@@ -3,6 +3,8 @@ import re
 from pathlib import Path
 from subprocess import STDOUT, check_output
 
+import pytest
+
 from jdk4py import JAVA, JAVA_HOME, JAVA_VERSION
 
 TESTS_DIRECTORY = Path(__file__).parent
@@ -19,13 +21,19 @@ def test_java_version():
     match = re.match(r'^openjdk version "(?P<version>[^"]+)"', output)
     assert match
     version = match.group("version")
+    print(version)
     assert version == ".".join(str(number) for number in JAVA_VERSION)
 
 
-def test_jar_execution():
+@pytest.mark.parametrize(
+    "add_opens", ["", "--add-opens java.base/java.nio=ALL-UNNAMED"]
+)
+def test_jar_execution(add_opens: str):
     jar_path = TEST_RESOURCES_DIRECTORY / "HelloWorld.jar"
     output = check_output(
-        [str(JAVA), "-jar", str(jar_path.absolute())], stderr=STDOUT, text=True
+        [str(JAVA), add_opens, "-jar", str(jar_path.absolute())],
+        stderr=STDOUT,
+        text=True,
     )
     assert output.strip() == "Hello, World"
 
