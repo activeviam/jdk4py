@@ -38,6 +38,9 @@ runs:
     - run: ls -la ${{ env.JAVA_HOME }}
       shell: bash
 
+    - run: ls -la ${{ env.JAVA_HOME }}/jmods
+      shell: bash
+
     - name: Build JDK
       shell: bash
       run: poetry run python scripts/build_jdk.py
