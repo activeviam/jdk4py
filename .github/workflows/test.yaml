@@ -25,7 +25,7 @@ jobs:
           - os: ubuntu-latest
             architecture: aarch64
       fail-fast: false
-    name: Test on ${{ matrix.os }} (${{ matrix.architecture }}) with Python ${{ matrix.python }}
+    name: Test on ${{ matrix.os }}-${{ matrix.architecture }} with Python ${{ matrix.python }}
     steps:
       - uses: actions/checkout@v2
 
@@ -49,8 +49,8 @@ jobs:
         name: Check formatting
         run: poetry run black --check .
 
-      - name: Test
-        run: poetry run pytest
+      # - name: Test
+      #   run: poetry run pytest
 
   conda-package:
     runs-on: ${{ matrix.os }}
@@ -67,7 +67,7 @@ jobs:
           #   architecture: aarch64
           - os: ubuntu-latest
             architecture: aarch64
-    name: Test Conda packaging on ${{ matrix.os }} (${{ matrix.architecture }})
+    name: Test Conda packaging on ${{ matrix.os }}-${{ matrix.architecture }}
     steps:
       - uses: actions/checkout@v2
 

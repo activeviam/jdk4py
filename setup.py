@@ -31,9 +31,9 @@ _PLATFORM_NAME_ARGUMENT_NAME = "--plat-name"
 
 
 def _add_platform_name_argument_when_building_python_wheel():
-    if "bdist_wheel" in argv and _PLATFORM_NAME_ARGUMENT_NAME not in argv:
-        argv.append(_PLATFORM_NAME_ARGUMENT_NAME)
-        argv.append(os.environ["JDK4PY_WHEEL_PLATFORM"])
+    platform = os.environ.get("JDK4PY_WHEEL_PLATFORM")
+    if platform and "bdist_wheel" in argv and _PLATFORM_NAME_ARGUMENT_NAME not in argv:
+        argv.extend([_PLATFORM_NAME_ARGUMENT_NAME, platform])
 
 
 setup_args = dict(
