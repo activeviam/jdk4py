@@ -38,3 +38,5 @@ runs:
     - name: Build JDK
       shell: bash
       run: poetry run python scripts/build_jdk.py
+      env:
+        JDK4PY_ARCHITECTURE: ${{ inputs.architecture }}
