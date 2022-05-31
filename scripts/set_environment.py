@@ -10,6 +10,7 @@ _BUILD_VERSION = 0
 _AARCH64 = "aarch64"
 _X64 = "x64"
 
+
 # Platforms taken from https://pypi.org/project/numpy/1.22.4/#files and https://anaconda.org/conda-forge/numpy/files?version=1.22.4.
 _SYSTEM_TO_ARCHITECTURE_TO_PACKAGE_TYPE_TO_PLATFORM = {
     "Darwin": {
@@ -41,8 +42,9 @@ _SYSTEM_TO_ARCHITECTURE_TO_PACKAGE_TYPE_TO_PLATFORM = {
 }
 
 _MACHINE_TO_ARCHITECTURE = {
-    "arm64": _AARCH64,
     "AMD64": _X64,
+    "arm64": _AARCH64,
+    "x86_64": _X64,
     **{architecture: architecture for architecture in [_AARCH64, _X64]},
 }
 
