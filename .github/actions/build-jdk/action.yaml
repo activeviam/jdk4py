@@ -35,6 +35,9 @@ runs:
         distribution: temurin
         java-version: ${{ env.JDK4PY_JAVA_VERSION }}
 
+    - run: ls -la ${{ env.JAVA_HOME }}
+      shell: bash
+
     - name: Build JDK
       shell: bash
       run: poetry run python scripts/build_jdk.py
