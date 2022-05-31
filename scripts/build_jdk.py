@@ -34,13 +34,13 @@ _MODULES = [
 def build_java_executable_files() -> None:
     rmtree(_JAVA_PATH, ignore_errors=True)
 
-    current_architecture = _MACHINE_TO_ARCHITECTURE[platform.machine()]
-    if current_architecture != os.environ["JDK4PY_ARCHITECTURE"]:
-        # The target architecture is not the same as the one of the current machine.
-        # `jlink` would produce a JDK unusable on the target architecture.
-        # The whole downloaded JDK will be used instead.
-        copytree(os.environ["JAVA_HOME"], _JAVA_PATH)
-        return
+    # current_architecture = _MACHINE_TO_ARCHITECTURE[platform.machine()]
+    # if current_architecture != os.environ["JDK4PY_ARCHITECTURE"]:
+    #     # The target architecture is not the same as the one of the current machine.
+    #     # `jlink` would produce a JDK unusable on the target architecture.
+    #     # The whole downloaded JDK will be used instead.
+    #     copytree(os.environ["JAVA_HOME"], _JAVA_PATH)
+    #     return
 
     locales = json.loads((_SCRIPTS_DIRECTORY / "locales.json").read_bytes())
 
@@ -54,6 +54,8 @@ def build_java_executable_files() -> None:
             "--add-modules",
             ",".join(_MODULES),
             f"--include-locales={','.join(locales)}",
+            "--module-path",
+            f"""{os.environ["JAVA_HOME"]}/jmods""",
             "--output",
             str(_JAVA_PATH),
         ],
