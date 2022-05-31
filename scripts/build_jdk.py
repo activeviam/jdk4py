@@ -21,7 +21,7 @@ _MODULES = [
 ]
 
 
-def build_java_executable_files():
+def build_java_executable_files() -> None:
     rmtree(_JAVA_PATH, ignore_errors=True)
 
     locales = json.loads((_SCRIPTS_DIRECTORY / "locales.json").read_bytes())

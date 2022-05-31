@@ -26,6 +26,8 @@ runs:
     - name: Set environment variables
       shell: bash
       run: poetry run python scripts/set_environment.py
+      env:
+        JDK4PY_ARCHITECTURE: ${{ inputs.architecture }}
 
     - uses: actions/setup-java@v2
       with:

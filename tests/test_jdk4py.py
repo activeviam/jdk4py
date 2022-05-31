@@ -10,11 +10,11 @@ TEST_RESOURCES_DIRECTORY = TESTS_DIRECTORY / "resources"
 LOCALES_PATH = TESTS_DIRECTORY.parent / "scripts" / "locales.json"
 
 
-def test_java_home():
+def test_java_home() -> None:
     assert JAVA == JAVA_HOME / "bin" / "java"
 
 
-def test_java_version():
+def test_java_version() -> None:
     output = check_output([str(JAVA), "-version"], stderr=STDOUT, text=True)
     match = re.match(r'^openjdk version "(?P<version>[^"]+)"', output)
     assert match, f"Unexpected output:\n{output}"
@@ -22,7 +22,7 @@ def test_java_version():
     assert version == ".".join(str(number) for number in JAVA_VERSION)
 
 
-def test_jar_execution():
+def test_jar_execution() -> None:
     jar_path = TEST_RESOURCES_DIRECTORY / "HelloWorld.jar"
     output = check_output(
         [str(JAVA), "-jar", str(jar_path.absolute())], stderr=STDOUT, text=True
@@ -30,7 +30,7 @@ def test_jar_execution():
     assert output.strip() == "Hello, World"
 
 
-def test_available_locales():
+def test_available_locales() -> None:
     path = TEST_RESOURCES_DIRECTORY / "PrintAvailableLocales.jar"
     output = check_output(
         [str(JAVA), "-jar", str(path.absolute())], stderr=STDOUT, text=True

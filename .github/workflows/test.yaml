@@ -53,36 +53,36 @@ jobs:
       # - name: Test
       #   run: poetry run pytest
 
-  conda-package:
-    runs-on: ${{ matrix.os }}
-    strategy:
-      matrix:
-        architecture:
-          - aarch64
-          - x64
-        os:
-          - macos-latest
-          - ubuntu-latest
-          # - windows-latest
-        exclude:
-          - os: macos-latest
-            architecture: aarch64
-          - os: ubuntu-latest
-            architecture: x64
-    name: Test Conda packaging on ${{ matrix.os }}-${{ matrix.architecture }}
-    steps:
-      - uses: actions/checkout@v2
+  # conda-package:
+  #   runs-on: ${{ matrix.os }}
+  #   strategy:
+  #     matrix:
+  #       architecture:
+  #         - aarch64
+  #         - x64
+  #       os:
+  #         - macos-latest
+  #         - ubuntu-latest
+  #         # - windows-latest
+  #       exclude:
+  #         - os: macos-latest
+  #           architecture: aarch64
+  #         - os: ubuntu-latest
+  #           architecture: x64
+  #   name: Test Conda packaging on ${{ matrix.os }}-${{ matrix.architecture }}
+  #   steps:
+  #     - uses: actions/checkout@v2
 
-      - uses: ./.github/actions/build-jdk
-        with:
-          architecture: ${{ matrix.architecture }}
-          # No need to test for each Python version
-          python-version: "3.10"
+  #     - uses: ./.github/actions/build-jdk
+  #       with:
+  #         architecture: ${{ matrix.architecture }}
+  #         # No need to test for each Python version
+  #         python-version: "3.10"
 
-      - uses: ./.github/actions/create-conda-package
+  #     - uses: ./.github/actions/create-conda-package
 
-      - uses: actions/upload-artifact@v2
-        with:
-          if-no-files-found: error
-          name: jdk4py-${{ matrix.os }}-${{ matrix.architecture }}-conda-packages
-          path: dist/${{ env.JDK4PY_CONDA_PLATFORM }}/jdk4py-*.tar.bz2
+  #     - uses: actions/upload-artifact@v2
+  #       with:
+  #         if-no-files-found: error
+  #         name: jdk4py-${{ matrix.os }}-${{ matrix.architecture }}-conda-packages
+  #         path: dist/${{ env.JDK4PY_CONDA_PLATFORM }}/jdk4py-*.tar.bz2
