@@ -11,7 +11,7 @@ _AARCH64 = "aarch64"
 _X64 = "x64"
 
 
-# Platforms taken from https://pypi.org/project/numpy/1.22.4/#files and https://anaconda.org/conda-forge/numpy/files?version=1.22.4.
+# Platforms taken from https://pypi.org/project/torch/1.11.0/#files and https://anaconda.org/conda-forge/numpy/files?version=1.22.4.
 _SYSTEM_TO_ARCHITECTURE_TO_PACKAGE_TYPE_TO_PLATFORM = {
     "Darwin": {
         _AARCH64: {
@@ -20,17 +20,17 @@ _SYSTEM_TO_ARCHITECTURE_TO_PACKAGE_TYPE_TO_PLATFORM = {
         },
         _X64: {
             "conda": "osx-64",
-            "wheel": "macosx_11_0_x86_64",
+            "wheel": "macosx_10_9_x86_64",
         },
     },
     "Linux": {
         _AARCH64: {
             "conda": "linux-aarch64",
-            "wheel": "manylinux_2_17_aarch64.manylinux2014_aarch64",
+            "wheel": "manylinux2014_aarch64",
         },
         _X64: {
             "conda": "linux-64",
-            "wheel": "manylinux_2_17_x86_64.manylinux2014_x86_64",
+            "wheel": "manylinux1_x86_64",
         },
     },
     "Windows": {
