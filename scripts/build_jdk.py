@@ -5,18 +5,16 @@ from pathlib import Path
 from shutil import copytree, rmtree
 from subprocess import check_call
 
-from ._architectures import AARCH64, X64
-
 
 _SCRIPTS_DIRECTORY = Path(__file__).parent
 _PROJECT_DIRECTORY = _SCRIPTS_DIRECTORY.parent
 _JAVA_PATH = _PROJECT_DIRECTORY / "jdk4py" / "java-runtime"
 
 _MACHINE_TO_ARCHITECTURE = {
-    "AMD64": X64,
-    "arm64": AARCH64,
-    "x86_64": X64,
-    **{architecture: architecture for architecture in [AARCH64, X64]},
+    "AMD64": "x64",
+    "arm64": "aarch64",
+    "x86_64": "x64",
+    **{architecture: architecture for architecture in ["aarch64", "x64"]},
 }
 
 

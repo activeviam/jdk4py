@@ -4,7 +4,6 @@ from typing import Mapping
 
 from jdk4py import JAVA_VERSION
 
-from ._architectures import AARCH64, X64
 
 _BUILD_VERSION = 0
 
@@ -12,27 +11,27 @@ _BUILD_VERSION = 0
 # Platforms taken from https://pypi.org/project/torch/1.11.0/#files and https://anaconda.org/conda-forge/numpy/files?version=1.22.4.
 _SYSTEM_TO_ARCHITECTURE_TO_PACKAGE_TYPE_TO_PLATFORM = {
     "Darwin": {
-        AARCH64: {
+        "aarch64": {
             "conda": "osx-arm64",
             "wheel": "macosx_11_0_arm64",
         },
-        X64: {
+        "x64": {
             "conda": "osx-64",
             "wheel": "macosx_10_9_x86_64",
         },
     },
     "Linux": {
-        AARCH64: {
+        "aarch64": {
             "conda": "linux-aarch64",
             "wheel": "manylinux2014_aarch64",
         },
-        X64: {
+        "x64": {
             "conda": "linux-64",
             "wheel": "manylinux1_x86_64",
         },
     },
     "Windows": {
-        X64: {
+        "x64": {
             "conda": "win-64",
             "wheel": "win_amd64",
         },
