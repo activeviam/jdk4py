@@ -4,48 +4,39 @@ from typing import Mapping
 
 from jdk4py import JAVA_VERSION
 
+from ._architectures import AARCH64, X64
+
 _BUILD_VERSION = 0
-
-
-_AARCH64 = "aarch64"
-_X64 = "x64"
 
 
 # Platforms taken from https://pypi.org/project/torch/1.11.0/#files and https://anaconda.org/conda-forge/numpy/files?version=1.22.4.
 _SYSTEM_TO_ARCHITECTURE_TO_PACKAGE_TYPE_TO_PLATFORM = {
     "Darwin": {
-        _AARCH64: {
+        AARCH64: {
             "conda": "osx-arm64",
             "wheel": "macosx_11_0_arm64",
         },
-        _X64: {
+        X64: {
             "conda": "osx-64",
             "wheel": "macosx_10_9_x86_64",
         },
     },
     "Linux": {
-        _AARCH64: {
+        AARCH64: {
             "conda": "linux-aarch64",
             "wheel": "manylinux2014_aarch64",
         },
-        _X64: {
+        X64: {
             "conda": "linux-64",
             "wheel": "manylinux1_x86_64",
         },
     },
     "Windows": {
-        _X64: {
+        X64: {
             "conda": "win-64",
             "wheel": "win_amd64",
         },
     },
-}
-
-_MACHINE_TO_ARCHITECTURE = {
-    "AMD64": _X64,
-    "arm64": _AARCH64,
-    "x86_64": _X64,
-    **{architecture: architecture for architecture in [_AARCH64, _X64]},
 }
 
 
@@ -57,9 +48,7 @@ def set_env_variables_in_github_job(variables: Mapping[str, str]) -> None:
 
 
 if __name__ == "__main__":
-    architecture = os.environ.get(
-        "JDK4PY_ARCHITECTURE", _MACHINE_TO_ARCHITECTURE[platform.machine()]
-    )
+    architecture = os.environ["JDK4PY_ARCHITECTURE"]
     system = platform.system()
 
     set_env_variables_in_github_job(
