@@ -12,20 +12,20 @@ jobs:
           - x64
         os:
           - macos-latest
-          - ubuntu-latest
-          - windows-latest
+          # - ubuntu-latest
+          # - windows-latest
         python:
-          - "3.7"
-          - "3.8"
-          - "3.9"
+          # - "3.7"
+          # - "3.8"
+          # - "3.9"
           - "3.10"
         include:
-          - os: macos-latest
-            architecture: aarch64
+          # - os: macos-latest
+          #   architecture: aarch64
           - os: ubuntu-latest
             architecture: aarch64
       fail-fast: false
-    name: Test on ${{ matrix.os }} with Python ${{ matrix.python }}
+    name: Test on ${{ matrix.os }} (${{ matrix.architecture }}) with Python ${{ matrix.python }}
     steps:
       - uses: actions/checkout@v2
 
@@ -42,7 +42,7 @@ jobs:
         with:
           if-no-files-found: error
           name: jdk4py-${{ matrix.os }}-${{ matrix.architecture }}.whl
-          path: dist/jdk4py-*-${{ env.JDK4PY_WHEEL_PLATFORM }}.whl
+          path: dist/jdk4py-*.whl
 
       # No need to lint for each OS and Python version
       - if: matrix.os == 'ubuntu-latest' && matrix.python == '3.10'
@@ -59,15 +59,15 @@ jobs:
         architecture:
           - x64
         os:
-          - macos-latest
+          # - macos-latest
           - ubuntu-latest
-          - windows-latest
+          # - windows-latest
         include:
-          - os: macos-latest
-            architecture: aarch64
+          # - os: macos-latest
+          #   architecture: aarch64
           - os: ubuntu-latest
             architecture: aarch64
-    name: Test Conda packaging
+    name: Test Conda packaging on ${{ matrix.os }} (${{ matrix.architecture }})
     steps:
       - uses: actions/checkout@v2
 

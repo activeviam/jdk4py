@@ -38,7 +38,7 @@ jobs:
         env:
           PYPI_TOKEN: ${{ secrets.PYPI_TOKEN }}
         shell: bash
-        run: poetry run twine upload dist/jdk4py-*-${{ env.JDK4PY_WHEEL_PLATFORM }}.whl --username __token__ --password "$PYPI_TOKEN"
+        run: poetry run twine upload dist/jdk4py-*.whl --username __token__ --password "$PYPI_TOKEN"
 
       - name: Upload Conda package
         env:
