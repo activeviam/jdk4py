@@ -9,21 +9,22 @@ jobs:
     strategy:
       matrix:
         architecture:
+          - aarch64
           - x64
         os:
           - macos-latest
-          # - ubuntu-latest
+          - ubuntu-latest
           # - windows-latest
         python:
           # - "3.7"
           # - "3.8"
           # - "3.9"
           - "3.10"
-        include:
-          # - os: macos-latest
-          #   architecture: aarch64
-          - os: ubuntu-latest
+        exclude:
+          - os: macos-latest
             architecture: aarch64
+          - os: ubuntu-latest
+            architecture: x64
       fail-fast: false
     name: Test on ${{ matrix.os }}-${{ matrix.architecture }} with Python ${{ matrix.python }}
     steps:
@@ -57,16 +58,17 @@ jobs:
     strategy:
       matrix:
         architecture:
+          - aarch64
           - x64
         os:
-          # - macos-latest
+          - macos-latest
           - ubuntu-latest
           # - windows-latest
-        include:
-          # - os: macos-latest
-          #   architecture: aarch64
-          - os: ubuntu-latest
+        exclude:
+          - os: macos-latest
             architecture: aarch64
+          - os: ubuntu-latest
+            architecture: x64
     name: Test Conda packaging on ${{ matrix.os }}-${{ matrix.architecture }}
     steps:
       - uses: actions/checkout@v2
