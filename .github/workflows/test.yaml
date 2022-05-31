@@ -8,12 +8,22 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        os: [macos-latest, windows-latest, ubuntu-latest]
+        architecture:
+          - x64
+        os:
+          - macos-latest
+          - ubuntu-latest
+          - windows-latest
         python:
           - "3.7"
           - "3.8"
           - "3.9"
           - "3.10"
+        include:
+          - os: macos-latest
+            architecture: aarch64
+          - os: ubuntu-latest
+            architecture: aarch64
       fail-fast: false
     name: Test on ${{ matrix.os }} with Python ${{ matrix.python }}
     steps:
@@ -21,7 +31,18 @@ jobs:
 
       - uses: ./.github/actions/build-jdk
         with:
+          architecture: ${{ matrix.architecture }}
           python-version: ${{ matrix.python }}
+
+      - uses: ./.github/actions/create-python-wheel
+
+      # No need to upload the package for each Python version
+      - if: matrix.python == '3.10'
+        uses: actions/upload-artifact@v2
+        with:
+          if-no-files-found: error
+          name: jdk4py-${{ matrix.os }}-${{ matrix.architecture }}.whl
+          path: dist/jdk4py-*-${{ env.JDK4PY_WHEEL_PLATFORM }}.whl
 
       # No need to lint for each OS and Python version
       - if: matrix.os == 'ubuntu-latest' && matrix.python == '3.10'
@@ -31,27 +52,29 @@ jobs:
       - name: Test
         run: poetry run pytest
 
-      - uses: ./.github/actions/create-python-wheel
-
-      # No need to upload the package for each Python version
-      - if: matrix.python == '3.10'
-        uses: actions/upload-artifact@v2
-        with:
-          if-no-files-found: error
-          name: jdk4py-${{ matrix.os }}.whl
-          path: dist/jdk4py-*.whl
-
   conda-package:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        os: [macos-latest, windows-latest, ubuntu-latest]
+        architecture:
+          - x64
+        os:
+          - macos-latest
+          - ubuntu-latest
+          - windows-latest
+        include:
+          - os: macos-latest
+            architecture: aarch64
+          - os: ubuntu-latest
+            architecture: aarch64
     name: Test Conda packaging
     steps:
       - uses: actions/checkout@v2
 
       - uses: ./.github/actions/build-jdk
         with:
+          architecture: ${{ matrix.architecture }}
+          # No need to test for each Python version
           python-version: "3.10"
 
       - uses: ./.github/actions/create-conda-package
@@ -59,5 +82,5 @@ jobs:
       - uses: actions/upload-artifact@v2
         with:
           if-no-files-found: error
-          name: jdk4py-${{ matrix.os }}-conda-packages
-          path: dist/${{ env.JDK4PY_CONDA_ARCH }}/jdk4py-*.tar.bz2
+          name: jdk4py-${{ matrix.os }}-${{ matrix.architecture }}-conda-packages
+          path: dist/${{ env.JDK4PY_CONDA_PLATFORM }}/jdk4py-*.tar.bz2

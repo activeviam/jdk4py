@@ -17,7 +17,7 @@ def test_java_home():
 def test_java_version():
     output = check_output([str(JAVA), "-version"], stderr=STDOUT, text=True)
     match = re.match(r'^openjdk version "(?P<version>[^"]+)"', output)
-    assert match
+    assert match, f"Unexpected output:\n{output}"
     version = match.group("version")
     assert version == ".".join(str(number) for number in JAVA_VERSION)
 

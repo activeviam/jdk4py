@@ -1,6 +1,9 @@
 name: Build JDK
 description: Install the dependencies and build the JDK
 inputs:
+  architecture:
+    description: The architecture targeted by the JDK to set up.
+    required: true
   python-version:
     description: The version of Python to set up.
     required: true
@@ -9,7 +12,7 @@ runs:
   steps:
     - uses: actions/setup-python@v2
       with:
-        architecture: x64
+        # No need to set the architecture for Python because jdk4py is platform independent Python-wise.
         python-version: ${{ inputs.python-version }}
 
     - name: Install Poetry
@@ -26,7 +29,8 @@ runs:
 
     - uses: actions/setup-java@v2
       with:
-        distribution: adopt
+        architecture: ${{ inputs.architecture }}
+        distribution: temurin
         java-version: ${{ env.JDK4PY_JAVA_VERSION }}
 
     - name: Build JDK
