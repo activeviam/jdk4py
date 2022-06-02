@@ -8,6 +8,7 @@ _SCRIPTS_DIRECTORY = Path(__file__).parent
 _PROJECT_DIRECTORY = _SCRIPTS_DIRECTORY.parent
 _JAVA_PATH = _PROJECT_DIRECTORY / "jdk4py" / "java-runtime"
 
+
 _MODULES = [
     "jdk.management.agent",
     "java.se",
@@ -21,7 +22,7 @@ _MODULES = [
 ]
 
 
-def build_java_executable_files():
+def build_java_executable_files() -> None:
     rmtree(_JAVA_PATH, ignore_errors=True)
 
     locales = json.loads((_SCRIPTS_DIRECTORY / "locales.json").read_bytes())

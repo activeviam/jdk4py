@@ -1,10 +1,10 @@
-import platform
+import os
 from pathlib import Path
 from sys import argv
 
 from setuptools import find_packages, setup
 
-_LIB_VERSION = 1
+_LIB_VERSION = 0
 
 _NAME = "jdk4py"
 _PROJECT_DIRECTORY = Path(__file__).parent
@@ -29,17 +29,11 @@ _VERSION = ".".join(
 
 _PLATFORM_NAME_ARGUMENT_NAME = "--plat-name"
 
-_SYSTEM_TO_PLATFORM_NAME = {
-    "Darwin": "macosx_10_9_x86_64",
-    "Linux": "manylinux1_x86_64",
-    "Windows": "win_amd64",
-}
-
 
 def _add_platform_name_argument_when_building_python_wheel():
-    if "bdist_wheel" in argv and _PLATFORM_NAME_ARGUMENT_NAME not in argv:
-        argv.append(_PLATFORM_NAME_ARGUMENT_NAME)
-        argv.append(_SYSTEM_TO_PLATFORM_NAME[platform.system()])
+    platform = os.environ.get("JDK4PY_WHEEL_PLATFORM")
+    if platform and "bdist_wheel" in argv and _PLATFORM_NAME_ARGUMENT_NAME not in argv:
+        argv.extend([_PLATFORM_NAME_ARGUMENT_NAME, platform])
 
 
 setup_args = dict(
@@ -54,13 +48,15 @@ setup_args = dict(
     packages=find_packages(exclude=["scripts", "tests"]),
     package_data={_NAME: [*_JAVA_FILES, _JAVA_VERSION_FILENAME, "py.typed"]},
     classifiers=[
-        "Development Status :: 4 - Beta",
+        "Development Status :: 5 - Production/Stable",
         "License :: OSI Approved :: GNU General Public License v2 (GPLv2)",
-        "Operating System :: OS Independent",
+        "Operating System :: MacOS",
+        "Operating System :: Microsoft :: Windows",
+        "Operating System :: POSIX :: Linux",
         "Programming Language :: Python :: 3",
     ],
     keywords=["jdk", "java", "jvm", "jre"],
-    python_requires=">=3.7",
+    python_requires=">=3.8",
 )
 
 if __name__ == "__main__":

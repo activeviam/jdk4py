@@ -1,9 +1,15 @@
 name: Create Conda package
 description: Create a Conda package
+inputs:
+  architecture:
+    description: The target architecture.
+    required: true
 runs:
   using: "composite"
   steps:
-    - uses: conda-incubator/setup-miniconda@v2
+    # Careful when upgrading to macOS 12 https://github.com/conda-incubator/setup-miniconda/issues/229 would have to be resolved first.
+    - if: ${{ inputs.architecture == 'x64' }}
+      uses: conda-incubator/setup-miniconda@v2
       with:
         channels: conda-forge
         conda-build-version: "3.21.6"

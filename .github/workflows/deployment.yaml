@@ -10,18 +10,31 @@ jobs:
     environment: deployment
     strategy:
       matrix:
-        os: [macos-latest, windows-latest, ubuntu-latest]
-    name: Deploy on ${{ matrix.os }}
+        architecture:
+          - x64
+        os:
+          - macos-latest
+          - ubuntu-latest
+          - windows-latest
+        include:
+          - architecture: aarch64
+            os: self-hosted-macos
+    name: Deploy on ${{ matrix.os }}-${{ matrix.architecture }}
     steps:
       - uses: actions/checkout@v2
 
       - uses: ./.github/actions/build-jdk
         with:
+          architecture: ${{ matrix.architecture }}
           python-version: "3.10"
 
       - uses: ./.github/actions/create-python-wheel
+        with:
+          build-number: ${{ env.JDK4PY_BUILD_NUMBER }}
 
       - uses: ./.github/actions/create-conda-package
+        with:
+          architecture: ${{ matrix.architecture }}
 
       - name: Upload Python wheel
         env:
@@ -36,8 +49,8 @@ jobs:
           JDK4PY_CONDA_CHANNEL_USERNAME: ${{ secrets.CONDA_CHANNEL_USERNAME }}
         shell: bash
         run: |
-          ls dist/$JDK4PY_CONDA_ARCH/jdk4py-*.tar.bz2 | \
+          ls dist/$JDK4PY_CONDA_PLATFORM/jdk4py-*.tar.bz2 | \
           while read filepath; do
             echo Uploading ${filepath}
-            curl --fail --user "$JDK4PY_CONDA_CHANNEL_USERNAME":"$JDK4PY_CONDA_CHANNEL_PASSWORD" --upload-file ${filepath} "$JDK4PY_CONDA_CHANNEL_URL/$JDK4PY_CONDA_ARCH/"
+            curl --fail --user "$JDK4PY_CONDA_CHANNEL_USERNAME":"$JDK4PY_CONDA_CHANNEL_PASSWORD" --upload-file ${filepath} "$JDK4PY_CONDA_CHANNEL_URL/$JDK4PY_CONDA_PLATFORM/"
           done
