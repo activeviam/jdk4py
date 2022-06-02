@@ -4,54 +4,54 @@ on:
     types: [opened, synchronize]
 
 jobs:
-  test:
-    runs-on: ${{ matrix.os }}
-    strategy:
-      matrix:
-        architecture:
-          #- x64
-          - aarch64
-        os:
-          # - macos-latest
-          - self-hosted-macos
-          # - windows-latest
-        python:
-          # - "3.7"
-          # - "3.8"
-          # - "3.9"
-          - "3.10"
-        # exclude:
-        #   # - os: macos-latest
-        #   #   architecture: aarch64
-        #   - os: ubuntu-latest
-        #     architecture: x64
-      fail-fast: false
-    name: Test on ${{ matrix.os }}-${{ matrix.architecture }} with Python ${{ matrix.python }}
-    steps:
-      - uses: actions/checkout@v2
+  # test:
+  #   runs-on: ${{ matrix.os }}
+  #   strategy:
+  #     matrix:
+  #       architecture:
+  #         #- x64
+  #         - aarch64
+  #       os:
+  #         # - macos-latest
+  #         - self-hosted-macos
+  #         # - windows-latest
+  #       python:
+  #         # - "3.7"
+  #         # - "3.8"
+  #         # - "3.9"
+  #         - "3.10"
+  #       # exclude:
+  #       #   # - os: macos-latest
+  #       #   #   architecture: aarch64
+  #       #   - os: ubuntu-latest
+  #       #     architecture: x64
+  #     fail-fast: false
+  #   name: Test on ${{ matrix.os }}-${{ matrix.architecture }} with Python ${{ matrix.python }}
+  #   steps:
+  #     - uses: actions/checkout@v2
 
-      - uses: ./.github/actions/build-jdk
-        with:
-          architecture: ${{ matrix.architecture }}
-          python-version: ${{ matrix.python }}
+  #     - uses: ./.github/actions/build-jdk
+  #       with:
+  #         architecture: ${{ matrix.architecture }}
+  #         python-version: ${{ matrix.python }}
 
-      - uses: ./.github/actions/create-python-wheel
+  #     - uses: ./.github/actions/create-python-wheel
 
-      # No need to upload the package for each Python version
-      - if: ${{ matrix.python == '3.10' }}
-        uses: actions/upload-artifact@v2
-        with:
-          if-no-files-found: error
-          name: jdk4py-${{ matrix.os }}-${{ matrix.architecture }}.whl
-          path: dist/jdk4py-*.whl
+  #     # No need to upload the package for each Python version
+  #     - if: ${{ matrix.python == '3.10' }}
+  #       uses: actions/upload-artifact@v2
+  #       with:
+  #         if-no-files-found: error
+  #         name: jdk4py-${{ matrix.os }}-${{ matrix.architecture }}.whl
+  #         path: dist/jdk4py-*.whl
 
-      # No need to lint for each OS and Python version
-      - if: ${{ matrix.os == 'ubuntu-latest' && matrix.python == '3.10' }}
-        name: Check formatting
-        run: poetry run black --check .
+  #     # No need to lint for each OS and Python version
+  #     - if: ${{ matrix.os == 'ubuntu-latest' && matrix.python == '3.10' }}
+  #       name: Check formatting
+  #       run: poetry run black --check .
 
-      - name: Test
-        run: poetry run pytest
+  #     - name: Test
+  #       run: poetry run pytest
 
   conda-package:
     runs-on: ${{ matrix.os }}
