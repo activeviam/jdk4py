@@ -37,6 +37,8 @@ jobs:
           python-version: ${{ matrix.python }}
 
       - uses: ./.github/actions/create-python-wheel
+        with:
+          build-number: ${{ env.JDK4PY_BUILD_NUMBER }}
 
       # The library's Python wheels are not tied to a specific version of Python so there is no need to upload the package for each Python version.
       - if: ${{ matrix.python == '3.10' }}

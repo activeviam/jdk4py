@@ -29,6 +29,8 @@ jobs:
           python-version: "3.10"
 
       - uses: ./.github/actions/create-python-wheel
+        with:
+          build-number: ${{ env.JDK4PY_BUILD_NUMBER }}
 
       - uses: ./.github/actions/create-conda-package
         with:
