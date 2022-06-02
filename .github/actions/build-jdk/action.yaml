@@ -12,7 +12,7 @@ runs:
   steps:
     - uses: actions/setup-python@v2
       with:
-        # No need to set the architecture: the action defaults to the architecture of the runner's OS.
+        architecture: x64
         python-version: ${{ inputs.python-version }}
 
     - name: Install Poetry
