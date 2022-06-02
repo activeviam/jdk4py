@@ -22,7 +22,7 @@ runs:
     - name: Check Python version
       shell: bash
       run: |
-        python -c 'import os; import sys; expected_version = os.environ["EXPECTED_PYTHON_VERSION"]; assert sys.version.startswith(expected_version), f"Expected Python version {expected_version} but got {sys.version}."'
+        python -c 'import os; import sys; expected_version = tuple(os.environ["EXPECTED_PYTHON_VERSION"].split(".")); assert sys.version_info == expected_version, f"Expected Python version {expected_version} but got {sys.version}."'
       env:
         EXPECTED_PYTHON_VERSION: ${{ inputs.python-version }}
 
