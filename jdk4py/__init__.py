@@ -8,7 +8,8 @@ _PACKAGE_DIRECTORY = Path(__file__).parent
 JAVA_HOME = _PACKAGE_DIRECTORY.absolute() / "java-runtime"
 JAVA = JAVA_HOME / "bin" / "java"
 
-JAVA_VERSION: Tuple[int, int, int] = tuple(
+_major, _minor, _patch = [
     int(part)
     for part in (_PACKAGE_DIRECTORY / "java_version.txt").read_text().strip().split(".")
-)
+]
+JAVA_VERSION: Tuple[int, int, int] = _major, _minor, _patch

@@ -1,47 +1,50 @@
 import os
 import platform
-from typing import Mapping
+from typing import Literal, Mapping
 
 from jdk4py import JAVA_VERSION
 
 
 _BUILD_VERSION = 0
 
-_AARCH64 = "aarch64"
-_X64 = "x64"
 
+_Architecture = Literal["aarch64", "x64"]
+_PackageType = Literal["conda", "wheel"]
 
-_MACHINE_TO_ARCHITECTURE = {
+_MACHINE_TO_ARCHITECTURE: Mapping[str, _Architecture] = {
+    "aarch64": "aarch64",
     "AMD64": "x64",
-    "arm64": _AARCH64,
+    "arm64": "aarch64",
+    "x64": "x64",
     "x86_64": "x64",
-    **{architecture: architecture for architecture in [_AARCH64, _X64]},
 }
 
 # Platforms taken from https://pypi.org/project/torch/1.11.0/#files and https://anaconda.org/conda-forge/numpy/files?version=1.22.4.
-_SYSTEM_TO_ARCHITECTURE_TO_PACKAGE_TYPE_TO_PLATFORM = {
+_SYSTEM_TO_ARCHITECTURE_TO_PACKAGE_TYPE_TO_PLATFORM: Mapping[
+    str, Mapping[_Architecture, Mapping[_PackageType, str]]
+] = {
     "Darwin": {
-        _AARCH64: {
+        "aarch64": {
             "conda": "osx-arm64",
             "wheel": "macosx_11_0_arm64",
         },
-        _X64: {
+        "x64": {
             "conda": "osx-64",
             "wheel": "macosx_10_9_x86_64",
         },
     },
     "Linux": {
-        _AARCH64: {
+        "aarch64": {
             "conda": "linux-aarch64",
             "wheel": "manylinux2014_aarch64",
         },
-        _X64: {
+        "x64": {
             "conda": "linux-64",
             "wheel": "manylinux1_x86_64",
         },
     },
     "Windows": {
-        _X64: {
+        "x64": {
             "conda": "win-64",
             "wheel": "win_amd64",
         },

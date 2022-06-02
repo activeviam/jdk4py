@@ -19,16 +19,16 @@ requirements:
   run:
     - python {{ python }}
 
-# test:
-#   source_files:
-#     - tests/**
-#     - scripts/locales.json
-#   requires:
-#     - pytest
-#   commands:
-#     - pytest tests
-#   imports:
-#     - jdk4py
+test:
+  source_files:
+    - tests/**
+    - scripts/locales.json
+  requires:
+    - pytest
+  commands:
+    - pytest tests
+  imports:
+    - jdk4py
 
 about:
   home: https://github.com/atoti/jdk4py
