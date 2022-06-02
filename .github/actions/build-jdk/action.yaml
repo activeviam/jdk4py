@@ -10,9 +10,10 @@ inputs:
 runs:
   using: "composite"
   steps:
-    - uses: actions/setup-python@v2
+    - if: ${{ inputs.architecture == 'x64' }}
+      uses: actions/setup-python@v2
       with:
-        architecture: x64
+        architecture: ${{ inputs.architecture }}
         python-version: ${{ inputs.python-version }}
 
     - name: Install Poetry
