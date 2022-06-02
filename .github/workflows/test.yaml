@@ -9,8 +9,8 @@ jobs:
     strategy:
       matrix:
         architecture:
+          #- x64
           - aarch64
-          # - x64
         os:
           # - macos-latest
           - self-hosted-macos
@@ -38,7 +38,7 @@ jobs:
       - uses: ./.github/actions/create-python-wheel
 
       # No need to upload the package for each Python version
-      - if: matrix.python == '3.10'
+      - if: ${{ matrix.python == '3.10' }}
         uses: actions/upload-artifact@v2
         with:
           if-no-files-found: error
@@ -46,12 +46,12 @@ jobs:
           path: dist/jdk4py-*.whl
 
       # No need to lint for each OS and Python version
-      - if: matrix.os == 'ubuntu-latest' && matrix.python == '3.10'
+      - if: ${{ matrix.os == 'ubuntu-latest' && matrix.python == '3.10' }}
         name: Check formatting
         run: poetry run black --check .
 
-      # - name: Test
-      #   run: poetry run pytest
+      - name: Test
+        run: poetry run pytest
 
   # conda-package:
   #   runs-on: ${{ matrix.os }}

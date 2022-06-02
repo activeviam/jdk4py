@@ -10,11 +10,21 @@ inputs:
 runs:
   using: "composite"
   steps:
+    # ARM architectures not supported.
+    # See https://github.com/actions/setup-python/issues/197.
     - if: ${{ inputs.architecture == 'x64' }}
       uses: actions/setup-python@v2
       with:
         architecture: ${{ inputs.architecture }}
         python-version: ${{ inputs.python-version }}
+
+    # For when `actions/setup-python` had to be skipped.
+    - name: Check Python version
+      shell: bash
+      run: |
+        python -c 'import os; import sys; expected_version = os.environ["EXPECTED_PYTHON_VERSION"]; assert sys.version.startswith(expected_version), f"Expected Python version {expected_version} but got {sys.version}."'
+      env:
+        EXPECTED_PYTHON_VERSION: ${{ inputs.python-version }}
 
     - name: Install Poetry
       shell: bash
