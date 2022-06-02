@@ -38,7 +38,7 @@ jobs:
 
       - uses: ./.github/actions/create-python-wheel
 
-      # No need to upload the package for each Python version
+      # The library's Python wheels are not tied to a specific version of Python so there is no need to upload the package for each Python version.
       - if: ${{ matrix.python == '3.10' }}
         uses: actions/upload-artifact@v2
         with:
@@ -46,7 +46,7 @@ jobs:
           name: jdk4py-${{ matrix.os }}-${{ matrix.architecture }}.whl
           path: dist/jdk4py-*.whl
 
-      # No need to do that for each OS and Python version
+      # No need to do that for each OS and Python version.
       - if: ${{ matrix.os == 'ubuntu-latest' && matrix.python == '3.10' }}
         name: Check formatting and types
         run: poetry run black --check . && poetry run mypy --show-error-codes jdk4py scripts tests
@@ -74,7 +74,7 @@ jobs:
       - uses: ./.github/actions/build-jdk
         with:
           architecture: ${{ matrix.architecture }}
-          # No need to test for each Python version
+          # No need to test for each Python version.
           python-version: "3.10"
 
       - uses: ./.github/actions/create-conda-package
