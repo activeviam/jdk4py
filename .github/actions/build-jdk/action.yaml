@@ -2,7 +2,7 @@ name: Build JDK
 description: Install the dependencies and build the JDK
 inputs:
   architecture:
-    description: The architecture targeted by the JDK to set up.
+    description: The target architecture.
     required: true
   python-version:
     description: The version of Python to set up.

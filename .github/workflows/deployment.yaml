@@ -17,10 +17,8 @@ jobs:
           - ubuntu-latest
           - windows-latest
         include:
-          - os: macos-latest
-            architecture: aarch64
-          - os: ubuntu-latest
-            architecture: aarch64
+          - architecture: aarch64
+            os: self-hosted-macos
     name: Deploy on ${{ matrix.os }}-${{ matrix.architecture }}
     steps:
       - uses: actions/checkout@v2
@@ -33,6 +31,8 @@ jobs:
       - uses: ./.github/actions/create-python-wheel
 
       - uses: ./.github/actions/create-conda-package
+        with:
+          architecture: ${{ matrix.architecture }}
 
       - name: Upload Python wheel
         env:
