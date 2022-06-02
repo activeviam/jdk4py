@@ -12,7 +12,7 @@ runs:
   steps:
     - uses: actions/setup-python@v2
       with:
-        # No need to set the architecture for Python because jdk4py is platform independent Python-wise.
+        # No need to set the architecture: the action defaults to the architecture of the runner's OS.
         python-version: ${{ inputs.python-version }}
 
     - name: Install Poetry
@@ -26,8 +26,6 @@ runs:
     - name: Set environment variables
       shell: bash
       run: poetry run python scripts/set_environment.py
-      env:
-        JDK4PY_ARCHITECTURE: ${{ inputs.architecture }}
 
     - uses: actions/setup-java@v2
       with:
@@ -35,14 +33,6 @@ runs:
         distribution: temurin
         java-version: ${{ env.JDK4PY_JAVA_VERSION }}
 
-    - run: ls -la ${{ env.JAVA_HOME }}
-      shell: bash
-
-    - run: ls -la ${{ env.JAVA_HOME }}/jmods
-      shell: bash
-
     - name: Build JDK
       shell: bash
       run: poetry run python scripts/build_jdk.py
-      env:
-        JDK4PY_ARCHITECTURE: ${{ inputs.architecture }}

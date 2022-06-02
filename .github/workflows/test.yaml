@@ -10,21 +10,21 @@ jobs:
       matrix:
         architecture:
           - aarch64
-          - x64
+          # - x64
         os:
           # - macos-latest
-          - ubuntu-latest
+          - self-hosted-macos
           # - windows-latest
         python:
           # - "3.7"
           # - "3.8"
           # - "3.9"
           - "3.10"
-        exclude:
-          # - os: macos-latest
-          #   architecture: aarch64
-          - os: ubuntu-latest
-            architecture: x64
+        # exclude:
+        #   # - os: macos-latest
+        #   #   architecture: aarch64
+        #   - os: ubuntu-latest
+        #     architecture: x64
       fail-fast: false
     name: Test on ${{ matrix.os }}-${{ matrix.architecture }} with Python ${{ matrix.python }}
     steps:
