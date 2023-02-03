@@ -19,6 +19,7 @@ _MODULES = [
     "jdk.jfr",
     "jdk.management.jfr",
     "jdk.localedata",
+    "jdk.zipfs",
 ]
 
 
