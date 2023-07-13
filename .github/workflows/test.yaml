@@ -12,7 +12,7 @@ jobs:
           - x64
         os:
           - macos-latest
-          - self-hosted-macos
+          - ubuntu-latest
           - windows-latest
         python:
           - "3.11"
