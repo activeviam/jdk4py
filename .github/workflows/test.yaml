@@ -4,71 +4,70 @@ on:
     types: [opened, synchronize]
 
 jobs:
-  # test:
-  #   runs-on: ${{ matrix.os }}
-  #   strategy:
-  #     matrix:
-  #       architecture:
-  #         - x64
-  #       os:
-  #         - macos-latest
-  #         - ubuntu-latest
-  #         - windows-latest
-  #       python:
-  #         - "3.11"
-  #       include:
-  #         - architecture: aarch64
-  #           os: self-hosted-macos
-  #           python: "3.11"
-  #         - architecture: x64
-  #           os: ubuntu-latest
-  #           python: "3.10"
-  #         - architecture: x64
-  #           os: ubuntu-latest
-  #           python: "3.9"
-  #     fail-fast: false
-  #   name: Test on ${{ matrix.os }}-${{ matrix.architecture }} with Python ${{ matrix.python }}
-  #   steps:
-  #     - uses: actions/checkout@v3
+  test:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        architecture:
+          - x64
+        os:
+          - macos-latest
+          - ubuntu-latest
+          - windows-latest
+        python:
+          - "3.11"
+        include:
+          - architecture: aarch64
+            os: self-hosted-macos
+            python: "3.11"
+          - architecture: x64
+            os: ubuntu-latest
+            python: "3.10"
+          - architecture: x64
+            os: ubuntu-latest
+            python: "3.9"
+      fail-fast: false
+    name: Test on ${{ matrix.os }}-${{ matrix.architecture }} with Python ${{ matrix.python }}
+    steps:
+      - uses: actions/checkout@v3
 
-  #     - uses: ./.github/actions/build-jdk
-  #       with:
-  #         architecture: ${{ matrix.architecture }}
-  #         python-version: ${{ matrix.python }}
+      - uses: ./.github/actions/build-jdk
+        with:
+          architecture: ${{ matrix.architecture }}
+          python-version: ${{ matrix.python }}
 
-  #     - uses: ./.github/actions/create-python-wheel
-  #       with:
-  #         build-number: ${{ env.JDK4PY_BUILD_NUMBER }}
+      - uses: ./.github/actions/create-python-wheel
+        with:
+          build-number: ${{ env.JDK4PY_BUILD_NUMBER }}
 
-  #     # The library's Python wheels are not tied to a specific version of Python so there is no need to upload the package for each Python version.
-  #     - if: ${{ matrix.python == '3.11' }}
-  #       uses: actions/upload-artifact@v3
-  #       with:
-  #         if-no-files-found: error
-  #         name: jdk4py-${{ matrix.os }}-${{ matrix.architecture }}.whl
-  #         path: dist/jdk4py-*.whl
+      # The library's Python wheels are not tied to a specific version of Python so there is no need to upload the package for each Python version.
+      - if: ${{ matrix.python == '3.11' }}
+        uses: actions/upload-artifact@v3
+        with:
+          if-no-files-found: error
+          name: jdk4py-${{ matrix.os }}-${{ matrix.architecture }}.whl
+          path: dist/jdk4py-*.whl
 
-  #     # No need to do that for each OS and Python version.
-  #     - if: ${{ matrix.os == 'ubuntu-latest' && matrix.python == '3.11' }}
-  #       name: Check formatting, linting, and types
-  #       run: poetry run black --check . && poetry run ruff check . && poetry run mypy --show-error-codes jdk4py scripts tests
+      # No need to do that for each OS and Python version.
+      - if: ${{ matrix.os == 'ubuntu-latest' && matrix.python == '3.11' }}
+        name: Check formatting, linting, and types
+        run: poetry run black --check . && poetry run ruff check . && poetry run mypy --show-error-codes jdk4py scripts tests
 
-  #     - run: poetry run pytest
+      - run: poetry run pytest
 
   conda-package:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
         architecture:
-          - aarch64
+          - x64
         os:
-          # - self-hosted-macos
-          # - ubuntu-latest
-          # - windows-latest
           - self-hosted-macos
-        # include:
-        #   - architecture: aarch64
-        #     os: self-hosted-macos
+          - ubuntu-latest
+          - windows-latest
+        include:
+          - architecture: aarch64
+            os: self-hosted-macos
     name: Test Conda packaging on ${{ matrix.os }}-${{ matrix.architecture }}
     steps:
       - uses: actions/checkout@v3

@@ -8,7 +8,7 @@ runs:
   using: composite
   steps:
     # ARM architecture is not supported.
-    # The runner must have conda already installed.
+    # The runner must have conda and conda-build already installed.
     - if: ${{ inputs.architecture == 'x64' }}
       uses: conda-incubator/setup-miniconda@v2
       with:
