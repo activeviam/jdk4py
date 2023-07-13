@@ -8,7 +8,7 @@ inputs:
     description: The version of Python to set up.
     required: true
 runs:
-  using: "composite"
+  using: composite
   steps:
     # ARM architecture is not supported.
     # See https://github.com/actions/setup-python/issues/197.
