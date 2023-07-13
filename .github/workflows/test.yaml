@@ -62,7 +62,7 @@ jobs:
         architecture:
           - x64
         os:
-          - self-hosted-macos
+          - macos-latest
           - ubuntu-latest
           - windows-latest
         include:
