@@ -13,7 +13,7 @@ runs:
     # ARM architecture is not supported.
     # See https://github.com/actions/setup-python/issues/197.
     - if: ${{ inputs.architecture == 'x64' }}
-      uses: actions/setup-python@v2
+      uses: actions/setup-python@v4
       with:
         architecture: ${{ inputs.architecture }}
         python-version: ${{ inputs.python-version }}
@@ -26,7 +26,7 @@ runs:
 
     - name: Install Poetry
       shell: bash
-      run: pip install poetry
+      run: pip install poetry==1.5.1
 
     - name: Install Python dependencies
       shell: bash
@@ -36,7 +36,7 @@ runs:
       shell: bash
       run: poetry run python scripts/set_environment.py
 
-    - uses: actions/setup-java@v2
+    - uses: actions/setup-java@v3
       with:
         architecture: ${{ inputs.architecture }}
         distribution: temurin
