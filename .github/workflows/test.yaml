@@ -9,23 +9,23 @@ jobs:
     strategy:
       matrix:
         architecture:
-          - aarch64
+          - x64
         os:
-          #  - macos-latest
+          - macos-latest
           - self-hosted-macos
-          #- windows-latest
+          - windows-latest
         python:
           - "3.11"
-        # include:
-        #   - architecture: aarch64
-        #     os: self-hosted-macos
-        #     python: "3.10.11"
-        # - architecture: x64
-        #   os: ubuntu-latest
-        #   python: "3.11"
-        # - architecture: x64
-        #   os: ubuntu-latest
-        #   python: "3.9"
+        include:
+          - architecture: aarch64
+            os: self-hosted-macos
+            python: "3.11"
+          - architecture: x64
+            os: ubuntu-latest
+            python: "3.10"
+          - architecture: x64
+            os: ubuntu-latest
+            python: "3.9"
       fail-fast: false
     name: Test on ${{ matrix.os }}-${{ matrix.architecture }} with Python ${{ matrix.python }}
     steps:
