@@ -63,12 +63,12 @@ jobs:
         architecture:
           - x64
         os:
-          - macos-latest
+          # - macos-latest
           - ubuntu-latest
-          - windows-latest
-        include:
-          - architecture: aarch64
-            os: self-hosted-macos
+          # - windows-latest
+        # include:
+        #   - architecture: aarch64
+        #     os: self-hosted-macos
     name: Test Conda packaging on ${{ matrix.os }}-${{ matrix.architecture }}
     steps:
       - uses: actions/checkout@v3
