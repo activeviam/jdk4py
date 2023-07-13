@@ -15,17 +15,17 @@ jobs:
           - ubuntu-latest
           - windows-latest
         python:
-          - "3.9"
+          - "3.10"
         include:
           - architecture: aarch64
             os: self-hosted-macos
-            python: "3.9"
+            python: "3.10"
           - architecture: x64
             os: ubuntu-latest
             python: "3.11"
           - architecture: x64
             os: ubuntu-latest
-            python: "3.10"
+            python: "3.9"
       fail-fast: false
     name: Test on ${{ matrix.os }}-${{ matrix.architecture }} with Python ${{ matrix.python }}
     steps:
@@ -41,7 +41,7 @@ jobs:
           build-number: ${{ env.JDK4PY_BUILD_NUMBER }}
 
       # The library's Python wheels are not tied to a specific version of Python so there is no need to upload the package for each Python version.
-      - if: ${{ matrix.python == '3.9' }}
+      - if: ${{ matrix.python == '3.10' }}
         uses: actions/upload-artifact@v3
         with:
           if-no-files-found: error
@@ -49,7 +49,7 @@ jobs:
           path: dist/jdk4py-*.whl
 
       # No need to do that for each OS and Python version.
-      - if: ${{ matrix.os == 'ubuntu-latest' && matrix.python == '3.9' }}
+      - if: ${{ matrix.os == 'ubuntu-latest' && matrix.python == '3.10' }}
         name: Check formatting, linting, and types
         run: poetry run black --check . && poetry run ruff check . && poetry run mypy --show-error-codes jdk4py scripts tests
 
@@ -77,7 +77,7 @@ jobs:
         with:
           architecture: ${{ matrix.architecture }}
           # No need to test for each Python version.
-          python-version: "3.9"
+          python-version: "3.10"
 
       - uses: ./.github/actions/create-conda-package
         with:
