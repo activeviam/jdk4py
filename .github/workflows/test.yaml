@@ -9,23 +9,23 @@ jobs:
     strategy:
       matrix:
         architecture:
-          - x64
+          - aarch64
         os:
           #  - macos-latest
-          - ubuntu-latest
+          - self-hosted-macos
           #- windows-latest
         python:
-          - "3.10"
-        include:
-          - architecture: aarch64
-            os: self-hosted-macos
-            python: "3.10.11"
-          # - architecture: x64
-          #   os: ubuntu-latest
-          #   python: "3.11"
-          # - architecture: x64
-          #   os: ubuntu-latest
-          #   python: "3.9"
+          - "3.11.0"
+        # include:
+        #   - architecture: aarch64
+        #     os: self-hosted-macos
+        #     python: "3.10.11"
+        # - architecture: x64
+        #   os: ubuntu-latest
+        #   python: "3.11"
+        # - architecture: x64
+        #   os: ubuntu-latest
+        #   python: "3.9"
       fail-fast: false
     name: Test on ${{ matrix.os }}-${{ matrix.architecture }} with Python ${{ matrix.python }}
     steps:
@@ -56,35 +56,35 @@ jobs:
       - name: Test
         run: poetry run pytest
 
-  conda-package:
-    runs-on: ${{ matrix.os }}
-    strategy:
-      matrix:
-        architecture:
-          - x64
-        os:
-          # - macos-latest
-          - ubuntu-latest
-          # - windows-latest
-        # include:
-        #   - architecture: aarch64
-        #     os: self-hosted-macos
-    name: Test Conda packaging on ${{ matrix.os }}-${{ matrix.architecture }}
-    steps:
-      - uses: actions/checkout@v3
+  # conda-package:
+  #   runs-on: ${{ matrix.os }}
+  #   strategy:
+  #     matrix:
+  #       architecture:
+  #         - x64
+  #       os:
+  #         # - macos-latest
+  #         - ubuntu-latest
+  #         # - windows-latest
+  #       # include:
+  #       #   - architecture: aarch64
+  #       #     os: self-hosted-macos
+  #   name: Test Conda packaging on ${{ matrix.os }}-${{ matrix.architecture }}
+  #   steps:
+  #     - uses: actions/checkout@v3
 
-      - uses: ./.github/actions/build-jdk
-        with:
-          architecture: ${{ matrix.architecture }}
-          # No need to test for each Python version.
-          python-version: "3.10"
+  #     - uses: ./.github/actions/build-jdk
+  #       with:
+  #         architecture: ${{ matrix.architecture }}
+  #         # No need to test for each Python version.
+  #         python-version: "3.10"
 
-      - uses: ./.github/actions/create-conda-package
-        with:
-          architecture: ${{ matrix.architecture }}
+  #     - uses: ./.github/actions/create-conda-package
+  #       with:
+  #         architecture: ${{ matrix.architecture }}
 
-      - uses: actions/upload-artifact@v3
-        with:
-          if-no-files-found: error
-          name: jdk4py-${{ matrix.os }}-${{ matrix.architecture }}-conda-packages
-          path: dist/${{ env.JDK4PY_CONDA_PLATFORM }}/jdk4py-*.tar.bz2
+  #     - uses: actions/upload-artifact@v3
+  #       with:
+  #         if-no-files-found: error
+  #         name: jdk4py-${{ matrix.os }}-${{ matrix.architecture }}-conda-packages
+  #         path: dist/${{ env.JDK4PY_CONDA_PLATFORM }}/jdk4py-*.tar.bz2
