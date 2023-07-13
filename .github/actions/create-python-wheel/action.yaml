@@ -8,5 +8,5 @@ runs:
   using: "composite"
   steps:
     - name: Build Python wheel
-      shell: bash
       run: poetry run python setup.py bdist_wheel --build-number ${{ inputs.build-number }}
+      shell: bash
