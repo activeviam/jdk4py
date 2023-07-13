@@ -5,16 +5,21 @@ inputs:
     description: The target architecture.
     required: true
 runs:
-  using: "composite"
+  using: composite
   steps:
-    # Careful when upgrading to macOS 12 https://github.com/conda-incubator/setup-miniconda/issues/229 would have to be resolved first.
+    # ARM architecture is not supported.
+    # The runner must have conda and conda-build already installed.
     - if: ${{ inputs.architecture == 'x64' }}
       uses: conda-incubator/setup-miniconda@v2
       with:
         channels: conda-forge
-        conda-build-version: "3.21.6"
+        conda-build-version: "3.25.0"
+
+    # Remove once https://github.com/conda/conda-build/issues/4835 is fixed
+    - run: conda install libarchive
+      shell: bash -l {0}
 
     - name: Create Conda package
+      run: conda build --no-anaconda-upload --output-folder dist .
       # See https://github.com/conda-incubator/setup-miniconda/blame/059455a698430d8b68fa317268fa2e3da3492a98/README.md#L609-L610.
       shell: bash -l {0}
-      run: conda build --no-anaconda-upload --output-folder dist .

@@ -8,40 +8,36 @@ inputs:
     description: The version of Python to set up.
     required: true
 runs:
-  using: "composite"
+  using: composite
   steps:
     # ARM architecture is not supported.
     # See https://github.com/actions/setup-python/issues/197.
-    - if: ${{ inputs.architecture == 'x64' }}
-      uses: actions/setup-python@v2
+    - id: setup_python
+      if: ${{ inputs.architecture == 'x64' }}
+      uses: actions/setup-python@v4
       with:
         architecture: ${{ inputs.architecture }}
         python-version: ${{ inputs.python-version }}
 
-    # For when `actions/setup-python` had to be skipped.
-    - name: Check Python version
+    - if: ${{ steps.setup_python.outcome == 'skipped' }}
+      name: Check Python version
+      run: python -c 'import sys; expected_version = tuple([int(number) for number in sys.argv[-1].split(".")]); assert sys.version_info[:2] == expected_version[:2], f"Expected Python version {expected_version} but got {sys.version_info}."' ${{ inputs.python-version }}
       shell: bash
-      run: |
-        python -c 'import sys; expected_version = tuple([int(number) for number in sys.argv[-1].split(".")]); assert sys.version_info[:2] == expected_version[:2], f"Expected Python version {expected_version} but got {sys.version_info}."' ${{ inputs.python-version }}
 
-    - name: Install Poetry
+    - run: pip install poetry==1.5.1
       shell: bash
-      run: pip install poetry
 
-    - name: Install Python dependencies
+    - run: poetry install
       shell: bash
-      run: poetry install
 
-    - name: Set environment variables
+    - run: poetry run python scripts/set_environment.py
       shell: bash
-      run: poetry run python scripts/set_environment.py
 
-    - uses: actions/setup-java@v2
+    - uses: actions/setup-java@v3
       with:
         architecture: ${{ inputs.architecture }}
         distribution: temurin
         java-version: ${{ env.JDK4PY_JAVA_VERSION }}
 
-    - name: Build JDK
+    - run: poetry run python scripts/build_jdk.py
       shell: bash
-      run: poetry run python scripts/build_jdk.py

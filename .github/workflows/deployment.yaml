@@ -21,12 +21,12 @@ jobs:
             os: self-hosted-macos
     name: Deploy on ${{ matrix.os }}-${{ matrix.architecture }}
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
 
       - uses: ./.github/actions/build-jdk
         with:
           architecture: ${{ matrix.architecture }}
-          python-version: "3.10"
+          python-version: "3.11"
 
       - uses: ./.github/actions/create-python-wheel
         with:
@@ -39,18 +39,18 @@ jobs:
       - name: Upload Python wheel
         env:
           PYPI_TOKEN: ${{ secrets.PYPI_TOKEN }}
-        shell: bash
         run: poetry run twine upload dist/jdk4py-*.whl --username __token__ --password "$PYPI_TOKEN"
+        shell: bash
 
       - name: Upload Conda package
         env:
           JDK4PY_CONDA_CHANNEL_PASSWORD: ${{ secrets.CONDA_CHANNEL_PASSWORD }}
           JDK4PY_CONDA_CHANNEL_URL: ${{ secrets.CONDA_CHANNEL_URL }}
           JDK4PY_CONDA_CHANNEL_USERNAME: ${{ secrets.CONDA_CHANNEL_USERNAME }}
-        shell: bash
         run: |
           ls dist/$JDK4PY_CONDA_PLATFORM/jdk4py-*.tar.bz2 | \
           while read filepath; do
             echo Uploading ${filepath}
             curl --fail --user "$JDK4PY_CONDA_CHANNEL_USERNAME":"$JDK4PY_CONDA_CHANNEL_PASSWORD" --upload-file ${filepath} "$JDK4PY_CONDA_CHANNEL_URL/$JDK4PY_CONDA_PLATFORM/"
           done
+        shell: bash

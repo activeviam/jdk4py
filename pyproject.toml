@@ -6,15 +6,31 @@ description = ""
 authors = []
 
 [tool.poetry.dependencies]
-python = "^3.8"
+python = ">=3.9"
 
 [tool.poetry.dev-dependencies]
 black = "*"
 mypy = "*"
 pytest = "*"
+ruff = "*"
 setuptools = "*"
 twine = "*"
 wheel = "*"
 
 [tool.mypy]
 strict = true
+warn_redundant_casts = true
+warn_unused_configs = true
+warn_unused_ignores = true
+
+[tool.pytest.ini_options]
+filterwarnings = ["error"]
+
+[tool.ruff]
+ignore = [
+    "E501", # Covered by Black.
+]
+
+[tool.ruff.isort]
+combine-as-imports = true
+required-imports = ["from __future__ import annotations"]
