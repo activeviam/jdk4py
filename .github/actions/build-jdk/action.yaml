@@ -24,7 +24,7 @@ runs:
       run: python -c 'import sys; expected_version = tuple([int(number) for number in sys.argv[-1].split(".")]); assert sys.version_info[:2] == expected_version[:2], f"Expected Python version {expected_version} but got {sys.version_info}."' ${{ inputs.python-version }}
       shell: bash
 
-    - run: pip install poetry==1.5.1
+    - run: pip install poetry==1.6.1
       shell: bash
 
     - run: poetry install

@@ -18,7 +18,7 @@ _JAVA_FILES = [_JAVA_RUNTIME_FOLDER] + [
     for path in (_SOURCE_DIRECTORY / _JAVA_RUNTIME_FOLDER).rglob("*")
 ]
 
-_JAVA_VERSION_FILENAME = "java_version.txt"
+_JAVA_VERSION_FILENAME   = "java_version.txt"
 
 _VERSION = ".".join(
     (

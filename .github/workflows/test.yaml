@@ -11,14 +11,17 @@ jobs:
         architecture:
           - x64
         os:
-          - macos-latest
+          - macos-latest-large
           - ubuntu-latest
           - windows-latest
         python:
-          - "3.11"
+          - "3.12"
         include:
           - architecture: aarch64
-            os: self-hosted-macos
+            os: macos-latest-xlarge
+            python: "3.12"
+          - architecture: x64
+            os: ubuntu-latest
             python: "3.11"
           - architecture: x64
             os: ubuntu-latest
@@ -41,7 +44,7 @@ jobs:
           build-number: ${{ env.JDK4PY_BUILD_NUMBER }}
 
       # The library's Python wheels are not tied to a specific version of Python so there is no need to upload the package for each Python version.
-      - if: ${{ matrix.python == '3.11' }}
+      - if: ${{ matrix.python == '3.12' }}
         uses: actions/upload-artifact@v3
         with:
           if-no-files-found: error
@@ -49,9 +52,9 @@ jobs:
           path: dist/jdk4py-*.whl
 
       # No need to do that for each OS and Python version.
-      - if: ${{ matrix.os == 'ubuntu-latest' && matrix.python == '3.11' }}
+      - if: ${{ matrix.os == 'ubuntu-latest' && matrix.python == '3.12' }}
         name: Check formatting, linting, and types
-        run: poetry run black --check . && poetry run ruff check . && poetry run mypy --show-error-codes jdk4py scripts tests
+        run: poetry run ruff format --check . && poetry run ruff check . && poetry run mypy --show-error-codes jdk4py scripts tests
 
       - run: poetry run pytest
 
@@ -62,12 +65,12 @@ jobs:
         architecture:
           - x64
         os:
-          - macos-latest
+          - macos-latest-large
           - ubuntu-latest
           - windows-latest
         include:
           - architecture: aarch64
-            os: self-hosted-macos
+            os: macos-latest-xlarge
     name: Test Conda packaging on ${{ matrix.os }}-${{ matrix.architecture }}
     steps:
       - uses: actions/checkout@v3
@@ -76,7 +79,7 @@ jobs:
         with:
           architecture: ${{ matrix.architecture }}
           # No need to test for each Python version.
-          python-version: "3.11"
+          python-version: "3.12"
 
       - uses: ./.github/actions/create-conda-package
         with:
