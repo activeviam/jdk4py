@@ -19,7 +19,8 @@ def test_java_version() -> None:
     match = re.match(r'^openjdk version "(?P<version>[^"]+)"', output)
     assert match, f"Unexpected output:\n{output}"
     version = match.group("version")
-    assert version == ".".join(str(number) for number in JAVA_VERSION)
+    assert isinstance(version, str)
+    assert tuple(int(number) for number in version.split(".")) == JAVA_VERSION
 
 
 def test_jar_execution() -> None:
