@@ -9,7 +9,6 @@ authors = []
 python = ">=3.9"
 
 [tool.poetry.dev-dependencies]
-black = "*"
 mypy = "*"
 pytest = "*"
 ruff = "*"
@@ -25,12 +24,3 @@ warn_unused_ignores = true
 
 [tool.pytest.ini_options]
 filterwarnings = ["error"]
-
-[tool.ruff]
-ignore = [
-    "E501", # Covered by Black.
-]
-
-[tool.ruff.isort]
-combine-as-imports = true
-required-imports = ["from __future__ import annotations"]

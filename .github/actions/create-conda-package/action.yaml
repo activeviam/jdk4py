@@ -2,18 +2,17 @@ name: Create Conda package
 description: Create a Conda package
 inputs:
   architecture:
-    description: The target architecture.
+    description: The architecture of the runner.
     required: true
 runs:
   using: composite
   steps:
-    # ARM architecture is not supported.
-    # The runner must have conda and conda-build already installed.
-    - if: ${{ inputs.architecture == 'x64' }}
-      uses: conda-incubator/setup-miniconda@v2
+    - uses: conda-incubator/setup-miniconda@v3
       with:
+        architecture: ${{ inputs.architecture }}
         channels: conda-forge
-        conda-build-version: "3.25.0"
+        conda-build-version: "3.27.0"
+        miniconda-version: "latest"
 
     # Remove once https://github.com/conda/conda-build/issues/4835 is fixed
     - run: conda install libarchive

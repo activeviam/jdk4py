@@ -13,20 +13,20 @@ jobs:
         architecture:
           - x64
         os:
-          - macos-latest
+          - macos-latest-large
           - ubuntu-latest
           - windows-latest
         include:
-          - architecture: aarch64
-            os: self-hosted-macos
+          - architecture: arm64
+            os: macos-latest-xlarge
     name: Deploy on ${{ matrix.os }}-${{ matrix.architecture }}
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
 
       - uses: ./.github/actions/build-jdk
         with:
-          architecture: ${{ matrix.architecture }}
-          python-version: "3.11"
+          os: ${{ matrix.os }}
+          python-version: "3.12"
 
       - uses: ./.github/actions/create-python-wheel
         with:
