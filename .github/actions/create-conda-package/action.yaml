@@ -7,11 +7,9 @@ inputs:
 runs:
   using: composite
   steps:
-    - run: python --version
-      shell: bash
-
     - uses: conda-incubator/setup-miniconda@v3
       with:
+        architecture: ${{ inputs.architecture }}
         channels: conda-forge
         conda-build-version: "3.27.0"
         miniconda-version: "latest"

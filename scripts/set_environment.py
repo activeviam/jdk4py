@@ -12,7 +12,6 @@ _Architecture = Literal["aarch64", "x64"]
 _PackageType = Literal["conda", "wheel"]
 
 _MACHINE_TO_ARCHITECTURE: Mapping[str, _Architecture] = {
-    "aarch64": "aarch64",
     "AMD64": "x64",
     "arm64": "aarch64",
     "x64": "x64",
@@ -34,10 +33,6 @@ _SYSTEM_TO_ARCHITECTURE_TO_PACKAGE_TYPE_TO_PLATFORM: Mapping[
         },
     },
     "Linux": {
-        "aarch64": {
-            "conda": "linux-aarch64",
-            "wheel": "manylinux2014_aarch64",
-        },
         "x64": {
             "conda": "linux-64",
             "wheel": "manylinux1_x86_64",
