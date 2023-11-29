@@ -7,11 +7,13 @@ inputs:
 runs:
   using: composite
   steps:
+    - run: python --version
+      shell: bash
+
     - uses: conda-incubator/setup-miniconda@v3
       with:
         channels: conda-forge
         conda-build-version: "3.27.0"
-        # No version with Python 3.12 available yet in https://repo.anaconda.com/miniconda.
         miniconda-version: "latest"
 
     - run: python --version

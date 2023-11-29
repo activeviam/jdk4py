@@ -88,11 +88,13 @@ jobs:
         with:
           architecture: ${{ matrix.architecture }}
           # No need to test each Python version.
-          python-version: "3.11"
+          python-version: "3.12"
 
       - uses: ./.github/actions/create-conda-package
         with:
           architecture: ${{ matrix.architecture }}
+
+      - run: ls -la dist
 
       - uses: actions/upload-artifact@v3
         with:

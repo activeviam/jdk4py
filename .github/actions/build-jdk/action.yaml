@@ -10,13 +10,14 @@ inputs:
 runs:
   using: composite
   steps:
+    - run: pipx install poetry==1.7.0
+      shell: bash
+
     - id: setup_python
       uses: actions/setup-python@v4
       with:
+        cache: "poetry"
         python-version: ${{ inputs.python-version }}
-
-    - run: pip install poetry==1.7.0
-      shell: bash
 
     - run: poetry install
       shell: bash
