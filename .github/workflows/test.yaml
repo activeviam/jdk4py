@@ -19,7 +19,7 @@ jobs:
         include:
           - architecture: arm64
             os: macos-latest-xlarge
-            python: "3.9"
+            python: "3.12"
           # - architecture: x64
           #   os: ubuntu-latest
           #   python: "3.11"
@@ -61,7 +61,7 @@ jobs:
       - run: poetry run pytest
 
       # The library's Python wheels are not tied to a specific version of Python so there is no need to upload the package for each Python version.
-      - if: ${{ matrix.python == '3.9' }}
+      - if: ${{ matrix.python == '3.12' }}
         uses: actions/upload-artifact@v3
         with:
           if-no-files-found: error
