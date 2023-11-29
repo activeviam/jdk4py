@@ -12,26 +12,26 @@ jobs:
           - x64
         os:
           - macos-latest-large
-          - ubuntu-latest
-          - windows-latest
+          #- ubuntu-latest
+          #- windows-latest
         python:
           - "3.12"
         include:
           - architecture: aarch64
             os: macos-latest-xlarge
             python: "3.12"
-          - architecture: x64
-            os: ubuntu-latest
-            python: "3.11"
-          - architecture: x64
-            os: ubuntu-latest
-            python: "3.10"
-          - architecture: x64
-            os: ubuntu-latest
-            python: "3.9"
-      fail-fast: false
+          # - architecture: x64
+          #   os: ubuntu-latest
+          #   python: "3.11"
+          # - architecture: x64
+          #   os: ubuntu-latest
+          #   python: "3.10"
+          # - architecture: x64
+          #   os: ubuntu-latest
+          #   python: "3.9"
     name: Test on ${{ matrix.os }}-${{ matrix.architecture }} with Python ${{ matrix.python }}
     steps:
+      - run: sysctl -a | grep machdep.cpu.brand_string
       - uses: actions/checkout@v4
 
       - uses: ./.github/actions/build-jdk
@@ -76,8 +76,8 @@ jobs:
           - x64
         os:
           - macos-latest-large
-          - ubuntu-latest
-          - windows-latest
+          # - ubuntu-latest
+          # - windows-latest
         include:
           - architecture: aarch64
             os: macos-latest-xlarge
