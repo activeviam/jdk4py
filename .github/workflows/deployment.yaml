@@ -17,7 +17,7 @@ jobs:
           - ubuntu-latest
           - windows-latest
         include:
-          - architecture: aarch64
+          - architecture: arm64
             os: self-hosted-macos
     name: Deploy on ${{ matrix.os }}-${{ matrix.architecture }}
     steps:
@@ -25,9 +25,8 @@ jobs:
 
       - uses: ./.github/actions/build-jdk
         with:
-          architecture: ${{ matrix.architecture }}
           os: ${{ matrix.os }}
-          python-version: "3.11"
+          python-version: "3.12"
 
       - uses: ./.github/actions/create-python-wheel
         with:

@@ -17,7 +17,7 @@ jobs:
         python:
           - "3.12"
         include:
-          - architecture: aarch64
+          - architecture: arm64
             os: macos-latest-xlarge
             python: "3.12"
           # - architecture: x64
@@ -36,7 +36,6 @@ jobs:
 
       - uses: ./.github/actions/build-jdk
         with:
-          architecture: ${{ matrix.architecture }}
           os: ${{ matrix.os }}
           python-version: ${{ matrix.python }}
 
@@ -80,7 +79,7 @@ jobs:
           # - ubuntu-latest
           # - windows-latest
         include:
-          - architecture: aarch64
+          - architecture: arm64
             os: macos-latest-xlarge
     name: Test Conda packaging on ${{ matrix.os }}-${{ matrix.architecture }}
     steps:
@@ -88,7 +87,6 @@ jobs:
 
       - uses: ./.github/actions/build-jdk
         with:
-          architecture: ${{ matrix.architecture }}
           os: ${{ matrix.os }}
           # No need to test each Python version.
           python-version: "3.12"

@@ -1,9 +1,6 @@
 name: Build JDK
 description: Install the dependencies and build the JDK
 inputs:
-  architecture:
-    description: The architecture of the runner.
-    required: true
   os:
     description: The OS of the runner.
     required: true
@@ -27,12 +24,10 @@ runs:
 
     - id: setup_python
       uses: actions/setup-python@v4
-      env:
-        # Overriding built-in variable to avoid clash between Apple Silicon and Intel macOS runners.
-        # See https://github.com/actions/setup-python/blob/b64ffcaf5b410884ad320a9cfac8866006a109aa/src/cache-distributions/poetry-cache.ts#L50.
-        RUNNER_OS: ${{ inputs.os }}-${{ inputs.architecture }}
       with:
-        cache: "poetry"
+        # Not using cache on Apple Silicon to avoid clash with Intel macOS runner (they both have `RUNNER_OS` set to `macOS`).
+        # See https://github.com/actions/setup-python/blob/b64ffcaf5b410884ad320a9cfac8866006a109aa/src/cache-distributions/poetry-cache.ts#L50.
+        cache: ${{ inputs.os == 'macos-latest-xlarge' && '' || 'poetry' }}
         python-version: ${{ inputs.python-version }}
 
     - run: poetry install
@@ -43,7 +38,6 @@ runs:
 
     - uses: actions/setup-java@v3
       with:
-        architecture: ${{ inputs.architecture }}
         distribution: temurin
         java-version: ${{ env.JDK4PY_JAVA_VERSION }}
 
