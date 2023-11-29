@@ -19,7 +19,7 @@ jobs:
         include:
           - architecture: arm64
             os: macos-latest-xlarge
-            python: "3.12"
+            python: "3.9"
           # - architecture: x64
           #   os: ubuntu-latest
           #   python: "3.11"
@@ -61,44 +61,44 @@ jobs:
       - run: poetry run pytest
 
       # The library's Python wheels are not tied to a specific version of Python so there is no need to upload the package for each Python version.
-      - if: ${{ matrix.python == '3.12' }}
+      - if: ${{ matrix.python == '3.9' }}
         uses: actions/upload-artifact@v3
         with:
           if-no-files-found: error
           name: jdk4py-${{ matrix.os }}-${{ matrix.architecture }}.whl
           path: dist/jdk4py-*.whl
 
-  conda-package:
-    runs-on: ${{ matrix.os }}
-    strategy:
-      matrix:
-        architecture:
-          - x64
-        os:
-          - macos-latest-large
-          # - ubuntu-latest
-          # - windows-latest
-        include:
-          - architecture: arm64
-            os: macos-latest-xlarge
-    name: Test Conda packaging on ${{ matrix.os }}-${{ matrix.architecture }}
-    steps:
-      - uses: actions/checkout@v4
+  # conda-package:
+  #   runs-on: ${{ matrix.os }}
+  #   strategy:
+  #     matrix:
+  #       architecture:
+  #         - x64
+  #       os:
+  #         - macos-latest-large
+  #         # - ubuntu-latest
+  #         # - windows-latest
+  #       include:
+  #         - architecture: arm64
+  #           os: macos-latest-xlarge
+  #   name: Test Conda packaging on ${{ matrix.os }}-${{ matrix.architecture }}
+  #   steps:
+  #     - uses: actions/checkout@v4
 
-      - uses: ./.github/actions/build-jdk
-        with:
-          os: ${{ matrix.os }}
-          # No need to test each Python version.
-          python-version: "3.12"
+  #     - uses: ./.github/actions/build-jdk
+  #       with:
+  #         os: ${{ matrix.os }}
+  #         # No need to test each Python version.
+  #         python-version: "3.12"
 
-      - uses: ./.github/actions/create-conda-package
-        with:
-          architecture: ${{ matrix.architecture }}
+  #     - uses: ./.github/actions/create-conda-package
+  #       with:
+  #         architecture: ${{ matrix.architecture }}
 
-      - run: ls -la dist
+  #     - run: ls -la dist
 
-      - uses: actions/upload-artifact@v3
-        with:
-          if-no-files-found: error
-          name: jdk4py-${{ matrix.os }}-${{ matrix.architecture }}-conda-packages
-          path: dist/${{ env.JDK4PY_CONDA_PLATFORM }}/jdk4py-*.tar.bz2
+  #     - uses: actions/upload-artifact@v3
+  #       with:
+  #         if-no-files-found: error
+  #         name: jdk4py-${{ matrix.os }}-${{ matrix.architecture }}-conda-packages
+  #         path: dist/${{ env.JDK4PY_CONDA_PLATFORM }}/jdk4py-*.tar.bz2
