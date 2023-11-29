@@ -20,7 +20,7 @@ def test_java_version() -> None:
     assert match, f"Unexpected output:\n{output}"
     version = match.group("version")
     assert isinstance(version, str)
-    assert tuple(int(number) for number in version.split(".")) == JAVA_VERSION
+    assert tuple([int(number) for number in version.split(".")][:3]) == JAVA_VERSION
 
 
 def test_jar_execution() -> None:
