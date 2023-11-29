@@ -28,7 +28,7 @@ PosixPath('/Users/johndoe/dev/jdk4py/jdk4py/java-runtime')
 >>> JAVA
 PosixPath('/Users/johndoe/dev/jdk4py/jdk4py/java-runtime/bin/java')
 >>> JAVA_VERSION
-(17, 0, 8, 1)
+(17, 0, 9)
 >>> from subprocess import check_output
 >>> some_java_options = ["-Xmx16G", "-Xms2G"]
 >>> check_output([str(JAVA), "-jar", "HelloWorld.jar",  *some_java_options])
@@ -37,7 +37,7 @@ b"Hello, World!"
 
 ## Versioning
 
-`jdk4py`'s version contains at least 4 numbers:
+`jdk4py`'s version contains 4 numbers:
 
-- The last number is `jdk4py` specific: it starts at 0 for each Java version and then increases.
-- The other numbers are the Java version.
+- The first 3 numbers are the Java version.
+- The fourth is `jdk4py` specific: it starts at 0 for each Java version and then increases.
