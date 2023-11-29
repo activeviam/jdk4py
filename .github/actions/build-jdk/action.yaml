@@ -13,7 +13,6 @@ runs:
     - id: setup_python
       uses: actions/setup-python@v4
       with:
-        architecture: ${{ inputs.architecture }}
         python-version: "3.12.0"
 
     - if: ${{ steps.setup_python.outcome == 'skipped' }}
