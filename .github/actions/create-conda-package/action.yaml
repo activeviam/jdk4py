@@ -11,6 +11,14 @@ runs:
       with:
         channels: conda-forge
         conda-build-version: "3.27.0"
+        # No version with Python 3.12 available yet in https://repo.anaconda.com/miniconda.
+        miniconda-version: "py311_23.10.0-1"
+
+    - run: python --version
+      shell: bash
+
+    - run: python --version
+      shell: bash -l {0}
 
     # Remove once https://github.com/conda/conda-build/issues/4835 is fixed
     - run: conda install libarchive
