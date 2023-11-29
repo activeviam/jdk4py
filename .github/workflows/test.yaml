@@ -31,7 +31,6 @@ jobs:
           #   python: "3.9"
     name: Test on ${{ matrix.os }}-${{ matrix.architecture }} with Python ${{ matrix.python }}
     steps:
-      - run: sysctl -a | grep machdep.cpu.brand_string
       - uses: actions/checkout@v4
 
       - uses: ./.github/actions/build-jdk
