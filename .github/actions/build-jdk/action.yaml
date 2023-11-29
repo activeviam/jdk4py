@@ -2,7 +2,10 @@ name: Build JDK
 description: Install the dependencies and build the JDK
 inputs:
   architecture:
-    description: The target architecture.
+    description: The architecture of the runner.
+    required: true
+  os:
+    description: The OS of the runner.
     required: true
   python-version:
     description: The version of Python to set up.
@@ -10,6 +13,14 @@ inputs:
 runs:
   using: composite
   steps:
+    # Remove once pipx is preinstalled on this OS.
+    - if: ${{ inputs.os == 'macos-latest-xlarge' }}
+      name: Install pipx
+      run: |
+        brew install pipx
+        pipx ensurepath
+      shell: bash
+
     - run: pipx install poetry==1.7.0
       shell: bash
 

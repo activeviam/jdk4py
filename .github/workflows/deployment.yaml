@@ -26,6 +26,7 @@ jobs:
       - uses: ./.github/actions/build-jdk
         with:
           architecture: ${{ matrix.architecture }}
+          os: ${{ matrix.os }}
           python-version: "3.11"
 
       - uses: ./.github/actions/create-python-wheel

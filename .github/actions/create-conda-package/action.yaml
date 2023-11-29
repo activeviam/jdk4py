@@ -2,7 +2,7 @@ name: Create Conda package
 description: Create a Conda package
 inputs:
   architecture:
-    description: The target architecture.
+    description: The architecture of the runner.
     required: true
 runs:
   using: composite
