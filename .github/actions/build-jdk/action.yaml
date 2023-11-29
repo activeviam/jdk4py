@@ -10,16 +10,14 @@ inputs:
 runs:
   using: composite
   steps:
-    # - id: setup_python
-    #   uses: actions/setup-python@v4
-    #   with:
-    #     architecture: ${{ inputs.architecture }}
-    #     python-version: ${{ inputs.python-version }}
+    - id: setup_python
+      uses: actions/setup-python@v4
+      with:
+        architecture: ${{ inputs.architecture }}
+        python-version: "3.12.0"
 
-    - run: python --version
-      shell: bash
-
-    - name: Check Python version
+    - if: ${{ steps.setup_python.outcome == 'skipped' }}
+      name: Check Python version
       run: python -c 'import sys; expected_version = tuple([int(number) for number in sys.argv[-1].split(".")]); assert sys.version_info[:2] == expected_version[:2], f"Expected Python version {expected_version} but got {sys.version_info}."' ${{ inputs.python-version }}
       shell: bash
 
