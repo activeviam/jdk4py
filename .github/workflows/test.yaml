@@ -12,23 +12,23 @@ jobs:
           - x64
         os:
           - macos-latest-large
-          #- ubuntu-latest
-          #- windows-latest
+          - ubuntu-latest
+          - windows-latest
         python:
           - "3.12"
         include:
           - architecture: arm64
             os: macos-latest-xlarge
             python: "3.12"
-          # - architecture: x64
-          #   os: ubuntu-latest
-          #   python: "3.11"
-          # - architecture: x64
-          #   os: ubuntu-latest
-          #   python: "3.10"
-          # - architecture: x64
-          #   os: ubuntu-latest
-          #   python: "3.9"
+          - architecture: x64
+            os: ubuntu-latest
+            python: "3.11"
+          - architecture: x64
+            os: ubuntu-latest
+            python: "3.10"
+          - architecture: x64
+            os: ubuntu-latest
+            python: "3.9"
       fail-fast: false
     name: Test on ${{ matrix.os }}-${{ matrix.architecture }} with Python ${{ matrix.python }}
     steps:
@@ -68,37 +68,35 @@ jobs:
           name: jdk4py-${{ matrix.os }}-${{ matrix.architecture }}.whl
           path: dist/jdk4py-*.whl
 
-  # conda-package:
-  #   runs-on: ${{ matrix.os }}
-  #   strategy:
-  #     matrix:
-  #       architecture:
-  #         - x64
-  #       os:
-  #         - macos-latest-large
-  #         # - ubuntu-latest
-  #         # - windows-latest
-  #       include:
-  #         - architecture: arm64
-  #           os: macos-latest-xlarge
-  #   name: Test Conda packaging on ${{ matrix.os }}-${{ matrix.architecture }}
-  #   steps:
-  #     - uses: actions/checkout@v4
+  conda-package:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        architecture:
+          - x64
+        os:
+          - macos-latest-large
+          - ubuntu-latest
+          - windows-latest
+        include:
+          - architecture: arm64
+            os: macos-latest-xlarge
+    name: Test Conda packaging on ${{ matrix.os }}-${{ matrix.architecture }}
+    steps:
+      - uses: actions/checkout@v4
 
-  #     - uses: ./.github/actions/build-jdk
-  #       with:
-  #         os: ${{ matrix.os }}
-  #         # No need to test each Python version.
-  #         python-version: "3.12"
+      - uses: ./.github/actions/build-jdk
+        with:
+          os: ${{ matrix.os }}
+          # No need to test each Python version.
+          python-version: "3.12"
 
-  #     - uses: ./.github/actions/create-conda-package
-  #       with:
-  #         architecture: ${{ matrix.architecture }}
+      - uses: ./.github/actions/create-conda-package
+        with:
+          architecture: ${{ matrix.architecture }}
 
-  #     - run: ls -la dist
-
-  #     - uses: actions/upload-artifact@v3
-  #       with:
-  #         if-no-files-found: error
-  #         name: jdk4py-${{ matrix.os }}-${{ matrix.architecture }}-conda-packages
-  #         path: dist/${{ env.JDK4PY_CONDA_PLATFORM }}/jdk4py-*.tar.bz2
+      - uses: actions/upload-artifact@v3
+        with:
+          if-no-files-found: error
+          name: jdk4py-${{ matrix.os }}-${{ matrix.architecture }}-conda-packages
+          path: dist/${{ env.JDK4PY_CONDA_PLATFORM }}/jdk4py-*.tar.bz2

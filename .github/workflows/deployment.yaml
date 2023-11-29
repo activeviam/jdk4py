@@ -13,12 +13,12 @@ jobs:
         architecture:
           - x64
         os:
-          - macos-latest
+          - macos-latest-large
           - ubuntu-latest
           - windows-latest
         include:
           - architecture: arm64
-            os: self-hosted-macos
+            os: macos-latest-xlarge
     name: Deploy on ${{ matrix.os }}-${{ matrix.architecture }}
     steps:
       - uses: actions/checkout@v4
