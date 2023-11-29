@@ -29,6 +29,7 @@ jobs:
           # - architecture: x64
           #   os: ubuntu-latest
           #   python: "3.9"
+      fail-fast: false
     name: Test on ${{ matrix.os }}-${{ matrix.architecture }} with Python ${{ matrix.python }}
     steps:
       - uses: actions/checkout@v4

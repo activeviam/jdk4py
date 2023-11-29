@@ -16,12 +16,13 @@ runs:
     # Remove once pipx is preinstalled on this OS.
     - if: ${{ inputs.os == 'macos-latest-xlarge' }}
       name: Install pipx
-      run: |
-        brew install pipx
-        pipx ensurepath
+      run: brew install pipx && echo "$HOME/.local/bin" >> $GITHUB_PATH
       shell: bash
 
     - run: pipx install poetry==1.7.0
+      shell: bash
+
+    - run: poetry --version
       shell: bash
 
     - id: setup_python
