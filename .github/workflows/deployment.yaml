@@ -36,21 +36,21 @@ jobs:
         with:
           architecture: ${{ matrix.architecture }}
 
-      - name: Upload Python wheel
-        env:
-          PYPI_TOKEN: ${{ secrets.PYPI_TOKEN }}
-        run: poetry run twine upload dist/jdk4py-*.whl --username __token__ --password "$PYPI_TOKEN"
-        shell: bash
-
       - name: Upload Conda package
         env:
           JDK4PY_CONDA_CHANNEL_TOKEN: ${{ secrets.CONDA_CHANNEL_TOKEN }}
-          JDK4PY_CONDA_CHANNEL_URL: ${{ secrets.CONDA_CHANNEL_URL }}
-          JDK4PY_CONDA_CHANNEL_USERNAME: ${{ secrets.CONDA_CHANNEL_USERNAME }}
+          JDK4PY_CONDA_CHANNEL_URL: ${{ vars.CONDA_CHANNEL_URL }}
+          JDK4PY_CONDA_CHANNEL_USERNAME: ${{ vars.CONDA_CHANNEL_USERNAME }}
         run: |
           ls dist/$JDK4PY_CONDA_PLATFORM/jdk4py-*.tar.bz2 | \
           while read filepath; do
             echo Uploading ${filepath}
             curl --fail --user "$JDK4PY_CONDA_CHANNEL_USERNAME":"$JDK4PY_CONDA_CHANNEL_TOKEN" --upload-file ${filepath} "$JDK4PY_CONDA_CHANNEL_URL/$JDK4PY_CONDA_PLATFORM/"
           done
+        shell: bash
+
+      - name: Upload Python wheel
+        env:
+          PYPI_TOKEN: ${{ secrets.PYPI_TOKEN }}
+        run: poetry run twine upload dist/jdk4py-*.whl --username __token__ --password "$PYPI_TOKEN"
         shell: bash
