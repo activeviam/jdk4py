@@ -4,7 +4,7 @@ from sys import argv
 
 from setuptools import find_packages, setup
 
-_LIB_VERSION = 1
+_LIB_VERSION = 2
 
 _NAME = "jdk4py"
 _PROJECT_DIRECTORY = Path(__file__).parent
