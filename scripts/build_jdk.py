@@ -32,7 +32,6 @@ def build_java_executable_files() -> None:
     check_call(
         [
             "jlink",
-            "--no-header-files",
             "--no-man-pages",
             "--compress=2",
             "--strip-debug",
