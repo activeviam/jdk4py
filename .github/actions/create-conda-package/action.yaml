@@ -11,7 +11,7 @@ runs:
       with:
         architecture: ${{ inputs.architecture }}
         channels: conda-forge
-        conda-build-version: "3.27.0"
+        conda-build-version: "3.28.4"
         miniconda-version: "latest"
 
     # Remove once https://github.com/conda/conda-build/issues/4835 is fixed
