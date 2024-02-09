@@ -56,7 +56,7 @@ setup_args = dict(
         "Programming Language :: Python :: 3",
     ],
     keywords=["jdk", "java", "jvm", "jre"],
-    python_requires=">=3.9",
+    python_requires=">=3.10",
 )
 
 if __name__ == "__main__":
