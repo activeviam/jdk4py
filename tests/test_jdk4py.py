@@ -5,9 +5,9 @@ from subprocess import STDOUT, check_output
 
 from jdk4py import JAVA, JAVA_HOME, JAVA_VERSION
 
-TESTS_DIRECTORY = Path(__file__).parent
-TEST_RESOURCES_DIRECTORY = TESTS_DIRECTORY / "resources"
-LOCALES_PATH = TESTS_DIRECTORY.parent / "scripts" / "locales.json"
+_TESTS_DIRECTORY = Path(__file__).parent
+_TEST_RESOURCES_DIRECTORY = _TESTS_DIRECTORY / "resources"
+_LOCALES_PATH = _TESTS_DIRECTORY.parent / "scripts" / "locales.json"
 
 
 def test_java_home() -> None:
@@ -24,7 +24,7 @@ def test_java_version() -> None:
 
 
 def test_jar_execution() -> None:
-    jar_path = TEST_RESOURCES_DIRECTORY / "HelloWorld.jar"
+    jar_path = _TEST_RESOURCES_DIRECTORY / "HelloWorld.jar"
     output = check_output(
         [str(JAVA), "-jar", str(jar_path.absolute())], stderr=STDOUT, text=True
     )
@@ -32,12 +32,12 @@ def test_jar_execution() -> None:
 
 
 def test_available_locales() -> None:
-    path = TEST_RESOURCES_DIRECTORY / "PrintAvailableLocales.jar"
+    path = _TEST_RESOURCES_DIRECTORY / "PrintAvailableLocales.jar"
     output = check_output(
         [str(JAVA), "-jar", str(path.absolute())], stderr=STDOUT, text=True
     )
     actual_locales = set(
         locale.replace("_", "-") for locale in output.strip().splitlines()
     )
-    expected_locales = set(json.loads(LOCALES_PATH.read_bytes()))
+    expected_locales = set(json.loads(_LOCALES_PATH.read_bytes()))
     assert expected_locales.issubset(actual_locales)

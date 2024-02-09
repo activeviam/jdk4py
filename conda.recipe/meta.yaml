@@ -31,14 +31,12 @@ test:
     - jdk4py
 
 about:
-  home: https://github.com/atoti/jdk4py
+  home: https://github.com/activeviam/jdk4py
   license: GNU General Public License v2.0
   license_file: LICENSE
   summary: Packaged JDK for Python.
-  dev_url: https://github.com/atoti/jdk4py
+  dev_url: https://github.com/activeviam/jdk4py
 
 extra:
   recipe-maintainers:
-    - bloussou
-    - fabiencelier
-    - tibdex
+    - ActiveViam

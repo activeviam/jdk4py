@@ -95,7 +95,7 @@ jobs:
         with:
           architecture: ${{ matrix.architecture }}
 
-      - uses: actions/upload-artifact@v3
+      - uses: actions/upload-artifact@v4
         with:
           if-no-files-found: error
           name: jdk4py-${{ matrix.os }}-${{ matrix.architecture }}-conda-packages

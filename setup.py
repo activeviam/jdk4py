@@ -39,12 +39,12 @@ def _add_platform_name_argument_when_building_python_wheel():
 setup_args = dict(
     name=_NAME,
     version=_VERSION,
-    author="atoti",
+    author="ActiveViam",
     author_email="dev@atoti.io",
     description="Packaged JDK for Python",
     long_description=Path("README.md").read_text(),
     long_description_content_type="text/markdown",
-    url="https://github.com/atoti/jdk4py",
+    url="https://github.com/activeviam/jdk4py",
     packages=find_packages(exclude=["scripts", "tests"]),
     package_data={_NAME: [*_JAVA_FILES, _JAVA_VERSION_FILENAME, "py.typed"]},
     classifiers=[
