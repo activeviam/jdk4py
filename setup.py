@@ -4,7 +4,7 @@ from sys import argv
 
 from setuptools import find_packages, setup
 
-_LIB_VERSION = 0
+_LIB_VERSION = 1
 
 _NAME = "jdk4py"
 _PROJECT_DIRECTORY = Path(__file__).parent
@@ -56,7 +56,7 @@ setup_args = dict(
         "Programming Language :: Python :: 3",
     ],
     keywords=["jdk", "java", "jvm", "jre"],
-    python_requires=">=3.10",
+    python_requires=">=3.9",
 )
 
 if __name__ == "__main__":
