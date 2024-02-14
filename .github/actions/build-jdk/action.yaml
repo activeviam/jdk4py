@@ -11,7 +11,7 @@ runs:
   using: composite
   steps:
     # Remove once pipx is preinstalled on this OS.
-    - if: ${{ inputs.os == 'macos-latest-xlarge' }}
+    - if: ${{ inputs.os == 'macos-14' }}
       name: Install pipx
       run: brew install pipx && echo "$HOME/.local/bin" >> $GITHUB_PATH
       shell: bash
@@ -20,7 +20,7 @@ runs:
       shell: bash
 
     - id: setup_python
-      uses: actions/setup-python@v4
+      uses: actions/setup-python@v5
       with:
         python-version: ${{ inputs.python-version }}
 
