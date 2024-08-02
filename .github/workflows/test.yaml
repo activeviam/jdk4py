@@ -10,6 +10,7 @@ jobs:
       matrix:
         architecture:
           - x64
+          - arm64
         os:
           - macos-13
           - ubuntu-22.04
@@ -17,9 +18,6 @@ jobs:
         python:
           - "3.12"
         include:
-          - architecture: arm64
-            os: macos-14
-            python: "3.12"
           - architecture: x64
             os: ubuntu-22.04
             python: "3.11"
@@ -29,6 +27,10 @@ jobs:
           - architecture: x64
             os: ubuntu-22.04
             python: "3.9"
+        exclude:
+          - architecture: arm64
+            os: windows-2022
+            python: "3.12"
       fail-fast: false
     name: Test on ${{ matrix.os }}-${{ matrix.architecture }} with Python ${{ matrix.python }}
     steps:
@@ -74,13 +76,14 @@ jobs:
       matrix:
         architecture:
           - x64
+          - arm64
         os:
           - macos-13
           - ubuntu-22.04
           - windows-2022
         include:
           - architecture: arm64
-            os: macos-14
+            os: windows-2022
     name: Test Conda packaging on ${{ matrix.os }}-${{ matrix.architecture }}
     steps:
       - uses: actions/checkout@v4

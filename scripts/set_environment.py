@@ -33,6 +33,10 @@ _SYSTEM_TO_ARCHITECTURE_TO_PACKAGE_TYPE_TO_PLATFORM: Mapping[
         },
     },
     "Linux": {
+        "aarch64": {
+            "conda": "linux-arm64",
+            "wheel": "manylinux1_arm64",
+        },
         "x64": {
             "conda": "linux-64",
             "wheel": "manylinux1_x86_64",
