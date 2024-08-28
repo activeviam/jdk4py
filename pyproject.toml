@@ -1,24 +1,53 @@
-[tool.poetry]
+[build-system]
+build-backend = "hatchling.build"
+requires = [
+    # Keep in sync with version in `tool.uv.dev-dependencies`.
+    "hatchling ==1.25.0",
+]
+
+[project]
+authors = [{ email = "dev@atoti.io", name = "ActiveViam" }]
+classifiers = [
+    "Development Status :: 5 - Production/Stable",
+    "License :: OSI Approved :: GNU General Public License v2 (GPLv2)",
+    "Operating System :: MacOS",
+    "Operating System :: Microsoft :: Windows",
+    "Operating System :: POSIX :: Linux",
+    "Programming Language :: Python :: 3",
+]
+dependencies = []
+description = "Packaged JDK for Python"
+dynamic = ["version"]
+keywords = ["jdk", "java", "jvm", "jre"]
 name = "jdk4py"
-# Poetry requires this but it is unused.
-version = "0.1.0"
-description = ""
-authors = []
+readme = "README.md"
+requires-python = ">=3.10"
 
-[tool.poetry.dependencies]
-python = ">=3.10"
+[project.urls]
+Repository = "https://github.com/activeviam/jdk4py"
 
-[tool.poetry.dev-dependencies]
-mypy = "*"
-# Keep in sync with version in `conda.recipe/meta.yaml`.
-pytest = "=7.4.4"
-ruff = "*"
-setuptools = "*"
-twine = "*"
-wheel = "*"
+[tool.hatch.build.hooks.custom]
+
+[tool.hatch.metadata.hooks.custom]
+
+[tool.hatch.build.targets.wheel]
+artifacts = ["java-runtime"]
 
 [tool.mypy]
+# Remove once https://github.com/python/mypy/issues/10428 is fixed.
+files = "hatch_build.py,scripts,src,tests"
 strict = true
 warn_redundant_casts = true
 warn_unused_configs = true
 warn_unused_ignores = true
+
+[tool.uv]
+dev-dependencies = [
+    "build",
+    # Keep in sync with version in `build-system.requires`.
+    "hatchling ==1.25.0",
+    "mypy",
+    "pytest",
+    "ruff",
+    "twine",
+]

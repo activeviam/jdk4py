@@ -10,27 +10,21 @@ inputs:
 runs:
   using: composite
   steps:
-    # Remove once pipx is preinstalled on this OS.
-    - if: ${{ inputs.os == 'macos-14' }}
-      name: Install pipx
-      run: brew install pipx && echo "$HOME/.local/bin" >> $GITHUB_PATH
+    - if: ${{ inputs.os != 'windows-2022' }}
+      run: curl -LsSf https://astral.sh/uv/0.4.0/install.sh | sh
       shell: bash
 
-    - run: pipx install poetry==1.7.1
+    - if: ${{ inputs.os == 'windows-2022' }}
+      run: irm https://astral.sh/uv/0.4.0/install.ps1 | iex
+      shell: powershell
+
+    - run: uv python install ${{ inputs.python-version }}
       shell: bash
 
-    - id: setup_python
-      uses: actions/setup-python@v5
-      with:
-        python-version: ${{ inputs.python-version }}
-
-    - run: poetry check --lock
+    - run: uv sync --locked
       shell: bash
 
-    - run: poetry install
-      shell: bash
-
-    - run: poetry run python scripts/set_environment.py
+    - run: uv run python scripts/set_environment.py
       shell: bash
 
     - uses: actions/setup-java@v4
@@ -38,5 +32,5 @@ runs:
         distribution: temurin
         java-version: ${{ env.JDK4PY_JAVA_VERSION }}
 
-    - run: poetry run python scripts/build_jdk.py
+    - run: uv run python scripts/build_jdk.py
       shell: bash

@@ -4,10 +4,6 @@ from typing import Literal, Mapping
 
 from jdk4py import JAVA_VERSION
 
-
-_BUILD_VERSION = 0
-
-
 _Architecture = Literal["aarch64", "x64"]
 _PackageType = Literal["conda", "wheel"]
 
@@ -64,7 +60,6 @@ if __name__ == "__main__":
 
     set_env_variables_in_github_job(
         {
-            "JDK4PY_BUILD_NUMBER": str(_BUILD_VERSION),
             "JDK4PY_CONDA_PLATFORM": _SYSTEM_TO_ARCHITECTURE_TO_PACKAGE_TYPE_TO_PLATFORM[
                 system
             ][architecture]["conda"],

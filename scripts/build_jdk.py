@@ -6,8 +6,7 @@ from subprocess import check_call
 
 _SCRIPTS_DIRECTORY = Path(__file__).parent
 _PROJECT_DIRECTORY = _SCRIPTS_DIRECTORY.parent
-_JAVA_PATH = _PROJECT_DIRECTORY / "jdk4py" / "java-runtime"
-
+_JAVA_PATH = _PROJECT_DIRECTORY / "src" / "jdk4py" / "java-runtime"
 
 _MODULES = [
     "java.se",
@@ -33,7 +32,6 @@ def build_java_executable_files() -> None:
         [
             "jlink",
             "--no-man-pages",
-            "--compress=2",
             "--strip-debug",
             "--add-modules",
             ",".join(_MODULES),
