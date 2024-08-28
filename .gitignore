@@ -1,6 +1,7 @@
 # Python
-__pycache__
 *.egg-info
+.venv
+__pycache__
 build
 dist
 

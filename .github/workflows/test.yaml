@@ -11,8 +11,8 @@ jobs:
         architecture:
           - x64
         os:
-          - macos-13
-          - ubuntu-22.04
+          - macos-14
+          - ubuntu-24.04
           - windows-2022
         python:
           - "3.12"
@@ -20,15 +20,18 @@ jobs:
           - architecture: arm64
             os: macos-14
             python: "3.12"
+          - architecture: arm64
+            os: ubuntu-24.04
+            python: "3.12"
           - architecture: x64
-            os: ubuntu-22.04
+            os: ubuntu-24.04
             python: "3.11"
           - architecture: x64
-            os: ubuntu-22.04
+            os: ubuntu-24.04
             python: "3.10"
-          - architecture: x64
-            os: ubuntu-22.04
-            python: "3.9"
+          - architecture: arm64
+            os: windows-2022
+            python: "3.12"
       fail-fast: false
     name: Test on ${{ matrix.os }}-${{ matrix.architecture }} with Python ${{ matrix.python }}
     steps:
@@ -44,17 +47,17 @@ jobs:
           build-number: ${{ env.JDK4PY_BUILD_NUMBER }}
 
       # No need to do that for each OS and Python version.
-      - if: ${{ matrix.os == 'ubuntu-22.04' && matrix.python == '3.12' }}
+      - if: ${{ matrix.architecture == 'x64' && matrix.os == 'ubuntu-24.04' && matrix.python == '3.12' }}
         name: Check formatting
         run: poetry run ruff format --check .
 
       # No need to do that for each OS and Python version.
-      - if: ${{ matrix.os == 'ubuntu-22.04' && matrix.python == '3.12' }}
+      - if:  ${{ matrix.architecture == 'x64' && matrix.os == 'ubuntu-24.04' && matrix.python == '3.12' }}
         name: Lint
         run: poetry run ruff check .
 
       # No need to do that for each OS and Python version.
-      - if: ${{ matrix.os == 'ubuntu-22.04' && matrix.python == '3.12' }}
+      - if:  ${{ matrix.architecture == 'x64' && matrix.os == 'ubuntu-24.04' && matrix.python == '3.12' }}
         name: Typecheck
         run: poetry run mypy --show-error-codes jdk4py scripts tests
 
@@ -75,12 +78,16 @@ jobs:
         architecture:
           - x64
         os:
-          - macos-13
-          - ubuntu-22.04
+          - macos-14
+          - ubuntu-24.04
           - windows-2022
         include:
           - architecture: arm64
             os: macos-14
+          - architecture: arm64
+            os: ubuntu-24.04
+          - architecture: arm64
+            os: windows-2022
     name: Test Conda packaging on ${{ matrix.os }}-${{ matrix.architecture }}
     steps:
       - uses: actions/checkout@v4

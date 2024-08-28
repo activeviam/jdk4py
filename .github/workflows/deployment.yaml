@@ -13,12 +13,16 @@ jobs:
         architecture:
           - x64
         os:
-          - macos-13
-          - ubuntu-22.04
+          - macos-14
+          - ubuntu-24.04
           - windows-2022
         include:
           - architecture: arm64
             os: macos-14
+          - architecture: arm64
+            os: ubuntu-24.04
+          - architecture: arm64
+            os: windows-2022
     name: Deploy on ${{ matrix.os }}-${{ matrix.architecture }}
     steps:
       - uses: actions/checkout@v4
