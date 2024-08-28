@@ -23,10 +23,8 @@ test:
   source_files:
     - tests/**
     - scripts/locales.json
-  requires:
-    - pytest
   commands:
-    - pytest tests
+    - python -m unittest
   imports:
     - jdk4py
 

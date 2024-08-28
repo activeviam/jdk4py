@@ -10,7 +10,6 @@ python = ">=3.10"
 
 [tool.poetry.dev-dependencies]
 mypy = "*"
-pytest = "*"
 ruff = "*"
 setuptools = "*"
 twine = "*"
@@ -21,6 +20,3 @@ strict = true
 warn_redundant_casts = true
 warn_unused_configs = true
 warn_unused_ignores = true
-
-[tool.pytest.ini_options]
-filterwarnings = ["error"]

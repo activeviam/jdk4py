@@ -9,9 +9,7 @@ runs:
   steps:
     - uses: conda-incubator/setup-miniconda@v3
       with:
-        channels: conda-forge
         conda-build-version: "24.7.1"
-
 
     # Remove once https://github.com/conda/conda-build/issues/4835 is fixed
     - run: conda install libarchive
