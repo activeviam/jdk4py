@@ -58,7 +58,7 @@ jobs:
         name: Typecheck
         run: poetry run mypy --show-error-codes jdk4py scripts tests
 
-      - run: poetry run python -m unittest
+      - run: poetry run pytest
 
       # The library's Python wheels are not tied to a specific version of Python so there is no need to upload the package for each Python version.
       - if: ${{ matrix.python == '3.12' }}
