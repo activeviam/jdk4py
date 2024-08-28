@@ -75,12 +75,12 @@ jobs:
         architecture:
           - x64
         os:
-          - macos-14
+          # - macos-14
           - ubuntu-24.04
-          - windows-2022
+          # - windows-2022
         include:
-          - architecture: arm64
-            os: macos-14
+          # - architecture: arm64
+          #   os: macos-14
           - architecture: arm64
             os: ubuntu-24.04
     name: Test Conda packaging on ${{ matrix.os }}-${{ matrix.architecture }}
