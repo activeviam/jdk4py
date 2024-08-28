@@ -62,7 +62,7 @@ jobs:
 
       # The library's Python wheels are not tied to a specific version of Python so there is no need to upload the package for each Python version.
       - if: ${{ matrix.python == '3.12' }}
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           if-no-files-found: error
           name: jdk4py-${{ matrix.os }}-${{ matrix.architecture }}.whl

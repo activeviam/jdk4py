@@ -24,9 +24,11 @@ test:
     - tests/**
     - scripts/locales.json
   requires:
-    - pytest ==7.4.4 # Must be available on anaconda (not conda-forge).
+    # Must be available on anaconda (not conda-forge).
+    # Keep in sync with version in `pyproject.toml`.
+    - pytest ==7.4.4
   commands:
-    - pytest tests
+    - pytest
   imports:
     - jdk4py
 
