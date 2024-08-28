@@ -23,8 +23,10 @@ test:
   source_files:
     - tests/**
     - scripts/locales.json
+  requires:
+    - pytest ==7.4.4 # Must be available on anaconda (not conda-forge).
   commands:
-    - python -m unittest
+    - pytest tests
   imports:
     - jdk4py
 

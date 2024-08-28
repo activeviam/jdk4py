@@ -1,7 +1,6 @@
 [tool.poetry]
 name = "jdk4py"
-# Poetry requires this but we do not use it.
-version = "0.1.0"
+version = "0.1.0" # Poetry requires this but it is unused.
 description = ""
 authors = []
 
@@ -10,6 +9,7 @@ python = ">=3.10"
 
 [tool.poetry.dev-dependencies]
 mypy = "*"
+pytest = "=7.4.4" # Same version as in `conda.recipe/meta.yaml`.
 ruff = "*"
 setuptools = "*"
 twine = "*"
