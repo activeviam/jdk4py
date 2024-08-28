@@ -18,24 +18,28 @@ _MACHINE_TO_ARCHITECTURE: Mapping[str, _Architecture] = {
     "x86_64": "x64",
 }
 
-# Platforms taken from https://pypi.org/project/torch/1.11.0/#files and https://anaconda.org/conda-forge/numpy/files?version=1.22.4.
+# Platforms taken from https://anaconda.org/conda-forge/numpy/files?version=2.1.0 and https://pypi.org/project/numpy/2.1.0/#files
 _SYSTEM_TO_ARCHITECTURE_TO_PACKAGE_TYPE_TO_PLATFORM: Mapping[
     str, Mapping[_Architecture, Mapping[_PackageType, str]]
 ] = {
     "Darwin": {
         "aarch64": {
             "conda": "osx-arm64",
-            "wheel": "macosx_11_0_arm64",
+            "wheel": "macosx_14_0_arm64",
         },
         "x64": {
             "conda": "osx-64",
-            "wheel": "macosx_10_9_x86_64",
+            "wheel": "macosx_13_0_x86_64",
         },
     },
     "Linux": {
+        "aarch64": {
+            "conda": "linux-aarch64",
+            "wheel": "manylinux_2_17_aarch64",
+        },
         "x64": {
             "conda": "linux-64",
-            "wheel": "manylinux1_x86_64",
+            "wheel": "manylinux_2_17_x86_64",
         },
     },
     "Windows": {
