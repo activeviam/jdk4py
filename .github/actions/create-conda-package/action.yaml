@@ -9,10 +9,9 @@ runs:
   steps:
     - uses: conda-incubator/setup-miniconda@v3
       with:
-        architecture: ${{ inputs.architecture }}
         channels: conda-forge
-        conda-build-version: "3.28.4"
-        miniconda-version: "latest"
+        conda-build-version: "24.7.1"
+        miniconda-version: "py312_24.7.1-0"
 
     # Remove once https://github.com/conda/conda-build/issues/4835 is fixed
     - run: conda install libarchive

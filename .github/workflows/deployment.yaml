@@ -21,8 +21,6 @@ jobs:
             os: macos-14
           - architecture: arm64
             os: ubuntu-24.04
-          - architecture: arm64
-            os: windows-2022
     name: Deploy on ${{ matrix.os }}-${{ matrix.architecture }}
     steps:
       - uses: actions/checkout@v4
