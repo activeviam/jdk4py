@@ -11,7 +11,7 @@ runs:
       with:
         channels: conda-forge
         conda-build-version: "24.7.1"
-        miniconda-version: "py312_24.7.1-0"
+        miniconda-version: "py312_24.7.1"
 
     # Remove once https://github.com/conda/conda-build/issues/4835 is fixed
     - run: conda install libarchive
