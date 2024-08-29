@@ -9,8 +9,8 @@ from jdk4py._included_locales import INCLUDED_LOCALES
 def build_java_runtime() -> None:
     rmtree(JAVA_HOME, ignore_errors=True)
 
-    check_call(
-        [
+    check_call(  # noqa: S603
+        [  # noqa: S607
             "jlink",
             "--no-man-pages",
             "--strip-debug",

@@ -11,5 +11,5 @@ ADDED_MODULES = frozenset(
         "jdk.security.auth",
         "jdk.unsupported",
         "jdk.zipfs",
-    }
+    },
 )

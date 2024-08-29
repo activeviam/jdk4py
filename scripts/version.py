@@ -9,4 +9,4 @@ VERSION = ".".join(
 )
 
 if __name__ == "__main__":
-    print(VERSION)
+    print(VERSION)  # noqa: T201

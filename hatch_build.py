@@ -1,13 +1,11 @@
-from hatchling.builders.hooks.plugin.interface import BuildHookInterface
-from hatchling.builders.config import BuilderConfigBound
-from hatchling.metadata.plugin.interface import MetadataHookInterface
-from pathlib import Path
 import json
 import platform
-
-
+from pathlib import Path
 from typing import Literal
 
+from hatchling.builders.config import BuilderConfigBound
+from hatchling.builders.hooks.plugin.interface import BuildHookInterface
+from hatchling.metadata.plugin.interface import MetadataHookInterface
 
 _PROJECT_DIRECTORY = Path(__file__).parent
 
@@ -17,7 +15,7 @@ _Architecture = Literal["arm64", "x64"]
 
 def _get_architecture(machine: str) -> _Architecture:
     match machine:
-        case "AMD64", "x64", "x86_64":
+        case "AMD64" | "x64" | "x86_64":
             return "x64"
         case "arm64":
             return "arm64"
@@ -47,14 +45,18 @@ def _get_platform_tag(system: str, architecture: _Architecture) -> str:
                     return "win_amd64"
                 case _:
                     raise ValueError(
-                        f"Unsupported {system} architecture: `{architecture}`."
+                        f"Unsupported {system} architecture: `{architecture}`.",
                     )
         case _:
             raise ValueError(f"Unsupported system: `{system}`.")
 
 
 class BuildHook(BuildHookInterface[BuilderConfigBound]):
-    def initialize(self, version: str, build_data: dict[str, object]) -> None:
+    def initialize(
+        self,
+        version: str,  # noqa: ARG002
+        build_data: dict[str, object],
+    ) -> None:
         python_tag = "py3"
         abi_tag = "none"
 
@@ -68,7 +70,7 @@ class BuildHook(BuildHookInterface[BuilderConfigBound]):
 class MetadataHook(MetadataHookInterface):
     def update(self, metadata: dict[str, object]) -> None:
         versions = json.loads(
-            (_PROJECT_DIRECTORY / "src" / "jdk4py" / "versions.json").read_bytes()
+            (_PROJECT_DIRECTORY / "src" / "jdk4py" / "versions.json").read_bytes(),
         )
         metadata["version"] = ".".join(
             str(number) for number in [*versions["java"], versions["api"]]

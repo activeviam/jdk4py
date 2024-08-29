@@ -13,5 +13,5 @@ INCLUDED_LOCALES = frozenset(
         "pt-BR",
         "ru-RU",
         "zh-CN",
-    ]
+    ],
 )

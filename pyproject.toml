@@ -42,6 +42,18 @@ warn_unused_configs = true
 warn_unused_ignores = true
 
 [tool.ruff.lint]
+ignore = [
+    "D100",
+    "D101",
+    "D102",
+    "D103",
+    "D104",
+    "D211",
+    "D212",
+    "EM102",
+    "S101",
+    "TRY003",
+]
 select = ["ALL"]
 
 [tool.uv]

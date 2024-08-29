@@ -1,7 +1,7 @@
 """JDK packaged for Python."""
 
-from pathlib import Path
 import json
+from pathlib import Path
 
 _PACKAGE_DIRECTORY = Path(__file__).parent
 
@@ -10,5 +10,5 @@ JAVA = JAVA_HOME / "bin" / "java"
 
 
 JAVA_VERSION: tuple[int, int, int] = tuple(
-    json.loads((_PACKAGE_DIRECTORY / "versions.json").read_bytes())["java"]
+    json.loads((_PACKAGE_DIRECTORY / "versions.json").read_bytes())["java"],
 )
