@@ -1,9 +1,8 @@
-{% set versions = load_file_data("src/jdk4py/versions.json") %}
-{% set version = ".".join(str(number) for number in [*versions["java"], versions["api"]]) %}
+{% set version = load_file_data("src/jdk4py/version.json") %}
 
 package:
   name: jdk4py
-  version: {{ environ.get('JDK4PY_VERSION') }}
+  version: {{ version}}
 
 source:
   path: ../

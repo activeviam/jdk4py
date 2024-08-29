@@ -69,9 +69,8 @@ class BuildHook(BuildHookInterface[BuilderConfigBound]):
 
 class MetadataHook(MetadataHookInterface):
     def update(self, metadata: dict[str, object]) -> None:
-        versions = json.loads(
-            (_PROJECT_DIRECTORY / "src" / "jdk4py" / "versions.json").read_bytes(),
+        version = json.loads(
+            (_PROJECT_DIRECTORY / "src" / "jdk4py" / "version.json").read_bytes(),
         )
-        metadata["version"] = ".".join(
-            str(number) for number in [*versions["java"], versions["api"]]
-        )
+        assert isinstance(version, str)
+        metadata["version"] = version

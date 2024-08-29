@@ -9,6 +9,7 @@ JAVA_HOME = _PACKAGE_DIRECTORY / "java-runtime"
 JAVA = JAVA_HOME / "bin" / "java"
 
 
+_VERSION: str = json.loads((_PACKAGE_DIRECTORY / "version.json").read_bytes())
 JAVA_VERSION: tuple[int, int, int] = tuple(
-    json.loads((_PACKAGE_DIRECTORY / "versions.json").read_bytes())["java"],
+    int(number) for number in _VERSION.split(".")[:3]
 )

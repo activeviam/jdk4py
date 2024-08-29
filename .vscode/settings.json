@@ -18,4 +18,5 @@
   "files.trimTrailingWhitespace": true,
   "python.analysis.autoImportCompletions": true,
   "python.languageServer": "Pylance",
+  "python.testing.pytestEnabled": true,
 }
