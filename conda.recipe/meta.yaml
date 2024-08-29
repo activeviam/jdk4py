@@ -5,7 +5,7 @@ package:
   version: {{ version}}
 
 source:
-  path: ../
+  path: ../src
 
 build:
   # Binaries are broken on macOS without it.
@@ -22,7 +22,6 @@ requirements:
 test:
   source_files:
     - tests/**
-    - scripts/locales.json
   requires:
     # Must be available on anaconda (not conda-forge).
     # Keep in sync with version in `pyproject.toml`.
