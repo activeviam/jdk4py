@@ -14,10 +14,10 @@ _Architecture = Literal["arm64", "x64"]
 
 
 def _get_architecture(machine: str) -> _Architecture:
-    match machine:
-        case "AMD64" | "x64" | "x86_64":
+    match machine.lower():
+        case "amd64" | "x64" | "x86_64":
             return "x64"
-        case "arm64":
+        case "aarch64" | "arm64":
             return "arm64"
         case _:
             raise ValueError(f"Unsupported machine: `{machine}`.")
@@ -26,20 +26,20 @@ def _get_architecture(machine: str) -> _Architecture:
 def _get_platform_tag(system: str, architecture: _Architecture) -> str:
     # Keep OS versions in sync with the ones in the GitHub Actions files.
     # Tag values taken from https://pypi.org/project/numpy/2.1.0/#files.
-    match system:
-        case "Darwin":
+    match system.lower():
+        case "darwin":
             match architecture:
                 case "arm64":
                     return "macosx_14_0_arm64"
                 case "x64":
                     return "macosx_13_0_x86_64"
-        case "Linux":
+        case "linux":
             match architecture:
                 case "arm64":
                     return "manylinux_2_17_aarch64"
                 case "x64":
                     return "manylinux_2_17_x86_64"
-        case "Windows":
+        case "windows":
             match architecture:
                 case "x64":
                     return "win_amd64"
