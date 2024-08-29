@@ -2,7 +2,6 @@ import os
 import platform
 from typing import Literal, Mapping
 
-from jdk4py import JAVA_VERSION
 
 _Architecture = Literal["aarch64", "x64"]
 _PackageType = Literal["conda", "wheel"]
@@ -63,9 +62,5 @@ if __name__ == "__main__":
             "JDK4PY_CONDA_PLATFORM": _SYSTEM_TO_ARCHITECTURE_TO_PACKAGE_TYPE_TO_PLATFORM[
                 system
             ][architecture]["conda"],
-            "JDK4PY_JAVA_VERSION": ".".join(str(number) for number in JAVA_VERSION),
-            "JDK4PY_WHEEL_PLATFORM": _SYSTEM_TO_ARCHITECTURE_TO_PACKAGE_TYPE_TO_PLATFORM[
-                system
-            ][architecture]["wheel"],
         }
     )

@@ -1,8 +1,6 @@
-{% set data = load_setup_py_data() %}
-
 package:
   name: jdk4py
-  version: {{ data['version'] }}
+  version: {{ environ.get('JDK4PY_VERSION') }}
 
 source:
   path: ../

@@ -4,10 +4,10 @@ from pathlib import Path
 from subprocess import STDOUT, check_output
 
 from jdk4py import JAVA, JAVA_HOME, JAVA_VERSION
+from jdk4py._included_locales import INCLUDED_LOCALES
 
-_TESTS_DIRECTORY = Path(__file__).parent
-_TEST_RESOURCES_DIRECTORY = _TESTS_DIRECTORY / "resources"
-_LOCALES_PATH = _TESTS_DIRECTORY.parent / "scripts" / "locales.json"
+
+_TEST_RESOURCES_DIRECTORY = Path(__file__).parent / "resources"
 
 
 def test_java_home() -> None:
@@ -39,5 +39,4 @@ def test_available_locales() -> None:
     actual_locales = set(
         locale.replace("_", "-") for locale in output.strip().splitlines()
     )
-    expected_locales = set(json.loads(_LOCALES_PATH.read_bytes()))
-    assert expected_locales.issubset(actual_locales)
+    assert INCLUDED_LOCALES.issubset(actual_locales)
