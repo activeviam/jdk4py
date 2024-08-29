@@ -17,5 +17,9 @@ runs:
     # - run: uv run python -c 'from pathlib import Path; print(f"""platform={next(Path("dist").glob("*/jdk4py-*.tar.bz2")).parts[1]}""")' >> "$GITHUB_OUTPUT"
     #   shell: bash
 
-    - run: echo "platform=linux-64" >> "$GITHUB_OUTPUT"
+    - id: output-step
+      run: echo "platform=linux-64" >> "$GITHUB_OUTPUT"
+      shell: bash
+
+    - run: echo "${{ steps.output-step.outputs.platform }}"
       shell: bash
