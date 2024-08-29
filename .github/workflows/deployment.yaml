@@ -6,29 +6,23 @@ on:
 
 jobs:
   deploy:
-    runs-on: ${{ matrix.os }}
+    runs-on: ${{ matrix.runner }}
     environment: deployment
     strategy:
       # Keep OS versions in sync with the ones in `hatch_build.py`.
       matrix:
-        architecture:
-          - x64
-        os:
-          - macos-13
+        runner:
+          - macos-13 # x64
+          - macos-14 # arm64
           - ubuntu-24.04
+          - ubuntu-24.04-arm64 # GitHub-hosted larger runner in the ActiveViam organization.
           - windows-2022
-        include:
-          - architecture: arm64
-            os: macos-14
-          - architecture: arm64
-            os: ubuntu-24.04
-    name: Deploy on ${{ matrix.os }}-${{ matrix.architecture }}
+    name: Deploy on ${{ runner.os }} (${{ runner.arch }})
     steps:
       - uses: actions/checkout@v4
 
       - uses: ./.github/actions/build-java-runtime
         with:
-          os: ${{ matrix.os }}
           python-version: "3.12"
 
       - uses: ./.github/actions/build-python-wheel

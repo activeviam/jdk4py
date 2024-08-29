@@ -5,53 +5,42 @@ on:
 
 jobs:
   test:
-    runs-on: ${{ matrix.os }}
+    runs-on: ${{ matrix.runner }}
     strategy:
       # Keep OS versions in sync with the ones in `hatch_build.py`.
       matrix:
-        architecture:
-          - x64
-        os:
-          - macos-13
+        runner:
+          - macos-13 # x64
+          - macos-14 # arm64
           - ubuntu-24.04
+          - ubuntu-24.04-arm64 # GitHub-hosted larger runner in the ActiveViam organization.
           - windows-2022
         python:
           - "3.12"
         include:
-          - architecture: arm64
-            os: macos-14
-            python: "3.12"
-          - architecture: arm64
-            os: ubuntu-24.04
-            python: "3.12"
-          - architecture: x64
-            os: ubuntu-24.04
+          - runner: ubuntu-24.04
             python: "3.11"
-          - architecture: x64
-            os: ubuntu-24.04
+          - runner: ubuntu-24.04
             python: "3.10"
       fail-fast: false
-    name: Test on ${{ matrix.os }}-${{ matrix.architecture }} with Python ${{ matrix.python }}
+    name: Test on ${{ runner.os }} (${{ runner.arch }}) with Python ${{ matrix.python }}
     steps:
       - uses: actions/checkout@v4
 
       - uses: ./.github/actions/build-java-runtime
-        with:
-          os: ${{ matrix.os }}
-          python-version: ${{ matrix.python }}
 
       - uses: ./.github/actions/build-python-wheel
 
-      # No need to test each OS, architecture, and Python version.
-      - if: ${{ matrix.os == 'ubuntu-24.04' && matrix.architecture == 'x64' && matrix.python == '3.12' }}
+      # No need to test each platform and Python version.
+      - if: ${{ matrix.runner == 'ubuntu-24.04' && matrix.python == '3.12' }}
         run: uv run ruff format --check .
 
-      # No need to test each OS, architecture, and Python version.
-      - if:  ${{ matrix.os == 'ubuntu-24.04' && matrix.architecture == 'x64' && matrix.python == '3.12' }}
+      # No need to test each platform and Python version.
+      - if: ${{ matrix.runner == 'ubuntu-24.04' && matrix.python == '3.12' }}
         run: uv run ruff check .
 
-      # No need to test each OS, architecture, and Python version.
-      - if:  ${{ matrix.os == 'ubuntu-24.04' && matrix.architecture == 'x64' && matrix.python == '3.12' }}
+      # No need to test each platform and Python version.
+      - if: ${{ matrix.runner == 'ubuntu-24.04' && matrix.python == '3.12' }}
         run: uv run mypy
 
       - run: uv run pytest
@@ -61,26 +50,21 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           if-no-files-found: error
-          name: jdk4py-${{ matrix.os }}-${{ matrix.architecture }}.whl
+          name: jdk4py-${{ runner.os }}-${{ runner.arch }}.whl
           path: dist/jdk4py-*.whl
 
   conda-package:
-    runs-on: ${{ matrix.os }}
+    runs-on: ${{ matrix.runner }}
     strategy:
       # Keep OS versions in sync with the ones in `hatch_build.py`.
       matrix:
-        architecture:
-          - x64
-        os:
-          - macos-13
+        runner:
+          - macos-13 # x64
+          - macos-14 # arm64
           - ubuntu-24.04
+          - ubuntu-24.04-arm64 # GitHub-hosted larger runner in the ActiveViam organization.
           - windows-2022
-        include:
-          - architecture: arm64
-            os: macos-14
-          - architecture: arm64
-            os: ubuntu-24.04
-    name: Test Conda packaging on ${{ matrix.os }}-${{ matrix.architecture }}
+    name: Test Conda packaging on ${{ runner.os }} (${{ runner.arch }})
     steps:
       - uses: actions/checkout@v4
 
@@ -92,10 +76,8 @@ jobs:
       - id: build-conda-package
         uses: ./.github/actions/build-conda-package
 
-      - run: echo "${{ steps.build-conda-package.outputs.platform }}"
-
       - uses: actions/upload-artifact@v4
         with:
           if-no-files-found: error
-          name: jdk4py-${{ matrix.os }}-${{ matrix.architecture }}-conda-packages
+          name: jdk4py-${{ runner.os }}-${{ runner.arch }}-conda-packages
           path: dist/${{ steps.build-conda-package.outputs.platform }}/jdk4py-*.tar.bz2
