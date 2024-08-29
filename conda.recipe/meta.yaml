@@ -1,11 +1,11 @@
-{% set version = load_file_data("jdk4py/version.json") %}
+{% set version = load_file_data("src/jdk4py/version.json") %}
 
 package:
   name: jdk4py
   version: {{ version}}
 
 source:
-  path: ../src
+  path: ../
 
 build:
   # Binaries are broken on macOS without it.
@@ -14,6 +14,8 @@ build:
 
 requirements:
   build:
+    # Keep in sync with version in `pyproject.toml`.
+    - hatchling ==1.25.0
     - python {{ python }}
     - pip ==24.2
   run:
