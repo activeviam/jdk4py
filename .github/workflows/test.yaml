@@ -90,10 +90,11 @@ jobs:
           # No need to test each Python version.
           python-version: "3.12"
 
-      - uses: ./.github/actions/build-conda-package
+      - id: build-conda-package
+        uses: ./.github/actions/build-conda-package
 
       - uses: actions/upload-artifact@v4
         with:
           if-no-files-found: error
           name: jdk4py-${{ matrix.os }}-${{ matrix.architecture }}-conda-packages
-          path: dist/${{ env.JDK4PY_CONDA_PLATFORM }}/jdk4py-*.tar.bz2
+          path: dist/${{ steps.build-conda-package.outputs.platform }}/jdk4py-*.tar.bz2

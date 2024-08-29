@@ -2,7 +2,7 @@
 build-backend = "hatchling.build"
 requires = [
     # Keep in sync with version in `conda.recipe/meta.yaml` and the section `tool.uv.dev-dependencies` in this file.
-    "hatchling ==1.25.0",
+    "hatchling ==1.21.1",
 ]
 
 [project]
@@ -60,10 +60,10 @@ select = ["ALL"]
 dev-dependencies = [
     "build",
     # Keep in sync with version in `build-system.requires`.
-    "hatchling ==1.25.0",
+    "hatchling ==1.21.1",
     "mypy",
     # Keep in sync with version in `conda.recipe/meta.yaml`.
-    "pytest ==8.3.2",
+    "pytest ==7.4.4",
     "ruff",
     "twine",
 ]

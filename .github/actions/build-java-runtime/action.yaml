@@ -25,13 +25,13 @@ runs:
       shell: bash
 
     - id: get-java-version
-      run: uv run python -c 'from jdk4py import JAVA_VERSION; print(f"""java-version={".".join(str(number) for number in JAVA_VERSION)}""")' >> "$GITHUB_OUTPUT"
+      run: uv run python -c 'from jdk4py import JAVA_VERSION; print(f"""version={".".join(str(number) for number in JAVA_VERSION)}""")' >> "$GITHUB_OUTPUT"
       shell: bash
 
     - uses: actions/setup-java@v4
       with:
         distribution: temurin
-        java-version: ${{ steps.get-java-version.outputs.java-version }}
+        java-version: ${{ steps.get-java-version.outputs.version }}
 
     - run: uv run python build_java_runtime.py
       shell: bash

@@ -33,13 +33,15 @@ jobs:
 
       - uses: ./.github/actions/build-python-wheel
 
-      - uses: ./.github/actions/build-conda-package
+      - id: build-conda-package
+        uses: ./.github/actions/build-conda-package
 
       - name: Upload Conda package
         env:
           JDK4PY_CONDA_CHANNEL_TOKEN: ${{ secrets.CONDA_CHANNEL_TOKEN }}
           JDK4PY_CONDA_CHANNEL_URL: ${{ vars.CONDA_CHANNEL_URL }}
           JDK4PY_CONDA_CHANNEL_USERNAME: ${{ vars.CONDA_CHANNEL_USERNAME }}
+          JDK4PY_CONDA_PLATFORM: ${{ steps.build-conda-package.outputs.platform }}
         run: |
           ls dist/$JDK4PY_CONDA_PLATFORM/jdk4py-*.tar.bz2 | \
           while read filepath; do
@@ -51,5 +53,5 @@ jobs:
       - name: Upload Python wheel
         env:
           PYPI_TOKEN: ${{ secrets.PYPI_TOKEN }}
-        run: poetry run twine upload dist/jdk4py-*.whl --username __token__ --password "$PYPI_TOKEN"
+        run: uv run twine upload dist/jdk4py-*.whl --username __token__ --password "$PYPI_TOKEN"
         shell: bash
