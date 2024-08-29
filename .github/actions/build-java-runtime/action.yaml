@@ -25,7 +25,7 @@ runs:
       shell: bash
 
     - id: get-java-version
-      run: echo "java-version=$(cat src/jdk4py/java_version.txt)" >> "$GITHUB_OUTPUT"
+      run: uv run python scripts/print_java_version.py >> "$GITHUB_OUTPUT"
       shell: bash
 
     - uses: actions/setup-java@v4
@@ -33,5 +33,5 @@ runs:
         distribution: temurin
         java-version: ${{ steps.get-java-version.outputs.java-version }}
 
-    - run: uv run python build_java_runtime.py
+    - run: uv run python scripts/build_java_runtime.py
       shell: bash
