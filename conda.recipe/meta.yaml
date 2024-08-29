@@ -1,4 +1,4 @@
-{% set version = load_file_data("src/jdk4py/version.json") %}
+{% set version = load_file_data("jdk4py/version.json") %}
 
 package:
   name: jdk4py

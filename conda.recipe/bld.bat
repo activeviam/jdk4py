@@ -1,2 +1,2 @@
-python -m pip install . --verbose
+python -m pip install --verbose .
 if errorlevel 1 exit 1
