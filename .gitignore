@@ -1,9 +1,5 @@
-# Python
-*.egg-info
-.venv
-__pycache__
-build
-dist
-
-# Java
-java-runtime
+.venv/
+__pycache__/
+build/
+dist/
+java-runtime/

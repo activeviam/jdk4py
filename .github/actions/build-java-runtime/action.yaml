@@ -24,9 +24,6 @@ runs:
     - run: uv sync --locked
       shell: bash
 
-    - run: uv run python scripts/set_environment.py
-      shell: bash
-
     - id: get-java-version
       run: echo "java-version=$(cat src/jdk4py/java_version.txt)" >> "$GITHUB_OUTPUT"
       shell: bash
@@ -36,5 +33,5 @@ runs:
         distribution: temurin
         java-version: ${{ steps.get-java-version.outputs.java-version }}
 
-    - run: uv run python scripts/build_java_runtime.py
+    - run: uv run python build_java_runtime.py
       shell: bash
