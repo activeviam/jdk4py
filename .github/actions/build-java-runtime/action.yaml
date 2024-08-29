@@ -1,20 +1,17 @@
 name: Build Java runtime
 description: Build the Java runtime after installing the required dependencies.
 inputs:
-  os:
-    description: The OS of the runner.
-    required: true
   python-version:
     description: The version of Python to set up.
     required: true
 runs:
   using: composite
   steps:
-    - if: ${{ inputs.os != 'windows-2022' }}
+    - if: ${{ runner.os != 'windows-2022' }}
       run: curl -LsSf https://astral.sh/uv/0.4.0/install.sh | sh
       shell: bash
 
-    - if: ${{ inputs.os == 'windows-2022' }}
+    - if: ${{ runner.os == 'windows-2022' }}
       run: irm https://astral.sh/uv/0.4.0/install.ps1 | iex
       shell: powershell
 

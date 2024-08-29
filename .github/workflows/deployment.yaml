@@ -9,7 +9,7 @@ jobs:
     runs-on: ${{ matrix.os }}
     environment: deployment
     strategy:
-      # Keep OS versions in sync with the ones in `get_platform_tag.py`.
+      # Keep OS versions in sync with the ones in `hatch_build.py`.
       matrix:
         architecture:
           - x64
@@ -53,5 +53,5 @@ jobs:
       - name: Upload Python wheel
         env:
           PYPI_TOKEN: ${{ secrets.PYPI_TOKEN }}
-        run: poetry run twine upload dist/jdk4py-*.whl --username __token__ --password "$PYPI_TOKEN"
+        run: uv run twine upload dist/jdk4py-*.whl --username __token__ --password "$PYPI_TOKEN"
         shell: bash
