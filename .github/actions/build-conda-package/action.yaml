@@ -6,13 +6,16 @@ outputs:
 runs:
   using: composite
   steps:
-    - uses: conda-incubator/setup-miniconda@v3
-      with:
-        conda-build-version: "24.7.1"
+    # - uses: conda-incubator/setup-miniconda@v3
+    #   with:
+    #     conda-build-version: "24.7.1"
 
-    - run: conda build --no-anaconda-upload --output-folder dist .
-      # See https://github.com/conda-incubator/setup-miniconda/blame/059455a698430d8b68fa317268fa2e3da3492a98/README.md#L609-L610.
-      shell: bash -l {0}
+    # - run: conda build --no-anaconda-upload --output-folder dist .
+    #   # See https://github.com/conda-incubator/setup-miniconda/blame/059455a698430d8b68fa317268fa2e3da3492a98/README.md#L609-L610.
+    #   shell: bash -l {0}
 
-    - run: uv run python -c 'from pathlib import Path; print(f"""platform={next(Path("dist").glob("*/jdk4py-*.tar.bz2")).parts[1]}""")' >> "$GITHUB_OUTPUT"
+    # - run: uv run python -c 'from pathlib import Path; print(f"""platform={next(Path("dist").glob("*/jdk4py-*.tar.bz2")).parts[1]}""")' >> "$GITHUB_OUTPUT"
+    #   shell: bash
+
+    - run: echo "platform=linux-64" >> "$GITHUB_OUTPUT"
       shell: bash

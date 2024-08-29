@@ -84,17 +84,24 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - uses: ./.github/actions/build-java-runtime
-        with:
-          os: ${{ matrix.os }}
-          # No need to test each Python version.
-          python-version: "3.12"
+      # - uses: ./.github/actions/build-java-runtime
+      #   with:
+      #     os: ${{ matrix.os }}
+      #     # No need to test each Python version.
+      #     python-version: "3.12"
+
+      - id: test
+        run: echo "foo=bar" >> "$GITHUB_OUTPUT"
+
+      - run: echo "${{ steps.test.outputs.foo }}"
 
       - id: build-conda-package
         uses: ./.github/actions/build-conda-package
 
-      - uses: actions/upload-artifact@v4
-        with:
-          if-no-files-found: error
-          name: jdk4py-${{ matrix.os }}-${{ matrix.architecture }}-conda-packages
-          path: dist/${{ steps.build-conda-package.outputs.platform }}/jdk4py-*.tar.bz2
+      - run: echo "${{ steps.build-conda-package.outputs.platform }}"
+
+      # - uses: actions/upload-artifact@v4
+      #   with:
+      #     if-no-files-found: error
+      #     name: jdk4py-${{ matrix.os }}-${{ matrix.architecture }}-conda-packages
+      #     path: dist/${{ steps.build-conda-package.outputs.platform }}/jdk4py-*.tar.bz2
