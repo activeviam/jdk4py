@@ -53,5 +53,5 @@ jobs:
       - name: Upload Python wheel
         env:
           PYPI_TOKEN: ${{ secrets.PYPI_TOKEN }}
-        run: uv run twine upload dist/jdk4py-*.whl --username __token__ --password "$PYPI_TOKEN"
+        run: poetry run twine upload dist/jdk4py-*.whl --username __token__ --password "$PYPI_TOKEN"
         shell: bash

@@ -3,6 +3,7 @@ description: Build a Conda package
 outputs:
   platform:
     description: The platform targeted by the Conda package.
+    value: ${{ steps.output-step.outputs.platform }}
 runs:
   using: composite
   steps:
