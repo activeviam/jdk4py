@@ -35,7 +35,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - uses: ./.github/actions/build-jdk
+      - uses: ./.github/actions/build-java-runtime
         with:
           os: ${{ matrix.os }}
           python-version: ${{ matrix.python }}
@@ -84,7 +84,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - uses: ./.github/actions/build-jdk
+      - uses: ./.github/actions/build-java-runtime
         with:
           os: ${{ matrix.os }}
           # No need to test each Python version.
