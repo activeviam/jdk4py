@@ -23,7 +23,7 @@ jobs:
           - runner: ubuntu-24.04
             python: "3.10"
       fail-fast: false
-    name: Test on ${{ runner.os }} (${{ runner.arch }}) with Python ${{ matrix.python }}
+    name: Test on ${{ matrix.runner }} with Python ${{ matrix.python }}
     steps:
       - uses: actions/checkout@v4
 
@@ -64,7 +64,7 @@ jobs:
           - ubuntu-24.04
           - ubuntu-24.04-arm64 # GitHub-hosted larger runner in the ActiveViam organization.
           - windows-2022
-    name: Test Conda packaging on ${{ runner.os }} (${{ runner.arch }})
+    name: Test Conda packaging on ${{ matrix.runner }}
     steps:
       - uses: actions/checkout@v4
 
