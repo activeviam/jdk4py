@@ -41,6 +41,9 @@ warn_redundant_casts = true
 warn_unused_configs = true
 warn_unused_ignores = true
 
+[tool.ruff.lint]
+select = ["ALL"]
+
 [tool.uv]
 dev-dependencies = [
     "build",

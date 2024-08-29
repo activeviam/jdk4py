@@ -1,8 +1,0 @@
-name: Create Python wheel
-description: Create a Python wheel
-runs:
-  using: "composite"
-  steps:
-    - name: Build Python wheel
-      run: uv run python -m build --installer uv --wheel
-      shell: bash

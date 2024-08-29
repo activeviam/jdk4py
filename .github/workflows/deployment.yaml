@@ -31,11 +31,9 @@ jobs:
           os: ${{ matrix.os }}
           python-version: "3.12"
 
-      - uses: ./.github/actions/create-python-wheel
+      - uses: ./.github/actions/build-python-wheel
 
-      - uses: ./.github/actions/create-conda-package
-        with:
-          architecture: ${{ matrix.architecture }}
+      - uses: ./.github/actions/build-conda-package
 
       - name: Upload Conda package
         env:

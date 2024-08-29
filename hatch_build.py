@@ -2,32 +2,74 @@ from hatchling.builders.hooks.plugin.interface import BuildHookInterface
 from hatchling.builders.config import BuilderConfigBound
 from hatchling.metadata.plugin.interface import MetadataHookInterface
 from pathlib import Path
-from subprocess import check_output
+import json
+import platform
+
+
+from typing import Literal
+
 
 _PROJECT_DIRECTORY = Path(__file__).parent
+
+
+_Architecture = Literal["arm64", "x64"]
+
+
+def _get_architecture(machine: str) -> _Architecture:
+    match machine:
+        case "AMD64", "x64", "x86_64":
+            return "x64"
+        case "arm64":
+            return "arm64"
+        case _:
+            raise ValueError(f"Unsupported machine: `{machine}`.")
+
+
+def _get_platform_tag(system: str, architecture: _Architecture) -> str:
+    # Keep OS versions in sync with the ones in the GitHub Actions files.
+    # Tag values taken from https://pypi.org/project/numpy/2.1.0/#files.
+    match system:
+        case "Darwin":
+            match architecture:
+                case "arm64":
+                    return "macosx_14_0_arm64"
+                case "x64":
+                    return "macosx_13_0_x86_64"
+        case "Linux":
+            match architecture:
+                case "arm64":
+                    return "manylinux_2_17_aarch64"
+                case "x64":
+                    return "manylinux_2_17_x86_64"
+        case "Windows":
+            match architecture:
+                case "x64":
+                    return "win_amd64"
+                case _:
+                    raise ValueError(
+                        f"Unsupported {system} architecture: `{architecture}`."
+                    )
+        case _:
+            raise ValueError(f"Unsupported system: `{system}`.")
 
 
 class BuildHook(BuildHookInterface[BuilderConfigBound]):
     def initialize(self, version: str, build_data: dict[str, object]) -> None:
         python_tag = "py3"
         abi_tag = "none"
-        platform_tag = check_output(
-            [
-                "python",
-                str(_PROJECT_DIRECTORY / "scripts" / "get_platform_tag.py"),
-                "wheel",
-            ],
-            text=True,
-        ).strip()
-        build_data["tag"] = "-".join([python_tag, abi_tag, platform_tag])
+
+        system = platform.system()
+        architecture = _get_architecture(platform.machine())
+        platform_tag = _get_platform_tag(system, architecture)
+
+        build_data["tag"] = f"{python_tag}-{abi_tag}-{platform_tag}"
 
 
 class MetadataHook(MetadataHookInterface):
     def update(self, metadata: dict[str, object]) -> None:
-        java_version = (
-            (_PROJECT_DIRECTORY / "src" / "jdk4py" / "java_version.txt")
-            .read_text()
-            .strip()
+        versions = json.loads(
+            (_PROJECT_DIRECTORY / "src" / "jdk4py" / "versions.json").read_bytes()
         )
-        lib_version = 1
-        metadata["version"] = f"{java_version}.{lib_version}"
+        metadata["version"] = ".".join(
+            str(number) for number in [*versions["java"], versions["api"]]
+        )

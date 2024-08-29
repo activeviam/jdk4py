@@ -37,5 +37,5 @@ b"Hello, World!"
 
 `jdk4py`'s version contains 4 numbers:
 
-- The first 3 numbers are the JDK version.
-- The fourth is `jdk4py` specific: it starts at 0 for each JDK version and increases when Python changes are made.
+- The first 3 numbers correspond to the JDK version.
+- The fourth number is the library API version.

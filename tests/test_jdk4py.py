@@ -1,17 +1,12 @@
-import json
 import re
 from pathlib import Path
 from subprocess import STDOUT, check_output
 
-from jdk4py import JAVA, JAVA_HOME, JAVA_VERSION
+from jdk4py import JAVA, JAVA_VERSION
 from jdk4py._included_locales import INCLUDED_LOCALES
 
 
 _TEST_RESOURCES_DIRECTORY = Path(__file__).parent / "resources"
-
-
-def test_java_home() -> None:
-    assert JAVA == JAVA_HOME / "bin" / "java"
 
 
 def test_java_version() -> None:
@@ -31,12 +26,10 @@ def test_jar_execution() -> None:
     assert output.strip() == "Hello, World"
 
 
-def test_available_locales() -> None:
+def test_included_locales() -> None:
     path = _TEST_RESOURCES_DIRECTORY / "PrintAvailableLocales.jar"
     output = check_output(
         [str(JAVA), "-jar", str(path.absolute())], stderr=STDOUT, text=True
     )
-    actual_locales = set(
-        locale.replace("_", "-") for locale in output.strip().splitlines()
-    )
-    assert INCLUDED_LOCALES.issubset(actual_locales)
+    locales = set(locale.replace("_", "-") for locale in output.strip().splitlines())
+    assert locales.issuperset(INCLUDED_LOCALES)
