@@ -2,8 +2,8 @@
 {% set version = load_file_data("src/jdk4py/version.json") %}
 
 package:
-  name: {{ pyproject.project.name }}
-  version: {{ version}}
+  name: {{ pyproject["project"]["name"] }}
+  version: {{ version }}
 
 source:
   path: ../
