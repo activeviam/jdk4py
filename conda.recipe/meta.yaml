@@ -33,11 +33,13 @@ test:
     - pytest
 
 about:
-  dev_url: {{ pyproject.project.urls.Repository }}
+  dev_url: {{ pyproject["project"]["urls"]["Repository"] }}
   license: GNU General Public License v2.0
   license_file: LICENSE
-  summary: {{ pyproject.project.description }}
+  summary: {{ pyproject["project"]["description"] }}
 
 extra:
   recipe-maintainers:
-    - ActiveViam
+  {% for author in pyproject["project"]["authors"] %}
+    - {{ author["name"] }}
+  {% endfor %}
