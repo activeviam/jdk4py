@@ -63,9 +63,7 @@ class BuildHook(BuildHookInterface[BuilderConfigBound]):
         architecture = _get_architecture(platform.machine())
         platform_tag = _get_platform_tag(system, architecture)
 
-        build_data["infer_tag"] = True
-
-        # build_data["tag"] = f"{python_tag}-{abi_tag}-{platform_tag}"
+        build_data["tag"] = f"{python_tag}-{abi_tag}-{platform_tag}"
 
 
 class MetadataHook(MetadataHookInterface):
