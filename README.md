@@ -1,6 +1,6 @@
 # jdk4py
 
-A JDK embedded in a Python package.
+A JDK shipped in a Python package.
 
 [![PyPI version](https://badge.fury.io/py/jdk4py.svg)](https://badge.fury.io/py/jdk4py)
 

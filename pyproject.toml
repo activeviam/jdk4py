@@ -16,7 +16,7 @@ classifiers = [
     "Programming Language :: Python :: 3",
 ]
 dependencies = []
-description = "Packaged JDK for Python"
+description = "A JDK shipped in a Python package"
 dynamic = ["version"]
 keywords = ["jdk", "java", "jvm", "jre"]
 name = "jdk4py"
