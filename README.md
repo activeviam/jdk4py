@@ -1,12 +1,10 @@
 # jdk4py
 
-A packaged JDK for Python.
+A JDK shipped in a Python package.
 
 [![PyPI version](https://badge.fury.io/py/jdk4py.svg)](https://badge.fury.io/py/jdk4py)
 
 ## Install
-
-Java is made easy to install as a single Python package:
 
 ```bash
 pip install jdk4py
@@ -28,10 +26,10 @@ PosixPath('/Users/johndoe/dev/jdk4py/jdk4py/java-runtime')
 >>> JAVA
 PosixPath('/Users/johndoe/dev/jdk4py/jdk4py/java-runtime/bin/java')
 >>> JAVA_VERSION
-(21, 0, 2)
+(21, 0, 4)
 >>> from subprocess import check_output
 >>> some_java_options = ["-Xmx16G", "-Xms2G"]
->>> check_output([str(JAVA), "-jar", "HelloWorld.jar",  *some_java_options])
+>>> check_output([JAVA, "-jar", "HelloWorld.jar",  *some_java_options])
 b"Hello, World!"
 ```
 
@@ -39,5 +37,5 @@ b"Hello, World!"
 
 `jdk4py`'s version contains 4 numbers:
 
-- The first 3 numbers are the Java version.
-- The fourth is `jdk4py` specific: it starts at 0 for each Java version and then increases.
+- The first 3 numbers correspond to the JDK version.
+- The fourth number is the library API version.

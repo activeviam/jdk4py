@@ -1,42 +1,46 @@
-{% set data = load_setup_py_data() %}
+{% set pyproject = load_file_data("pyproject.toml") %}
+{% set version = load_file_data("src/jdk4py/version.json") %}
 
 package:
-  name: jdk4py
-  version: {{ data['version'] }}
+  name: {{ pyproject["project"]["name"] }}
+  version: {{ version }}
 
 source:
   path: ../
 
 build:
-  binary_relocation: False # Without that, binaries are broken on macOS.
+  # Binaries are broken on macOS without it.
+  binary_relocation: False
   include_recipe: False
-  number: {{ environ.get('JDK4PY_BUILD_NUMBER') }}
 
 requirements:
   build:
+    # Must be available on anaconda (not conda-forge).
+    # Keep in sync with version in `pyproject.toml`.
+    - hatchling ==1.21.1
     - python {{ python }}
-    - pip
+    - pip ==24.2
   run:
     - python {{ python }}
 
 test:
   source_files:
-    - tests/**
-    - scripts/locales.json
+    - tests/
   requires:
-    - pytest
+    # Must be available on anaconda (not conda-forge).
+    # Keep in sync with version in `pyproject.toml`.
+    - pytest ==7.4.4
   commands:
-    - pytest tests
-  imports:
-    - jdk4py
+    - pytest
 
 about:
-  home: https://github.com/activeviam/jdk4py
+  dev_url: {{ pyproject["project"]["urls"]["Repository"] }}
   license: GNU General Public License v2.0
   license_file: LICENSE
-  summary: Packaged JDK for Python.
-  dev_url: https://github.com/activeviam/jdk4py
+  summary: {{ pyproject["project"]["description"] }}
 
 extra:
   recipe-maintainers:
-    - ActiveViam
+  {% for author in pyproject["project"]["authors"] %}
+    - {{ author["name"] }}
+  {% endfor %}

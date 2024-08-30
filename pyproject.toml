@@ -1,22 +1,41 @@
-[tool.poetry]
+[build-system]
+build-backend = "hatchling.build"
+requires = [
+    # Keep in sync with version in `conda.recipe/meta.yaml` and the section `tool.uv.dev-dependencies` in this file.
+    "hatchling ==1.21.1",
+]
+
+[project]
+authors = [{ email = "dev@atoti.io", name = "ActiveViam" }]
+classifiers = [
+    "Development Status :: 5 - Production/Stable",
+    "License :: OSI Approved :: GNU General Public License v2 (GPLv2)",
+    "Operating System :: MacOS",
+    "Operating System :: Microsoft :: Windows",
+    "Operating System :: POSIX :: Linux",
+    "Programming Language :: Python :: 3",
+]
+dependencies = []
+description = "A JDK shipped in a Python package"
+dynamic = ["version"]
+keywords = ["jdk", "java", "jvm", "jre"]
 name = "jdk4py"
-# Poetry requires this but we do not use it.
-version = "0.1.0"
-description = ""
-authors = []
+readme = "README.md"
+requires-python = ">=3.10"
 
-[tool.poetry.dependencies]
-python = ">=3.9"
+[project.urls]
+Repository = "https://github.com/activeviam/jdk4py"
 
-[tool.poetry.dev-dependencies]
-mypy = "*"
-pytest = "*"
-ruff = "*"
-setuptools = "*"
-twine = "*"
-wheel = "*"
+[tool.hatch.build.hooks.custom]
+
+[tool.hatch.metadata.hooks.custom]
+
+[tool.hatch.build.targets.wheel]
+artifacts = ["java-runtime"]
 
 [tool.mypy]
+# Remove once https://github.com/python/mypy/issues/10428 is fixed.
+files = "build_java_runtime.py,hatch_build.py,src,tests"
 strict = true
 warn_redundant_casts = true
 warn_unused_configs = true
@@ -24,3 +43,30 @@ warn_unused_ignores = true
 
 [tool.pytest.ini_options]
 filterwarnings = ["error"]
+
+[tool.ruff.lint]
+ignore = [
+    "D100",
+    "D101",
+    "D102",
+    "D103",
+    "D104",
+    "D211",
+    "D212",
+    "EM102",
+    "S101",
+    "TRY003",
+]
+select = ["ALL"]
+
+[tool.uv]
+dev-dependencies = [
+    "build",
+    # Keep in sync with version in `build-system.requires`.
+    "hatchling ==1.21.1",
+    "mypy",
+    # Keep in sync with version in `conda.recipe/meta.yaml`.
+    "pytest ==7.4.4",
+    "ruff",
+    "twine",
+]

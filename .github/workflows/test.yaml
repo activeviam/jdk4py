@@ -5,98 +5,78 @@ on:
 
 jobs:
   test:
-    runs-on: ${{ matrix.os }}
+    runs-on: ${{ matrix.runner }}
     strategy:
       matrix:
-        architecture:
-          - x64
-        os:
-          - macos-13
-          - ubuntu-22.04
+        runner:
+          - macos-13 # x64
+          - macos-14 # arm64
+          - ubuntu-24.04
+          - ubuntu-24.04-arm64 # GitHub-hosted larger runner in the ActiveViam organization.
           - windows-2022
         python:
           - "3.12"
         include:
-          - architecture: arm64
-            os: macos-14
-            python: "3.12"
-          - architecture: x64
-            os: ubuntu-22.04
+          - runner: ubuntu-24.04
             python: "3.11"
-          - architecture: x64
-            os: ubuntu-22.04
+          - runner: ubuntu-24.04
             python: "3.10"
-          - architecture: x64
-            os: ubuntu-22.04
-            python: "3.9"
       fail-fast: false
-    name: Test on ${{ matrix.os }}-${{ matrix.architecture }} with Python ${{ matrix.python }}
+    name: Test on ${{ matrix.runner }} with Python ${{ matrix.python }}
     steps:
       - uses: actions/checkout@v4
 
-      - uses: ./.github/actions/build-jdk
-        with:
-          os: ${{ matrix.os }}
-          python-version: ${{ matrix.python }}
+      - uses: ./.github/actions/build-java-runtime
 
-      - uses: ./.github/actions/create-python-wheel
-        with:
-          build-number: ${{ env.JDK4PY_BUILD_NUMBER }}
+      - id: build-python-wheel
+        uses: ./.github/actions/build-python-wheel
 
-      # No need to do that for each OS and Python version.
-      - if: ${{ matrix.os == 'ubuntu-22.04' && matrix.python == '3.12' }}
-        name: Check formatting
-        run: poetry run ruff format --check .
+      # No need to test each platform and Python version.
+      - if: ${{ matrix.runner == 'ubuntu-24.04' && matrix.python == '3.12' }}
+        run: uv run ruff format --check .
 
-      # No need to do that for each OS and Python version.
-      - if: ${{ matrix.os == 'ubuntu-22.04' && matrix.python == '3.12' }}
-        name: Lint
-        run: poetry run ruff check .
+      # No need to test each platform and Python version.
+      - if: ${{ matrix.runner == 'ubuntu-24.04' && matrix.python == '3.12' }}
+        run: uv run ruff check .
 
-      # No need to do that for each OS and Python version.
-      - if: ${{ matrix.os == 'ubuntu-22.04' && matrix.python == '3.12' }}
-        name: Typecheck
-        run: poetry run mypy --show-error-codes jdk4py scripts tests
+      # No need to test each platform and Python version.
+      - if: ${{ matrix.runner == 'ubuntu-24.04' && matrix.python == '3.12' }}
+        run: uv run mypy
 
-      - run: poetry run pytest
+      - run: uv run pytest
 
-      # The library's Python wheels are not tied to a specific version of Python so there is no need to upload the package for each Python version.
+      # The Python wheels are not tied to a specific Python version.
       - if: ${{ matrix.python == '3.12' }}
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           if-no-files-found: error
-          name: jdk4py-${{ matrix.os }}-${{ matrix.architecture }}.whl
-          path: dist/jdk4py-*.whl
+          name: ${{ steps.build-python-wheel.outputs.filename }}
+          path: dist/${{ steps.build-python-wheel.outputs.filename }}
 
   conda-package:
-    runs-on: ${{ matrix.os }}
+    runs-on: ${{ matrix.runner }}
     strategy:
       matrix:
-        architecture:
-          - x64
-        os:
-          - macos-13
-          - ubuntu-22.04
+        runner:
+          - macos-13 # x64
+          - macos-14 # arm64
+          - ubuntu-24.04
+          - ubuntu-24.04-arm64 # GitHub-hosted larger runner in the ActiveViam organization.
           - windows-2022
-        include:
-          - architecture: arm64
-            os: macos-14
-    name: Test Conda packaging on ${{ matrix.os }}-${{ matrix.architecture }}
+    name: Test Conda packaging on ${{ matrix.runner }}
     steps:
       - uses: actions/checkout@v4
 
-      - uses: ./.github/actions/build-jdk
+      - uses: ./.github/actions/build-java-runtime
         with:
-          os: ${{ matrix.os }}
           # No need to test each Python version.
           python-version: "3.12"
 
-      - uses: ./.github/actions/create-conda-package
-        with:
-          architecture: ${{ matrix.architecture }}
+      - id: build-conda-packages
+        uses: ./.github/actions/build-conda-packages
 
       - uses: actions/upload-artifact@v4
         with:
           if-no-files-found: error
-          name: jdk4py-${{ matrix.os }}-${{ matrix.architecture }}-conda-packages
-          path: dist/${{ env.JDK4PY_CONDA_PLATFORM }}/jdk4py-*.tar.bz2
+          name: jdk4py-${{ steps.build-conda-packages.outputs.platform }}-conda-packages
+          path: dist/${{ steps.build-conda-packages.outputs.platform }}/jdk4py-*.tar.bz2

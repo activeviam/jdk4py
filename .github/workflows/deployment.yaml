@@ -6,41 +6,36 @@ on:
 
 jobs:
   deploy:
-    runs-on: ${{ matrix.os }}
+    runs-on: ${{ matrix.runner }}
     environment: deployment
     strategy:
       matrix:
-        architecture:
-          - x64
-        os:
-          - macos-13
-          - ubuntu-22.04
+        runner:
+          - macos-13 # x64
+          - macos-14 # arm64
+          - ubuntu-24.04
+          - ubuntu-24.04-arm64 # GitHub-hosted larger runner in the ActiveViam organization.
           - windows-2022
-        include:
-          - architecture: arm64
-            os: macos-14
-    name: Deploy on ${{ matrix.os }}-${{ matrix.architecture }}
+    name: Deploy on ${{ matrix.runner }}
     steps:
       - uses: actions/checkout@v4
 
-      - uses: ./.github/actions/build-jdk
+      - uses: ./.github/actions/build-java-runtime
         with:
-          os: ${{ matrix.os }}
           python-version: "3.12"
 
-      - uses: ./.github/actions/create-python-wheel
-        with:
-          build-number: ${{ env.JDK4PY_BUILD_NUMBER }}
+      - id: build-python-wheel
+        uses: ./.github/actions/build-python-wheel
 
-      - uses: ./.github/actions/create-conda-package
-        with:
-          architecture: ${{ matrix.architecture }}
+      - id: build-conda-packages
+        uses: ./.github/actions/build-conda-packages
 
-      - name: Upload Conda package
+      - name: Upload Conda packages
         env:
           JDK4PY_CONDA_CHANNEL_TOKEN: ${{ secrets.CONDA_CHANNEL_TOKEN }}
           JDK4PY_CONDA_CHANNEL_URL: ${{ vars.CONDA_CHANNEL_URL }}
           JDK4PY_CONDA_CHANNEL_USERNAME: ${{ vars.CONDA_CHANNEL_USERNAME }}
+          JDK4PY_CONDA_PLATFORM: ${{ steps.build-conda-packages.outputs.platform }}
         run: |
           ls dist/$JDK4PY_CONDA_PLATFORM/jdk4py-*.tar.bz2 | \
           while read filepath; do
@@ -51,6 +46,7 @@ jobs:
 
       - name: Upload Python wheel
         env:
-          PYPI_TOKEN: ${{ secrets.PYPI_TOKEN }}
-        run: poetry run twine upload dist/jdk4py-*.whl --username __token__ --password "$PYPI_TOKEN"
+          JDK4PY_PYPI_TOKEN: ${{ secrets.PYPI_TOKEN }}
+          JDK4PY_WHEEL_FILENAME: ${{ steps.build-python-wheel.outputs.filename }}
+        run: uv run twine upload dist/"$JDK4PY_WHEEL_FILENAME" --username __token__ --password "$JDK4PY_PYPI_TOKEN"
         shell: bash
