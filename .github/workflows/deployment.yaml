@@ -25,7 +25,8 @@ jobs:
         with:
           python-version: "3.12"
 
-      - uses: ./.github/actions/build-python-wheel
+      - id: build-python-wheel
+        uses: ./.github/actions/build-python-wheel
 
       - id: build-conda-packages
         uses: ./.github/actions/build-conda-packages
@@ -46,6 +47,7 @@ jobs:
 
       - name: Upload Python wheel
         env:
-          PYPI_TOKEN: ${{ secrets.PYPI_TOKEN }}
-        run: uv run twine upload dist/jdk4py-*.whl --username __token__ --password "$PYPI_TOKEN"
+          JDK4PY_PYPI_TOKEN: ${{ secrets.PYPI_TOKEN }}
+          JDK4PY_WHEEL_FILENAME: ${{ steps.build-python-wheel.outputs.filename }}
+        run: uv run twine upload dist/"$JDK4PY_WHEEL_FILENAME" --username __token__ --password "$JDK4PY_PYPI_TOKEN"
         shell: bash

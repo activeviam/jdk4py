@@ -2,7 +2,7 @@
 {% set version = load_file_data("src/jdk4py/version.json") %}
 
 package:
-  name: {{ pyproject['project']['name'] }}
+  name: {{ pyproject.project.name }}
   version: {{ version}}
 
 source:
@@ -33,10 +33,10 @@ test:
     - pytest
 
 about:
-  dev_url: {{ pyproject['project']['urls']['Repository'] }}
+  dev_url: {{ pyproject.project.urls.Repository }}
   license: GNU General Public License v2.0
   license_file: LICENSE
-  summary: {{ pyproject['project']['description'] }}
+  summary: {{ pyproject.project.description }}
 
 extra:
   recipe-maintainers:

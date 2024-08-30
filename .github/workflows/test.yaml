@@ -29,7 +29,8 @@ jobs:
 
       - uses: ./.github/actions/build-java-runtime
 
-      - uses: ./.github/actions/build-python-wheel
+      - id: build-python-wheel
+        uses: ./.github/actions/build-python-wheel
 
       # No need to test each platform and Python version.
       - if: ${{ matrix.runner == 'ubuntu-24.04' && matrix.python == '3.12' }}
@@ -50,8 +51,8 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           if-no-files-found: error
-          name: jdk4py-${{ runner.os }}-${{ runner.arch }}.whl
-          path: dist/jdk4py-*.whl
+          name: ${{ steps.build-python-wheel.outputs.filename }}
+          path: dist/${{ steps.build-python-wheel.outputs.filename }}
 
   conda-package:
     runs-on: ${{ matrix.runner }}
@@ -79,5 +80,5 @@ jobs:
       - uses: actions/upload-artifact@v4
         with:
           if-no-files-found: error
-          name: jdk4py-${{ runner.os }}-${{ runner.arch }}-conda-packages
+          name: jdk4py-${{ steps.build-conda-packages.outputs.platform }}-conda-packages
           path: dist/${{ steps.build-conda-packages.outputs.platform }}/jdk4py-*.tar.bz2
