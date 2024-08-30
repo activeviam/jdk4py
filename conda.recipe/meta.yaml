@@ -15,9 +15,9 @@ build:
 
 requirements:
   build:
-  {% for dependency in pyproject["uv"]["dev-dependencies"] if any(dependency == dependency_name or dependency.startsWith(f"{dependency_name} ") for dependency_name in ("hatchling")) %}
-    - {{ dependency }}
-  {% endfor %}
+    # Must be available on anaconda (not conda-forge).
+    # Keep in sync with version in `pyproject.toml`.
+    - hatchling ==1.21.1
     - python {{ python }}
     - pip ==24.2
   run:
