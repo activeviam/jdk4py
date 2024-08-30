@@ -15,8 +15,9 @@ build:
 
 requirements:
   build:
-    # Keep in sync with version in `pyproject.toml`.
-    - hatchling ==1.21.1
+  {% for dependency in pyproject["uv"]["dev-dependencies"] if any(dependency == dependency_name or dependency.startsWith(f"{dependency_name} ") for dependency_name in ("hatchling")) %}
+    - {{ dependency }}
+  {% endfor %}
     - python {{ python }}
     - pip ==24.2
   run:
