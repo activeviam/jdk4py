@@ -9,7 +9,6 @@ jobs:
     runs-on: ${{ matrix.runner }}
     environment: deployment
     strategy:
-      # Keep OS versions in sync with the ones in `hatch_build.py`.
       matrix:
         runner:
           - macos-13 # x64

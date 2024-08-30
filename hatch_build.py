@@ -24,15 +24,14 @@ def _get_architecture(machine: str) -> _Architecture:
 
 
 def _get_platform_tag(system: str, architecture: _Architecture) -> str:
-    # Keep OS versions in sync with the ones in the GitHub Actions files.
     # Tag values taken from https://pypi.org/project/numpy/2.1.0/#files.
     match system.lower():
         case "darwin":
             match architecture:
                 case "arm64":
-                    return "macosx_14_0_arm64"
+                    return "macosx_11_0_arm64"
                 case "x64":
-                    return "macosx_13_0_x86_64"
+                    return "macosx_10_9_x86_64"
         case "linux":
             match architecture:
                 case "arm64":
@@ -64,7 +63,9 @@ class BuildHook(BuildHookInterface[BuilderConfigBound]):
         architecture = _get_architecture(platform.machine())
         platform_tag = _get_platform_tag(system, architecture)
 
-        build_data["tag"] = f"{python_tag}-{abi_tag}-{platform_tag}"
+        build_data["infer_tag"] = True
+
+        # build_data["tag"] = f"{python_tag}-{abi_tag}-{platform_tag}"
 
 
 class MetadataHook(MetadataHookInterface):
