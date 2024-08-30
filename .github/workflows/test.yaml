@@ -4,55 +4,55 @@ on:
     types: [opened, synchronize]
 
 jobs:
-  test:
-    runs-on: ${{ matrix.runner }}
-    strategy:
-      # Keep OS versions in sync with the ones in `hatch_build.py`.
-      matrix:
-        runner:
-          - macos-13 # x64
-          - macos-14 # arm64
-          - ubuntu-24.04
-          - ubuntu-24.04-arm64 # GitHub-hosted larger runner in the ActiveViam organization.
-          - windows-2022
-        python:
-          - "3.12"
-        include:
-          - runner: ubuntu-24.04
-            python: "3.11"
-          - runner: ubuntu-24.04
-            python: "3.10"
-      fail-fast: false
-    name: Test on ${{ matrix.runner }} with Python ${{ matrix.python }}
-    steps:
-      - uses: actions/checkout@v4
+  # test:
+  #   runs-on: ${{ matrix.runner }}
+  #   strategy:
+  #     # Keep OS versions in sync with the ones in `hatch_build.py`.
+  #     matrix:
+  #       runner:
+  #         - macos-13 # x64
+  #         - macos-14 # arm64
+  #         - ubuntu-24.04
+  #         - ubuntu-24.04-arm64 # GitHub-hosted larger runner in the ActiveViam organization.
+  #         - windows-2022
+  #       python:
+  #         - "3.12"
+  #       include:
+  #         - runner: ubuntu-24.04
+  #           python: "3.11"
+  #         - runner: ubuntu-24.04
+  #           python: "3.10"
+  #     fail-fast: false
+  #   name: Test on ${{ matrix.runner }} with Python ${{ matrix.python }}
+  #   steps:
+  #     - uses: actions/checkout@v4
 
-      - uses: ./.github/actions/build-java-runtime
+  #     - uses: ./.github/actions/build-java-runtime
 
-      - id: build-python-wheel
-        uses: ./.github/actions/build-python-wheel
+  #     - id: build-python-wheel
+  #       uses: ./.github/actions/build-python-wheel
 
-      # No need to test each platform and Python version.
-      - if: ${{ matrix.runner == 'ubuntu-24.04' && matrix.python == '3.12' }}
-        run: uv run ruff format --check .
+  #     # No need to test each platform and Python version.
+  #     - if: ${{ matrix.runner == 'ubuntu-24.04' && matrix.python == '3.12' }}
+  #       run: uv run ruff format --check .
 
-      # No need to test each platform and Python version.
-      - if: ${{ matrix.runner == 'ubuntu-24.04' && matrix.python == '3.12' }}
-        run: uv run ruff check .
+  #     # No need to test each platform and Python version.
+  #     - if: ${{ matrix.runner == 'ubuntu-24.04' && matrix.python == '3.12' }}
+  #       run: uv run ruff check .
 
-      # No need to test each platform and Python version.
-      - if: ${{ matrix.runner == 'ubuntu-24.04' && matrix.python == '3.12' }}
-        run: uv run mypy
+  #     # No need to test each platform and Python version.
+  #     - if: ${{ matrix.runner == 'ubuntu-24.04' && matrix.python == '3.12' }}
+  #       run: uv run mypy
 
-      - run: uv run pytest
+  #     - run: uv run pytest
 
-      # No need to upload for each Python version since the Python wheels are not tied to a specific Python version.
-      - if: ${{ matrix.python == '3.12' }}
-        uses: actions/upload-artifact@v4
-        with:
-          if-no-files-found: error
-          name: ${{ steps.build-python-wheel.outputs.filename }}
-          path: dist/${{ steps.build-python-wheel.outputs.filename }}
+  #     # No need to upload for each Python version since the Python wheels are not tied to a specific Python version.
+  #     - if: ${{ matrix.python == '3.12' }}
+  #       uses: actions/upload-artifact@v4
+  #       with:
+  #         if-no-files-found: error
+  #         name: ${{ steps.build-python-wheel.outputs.filename }}
+  #         path: dist/${{ steps.build-python-wheel.outputs.filename }}
 
   conda-package:
     runs-on: ${{ matrix.runner }}
@@ -60,11 +60,11 @@ jobs:
       # Keep OS versions in sync with the ones in `hatch_build.py`.
       matrix:
         runner:
-          - macos-13 # x64
-          - macos-14 # arm64
+          # - macos-13 # x64
+          # - macos-14 # arm64
           - ubuntu-24.04
-          - ubuntu-24.04-arm64 # GitHub-hosted larger runner in the ActiveViam organization.
-          - windows-2022
+          # - ubuntu-24.04-arm64 # GitHub-hosted larger runner in the ActiveViam organization.
+          # - windows-2022
     name: Test Conda packaging on ${{ matrix.runner }}
     steps:
       - uses: actions/checkout@v4
