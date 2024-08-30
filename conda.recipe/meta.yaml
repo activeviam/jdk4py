@@ -1,8 +1,8 @@
-{% set pyproject = load_file_data('pyproject.toml') %}
+{% set pyproject = load_file_data("pyproject.toml") %}
 {% set version = load_file_data("src/jdk4py/version.json") %}
 
 package:
-  name: {{ pyproject.get('project').get('name') }}
+  name: {{ pyproject.project.name }}
   version: {{ version}}
 
 source:
@@ -24,7 +24,7 @@ requirements:
 
 test:
   source_files:
-    - tests/**
+    - tests/
   requires:
     # Must be available on anaconda (not conda-forge).
     # Keep in sync with version in `pyproject.toml`.
