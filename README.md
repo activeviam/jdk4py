@@ -29,7 +29,7 @@ PosixPath('/Users/johndoe/dev/jdk4py/jdk4py/java-runtime/bin/java')
 (21, 0, 4)
 >>> from subprocess import check_output
 >>> some_java_options = ["-Xmx16G", "-Xms2G"]
->>> check_output([str(JAVA), "-jar", "HelloWorld.jar",  *some_java_options])
+>>> check_output([JAVA, "-jar", "HelloWorld.jar",  *some_java_options])
 b"Hello, World!"
 ```
 

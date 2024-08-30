@@ -18,7 +18,7 @@ def build_java_runtime() -> None:
             ",".join(ADDED_MODULES),
             f"--include-locales={','.join(INCLUDED_LOCALES)}",
             "--output",
-            str(JAVA_HOME),
+            JAVA_HOME,
         ],
     )
 

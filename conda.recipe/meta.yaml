@@ -1,7 +1,8 @@
+{% set pyproject = load_file_data('pyproject.toml') %}
 {% set version = load_file_data("src/jdk4py/version.json") %}
 
 package:
-  name: jdk4py
+  name: {{ pyproject['project']['name'] }}
   version: {{ version}}
 
 source:
@@ -32,11 +33,10 @@ test:
     - pytest
 
 about:
-  home: https://github.com/activeviam/jdk4py
+  dev_url: {{ pyproject['project']['urls']['Repository'] }}
   license: GNU General Public License v2.0
   license_file: LICENSE
-  summary: Packaged JDK for Python.
-  dev_url: https://github.com/activeviam/jdk4py
+  summary: {{ pyproject['project']['description'] }}
 
 extra:
   recipe-maintainers:

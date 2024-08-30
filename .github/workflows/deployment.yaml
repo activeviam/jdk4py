@@ -27,15 +27,15 @@ jobs:
 
       - uses: ./.github/actions/build-python-wheel
 
-      - id: build-conda-package
-        uses: ./.github/actions/build-conda-package
+      - id: build-conda-packages
+        uses: ./.github/actions/build-conda-packages
 
-      - name: Upload Conda package
+      - name: Upload Conda packages
         env:
           JDK4PY_CONDA_CHANNEL_TOKEN: ${{ secrets.CONDA_CHANNEL_TOKEN }}
           JDK4PY_CONDA_CHANNEL_URL: ${{ vars.CONDA_CHANNEL_URL }}
           JDK4PY_CONDA_CHANNEL_USERNAME: ${{ vars.CONDA_CHANNEL_USERNAME }}
-          JDK4PY_CONDA_PLATFORM: ${{ steps.build-conda-package.outputs.platform }}
+          JDK4PY_CONDA_PLATFORM: ${{ steps.build-conda-packages.outputs.platform }}
         run: |
           ls dist/$JDK4PY_CONDA_PLATFORM/jdk4py-*.tar.bz2 | \
           while read filepath; do

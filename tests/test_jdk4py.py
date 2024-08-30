@@ -10,7 +10,7 @@ _TEST_RESOURCES_DIRECTORY = Path(__file__).parent / "resources"
 
 def test_java_version() -> None:
     output = check_output(  # noqa: S603
-        [str(JAVA), "-version"],
+        [JAVA, "-version"],
         stderr=STDOUT,
         text=True,
     )
@@ -22,21 +22,19 @@ def test_java_version() -> None:
 
 
 def test_jar_execution() -> None:
-    jar_path = _TEST_RESOURCES_DIRECTORY / "HelloWorld.jar"
     output = check_output(  # noqa: S603
-        [str(JAVA), "-jar", str(jar_path.absolute())],
+        [JAVA, "-jar", _TEST_RESOURCES_DIRECTORY / "HelloWorld.jar"],
         stderr=STDOUT,
         text=True,
-    )
-    assert output.strip() == "Hello, World"
+    ).strip()
+    assert output == "Hello, World"
 
 
 def test_included_locales() -> None:
-    path = _TEST_RESOURCES_DIRECTORY / "PrintAvailableLocales.jar"
     output = check_output(  # noqa: S603
-        [str(JAVA), "-jar", str(path.absolute())],
+        [JAVA, "-jar", _TEST_RESOURCES_DIRECTORY / "PrintAvailableLocales.jar"],
         stderr=STDOUT,
         text=True,
-    )
-    locales = {locale.replace("_", "-") for locale in output.strip().splitlines()}
+    ).strip()
+    locales = {locale.replace("_", "-") for locale in output.splitlines()}
     assert locales.issuperset(INCLUDED_LOCALES)

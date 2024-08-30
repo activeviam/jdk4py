@@ -1,5 +1,5 @@
 name: Build Python wheel
-description: Build a Python wheel
+description: Build the Python wheel
 runs:
   using: "composite"
   steps:

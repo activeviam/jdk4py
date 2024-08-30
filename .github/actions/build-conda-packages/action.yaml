@@ -1,8 +1,8 @@
-name: Build Conda package
-description: Build a Conda package
+name: Build Conda packages
+description: Build the Conda packages
 outputs:
   platform:
-    description: The platform targeted by the Conda package.
+    description: The platform targeted by the Conda packages.
     value: ${{ steps.get-platform.outputs.platform }}
 runs:
   using: composite
