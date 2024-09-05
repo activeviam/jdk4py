@@ -1,8 +1,8 @@
 name: Deploy Conda packages and Python wheels
-on: [push]
-  # push:
-  #   branches:
-  #     - main
+on:
+  push:
+    branches:
+      - main
 
 jobs:
   build:
@@ -11,17 +11,17 @@ jobs:
     strategy:
       matrix:
         runner:
-          # - macos-13 # x64
+          - macos-13 # x64
           - macos-14 # arm64
           - ubuntu-24.04
           - ubuntu-24.04-arm64 # GitHub-hosted larger runner in the ActiveViam organization.
-          # - windows-2022
+          - windows-2022
     steps:
       - uses: actions/checkout@v4
 
       - uses: ./.github/actions/build-java-runtime
         with:
-          python-version: "3.12"
+          python-version: "3.10"
 
       - uses: ./.github/actions/build-python-wheel
 
@@ -53,7 +53,8 @@ jobs:
           merge-multiple: true
           path: dist/
 
-      - run: ls -R dist/
+      - name: List Conda packages and Python wheels
+        run: ls -R dist/
 
       - name: Publish Conda packages
         env:
@@ -65,7 +66,7 @@ jobs:
           ls */jdk4py-*.tar.bz2 | \
           while read filepath; do
             echo Uploading ${filepath}
-            echo "$JDK4PY_CONDA_CHANNEL_URL/$(dirname $filepath)/"
+            curl --fail --user "$JDK4PY_CONDA_CHANNEL_USERNAME":"$JDK4PY_CONDA_CHANNEL_TOKEN" --upload-file ${filepath} "$JDK4PY_CONDA_CHANNEL_URL/$(dirname $filepath)/"
           done
         shell: bash
 
@@ -76,7 +77,5 @@ jobs:
       - name: Keep only Python wheels
         run: rm -R -- dist/*/
 
-      - run: ls -R dist/
-
-      # - name: Publish Python wheels
-      #   uses: pypa/gh-action-pypi-publish@release/v1
+      - name: Publish Python wheels
+        uses: pypa/gh-action-pypi-publish@release/v1
