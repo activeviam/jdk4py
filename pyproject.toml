@@ -61,7 +61,6 @@ select = ["ALL"]
 
 [tool.uv]
 dev-dependencies = [
-    "build",
     # Keep in sync with version in `build-system.requires`.
     "hatchling ==1.21.1",
     "mypy",

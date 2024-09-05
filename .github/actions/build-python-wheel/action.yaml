@@ -7,7 +7,7 @@ outputs:
 runs:
   using: "composite"
   steps:
-    - run: uv run python -m build --installer uv --wheel
+    - run: uv build --wheel
       shell: bash
 
     - id: get-filename
