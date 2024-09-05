@@ -1,13 +1,13 @@
-name: Deploy Conda and PyPI packages
+name: Deploy Conda packages and Python wheels
 on:
   push:
     branches:
       - main
 
 jobs:
-  deploy:
+  build:
+    name: Build on ${{ matrix.runner }}
     runs-on: ${{ matrix.runner }}
-    environment: deployment
     strategy:
       matrix:
         runner:
@@ -16,37 +16,66 @@ jobs:
           - ubuntu-24.04
           - ubuntu-24.04-arm64 # GitHub-hosted larger runner in the ActiveViam organization.
           - windows-2022
-    name: Deploy on ${{ matrix.runner }}
     steps:
       - uses: actions/checkout@v4
 
       - uses: ./.github/actions/build-java-runtime
         with:
-          python-version: "3.12"
+          python-version: "3.10"
 
-      - id: build-python-wheel
-        uses: ./.github/actions/build-python-wheel
+      - uses: ./.github/actions/build-python-wheel
 
-      - id: build-conda-packages
-        uses: ./.github/actions/build-conda-packages
+      - uses: actions/upload-artifact@v4
+        with:
+          if-no-files-found: error
+          name: jdk4py-${{ matrix.runner }}-python-wheel
+          path: dist/jdk4py-*.whl
 
-      - name: Upload Conda packages
+      - uses: ./.github/actions/build-conda-packages
+
+      - uses: actions/upload-artifact@v4
+        with:
+          if-no-files-found: error
+          name: jdk4py-${{ matrix.runner }}-conda-packages
+          path: dist/*/jdk4py-*.tar.bz2
+
+  publish:
+    environment: deployment
+    name: Publish Conda packages and Python wheels
+    needs: build
+    runs-on: ubuntu-24.04
+    permissions:
+      # Required for trusted publishing.
+      id-token: write
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          merge-multiple: true
+          path: dist/
+
+      - name: List Conda packages and Python wheels
+        run: ls -R dist/
+
+      - name: Publish Conda packages
         env:
           JDK4PY_CONDA_CHANNEL_TOKEN: ${{ secrets.CONDA_CHANNEL_TOKEN }}
           JDK4PY_CONDA_CHANNEL_URL: ${{ vars.CONDA_CHANNEL_URL }}
           JDK4PY_CONDA_CHANNEL_USERNAME: ${{ vars.CONDA_CHANNEL_USERNAME }}
-          JDK4PY_CONDA_PLATFORM: ${{ steps.build-conda-packages.outputs.platform }}
         run: |
-          ls dist/$JDK4PY_CONDA_PLATFORM/jdk4py-*.tar.bz2 | \
+          cd dist/
+          ls */jdk4py-*.tar.bz2 | \
           while read filepath; do
             echo Uploading ${filepath}
-            curl --fail --user "$JDK4PY_CONDA_CHANNEL_USERNAME":"$JDK4PY_CONDA_CHANNEL_TOKEN" --upload-file ${filepath} "$JDK4PY_CONDA_CHANNEL_URL/$JDK4PY_CONDA_PLATFORM/"
+            curl --fail --user "$JDK4PY_CONDA_CHANNEL_USERNAME":"$JDK4PY_CONDA_CHANNEL_TOKEN" --upload-file ${filepath} "$JDK4PY_CONDA_CHANNEL_URL/$(dirname $filepath)/"
           done
         shell: bash
 
-      - name: Upload Python wheel
-        env:
-          JDK4PY_PYPI_TOKEN: ${{ secrets.PYPI_TOKEN }}
-          JDK4PY_WHEEL_FILENAME: ${{ steps.build-python-wheel.outputs.filename }}
-        run: uv run twine upload dist/"$JDK4PY_WHEEL_FILENAME" --username __token__ --password "$JDK4PY_PYPI_TOKEN"
-        shell: bash
+      # Conda packages are nested inside platform specific directories.
+      # Deleting all sub directories only leaves Python wheels in `dist/`.
+      # This is required to not confuse `twine upload` when `dist/*` is passed.
+      # See https://github.com/pypa/gh-action-pypi-publish/blob/36978192ca7715ea2e0d12e82d5518a651a9f739/twine-upload.sh#L208C43-L208C61.
+      - name: Keep only Python wheels
+        run: rm -R -- dist/*/
+
+      - name: Publish Python wheels
+        uses: pypa/gh-action-pypi-publish@release/v1

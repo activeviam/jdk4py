@@ -5,6 +5,7 @@ on:
 
 jobs:
   test:
+    name: Test on ${{ matrix.runner }} with Python ${{ matrix.python }}
     runs-on: ${{ matrix.runner }}
     strategy:
       matrix:
@@ -15,45 +16,44 @@ jobs:
           - ubuntu-24.04-arm64 # GitHub-hosted larger runner in the ActiveViam organization.
           - windows-2022
         python:
-          - "3.12"
+          - "3.10"
         include:
           - runner: ubuntu-24.04
             python: "3.11"
           - runner: ubuntu-24.04
-            python: "3.10"
+            python: "3.12"
       fail-fast: false
-    name: Test on ${{ matrix.runner }} with Python ${{ matrix.python }}
     steps:
       - uses: actions/checkout@v4
 
       - uses: ./.github/actions/build-java-runtime
 
-      - id: build-python-wheel
-        uses: ./.github/actions/build-python-wheel
+      - uses: ./.github/actions/build-python-wheel
 
       # No need to test each platform and Python version.
-      - if: ${{ matrix.runner == 'ubuntu-24.04' && matrix.python == '3.12' }}
+      - if: ${{ matrix.runner == 'ubuntu-24.04' && matrix.python == '3.10' }}
         run: uv run ruff format --check .
 
       # No need to test each platform and Python version.
-      - if: ${{ matrix.runner == 'ubuntu-24.04' && matrix.python == '3.12' }}
+      - if: ${{ matrix.runner == 'ubuntu-24.04' && matrix.python == '3.10' }}
         run: uv run ruff check .
 
       # No need to test each platform and Python version.
-      - if: ${{ matrix.runner == 'ubuntu-24.04' && matrix.python == '3.12' }}
+      - if: ${{ matrix.runner == 'ubuntu-24.04' && matrix.python == '3.10' }}
         run: uv run mypy
 
       - run: uv run pytest
 
       # The Python wheels are not tied to a specific Python version.
-      - if: ${{ matrix.python == '3.12' }}
+      - if: ${{ matrix.python == '3.10' }}
         uses: actions/upload-artifact@v4
         with:
           if-no-files-found: error
-          name: ${{ steps.build-python-wheel.outputs.filename }}
-          path: dist/${{ steps.build-python-wheel.outputs.filename }}
+          name: jdk4py-${{ matrix.runner }}-python-wheel
+          path: dist/jdk4py-*.whl
 
   conda-package:
+    name: Test Conda packaging on ${{ matrix.runner }}
     runs-on: ${{ matrix.runner }}
     strategy:
       matrix:
@@ -63,20 +63,18 @@ jobs:
           - ubuntu-24.04
           - ubuntu-24.04-arm64 # GitHub-hosted larger runner in the ActiveViam organization.
           - windows-2022
-    name: Test Conda packaging on ${{ matrix.runner }}
     steps:
       - uses: actions/checkout@v4
 
       - uses: ./.github/actions/build-java-runtime
         with:
           # No need to test each Python version.
-          python-version: "3.12"
+          python-version: "3.10"
 
-      - id: build-conda-packages
-        uses: ./.github/actions/build-conda-packages
+      - uses: ./.github/actions/build-conda-packages
 
       - uses: actions/upload-artifact@v4
         with:
           if-no-files-found: error
-          name: jdk4py-${{ steps.build-conda-packages.outputs.platform }}-conda-packages
-          path: dist/${{ steps.build-conda-packages.outputs.platform }}/jdk4py-*.tar.bz2
+          name: jdk4py-${{ matrix.runner }}-conda-packages
+          path: dist/*/jdk4py-*.tar.bz2
