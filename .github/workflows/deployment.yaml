@@ -62,7 +62,7 @@ jobs:
           JDK4PY_CONDA_CHANNEL_USERNAME: ${{ vars.CONDA_CHANNEL_USERNAME }}
         run: |
           cd dist/
-          ls $JDK4PY_CONDA_PLATFORM/jdk4py-*.tar.bz2 | \
+          ls */jdk4py-*.tar.bz2 | \
           while read filepath; do
             echo Uploading ${filepath}
             echo ${filepath}
