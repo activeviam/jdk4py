@@ -65,7 +65,6 @@ jobs:
           ls */jdk4py-*.tar.bz2 | \
           while read filepath; do
             echo Uploading ${filepath}
-            echo ${filepath}
             echo "$JDK4PY_CONDA_CHANNEL_URL/$(dirname $filepath)/"
           done
         shell: bash
@@ -75,7 +74,7 @@ jobs:
       # This is required to not confuse `twine upload` when `dist/*` is passed.
       # See https://github.com/pypa/gh-action-pypi-publish/blob/36978192ca7715ea2e0d12e82d5518a651a9f739/twine-upload.sh#L208C43-L208C61.
       - name: Keep only Python wheels
-        run: m -r -- dist/*/
+        run: rm -R -- dist/*/
 
       - run: ls -R dist/
 
