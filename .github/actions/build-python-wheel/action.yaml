@@ -1,15 +1,10 @@
 name: Build Python wheel
 description: Build the Python wheel
-outputs:
-  filename:
-    description: The name of the built Python wheel.
-    value: ${{ steps.get-filename.outputs.filename }}
 runs:
   using: "composite"
   steps:
     - run: uv build --wheel
       shell: bash
 
-    - id: get-filename
-      run: uv run python -c 'from pathlib import Path; print(f"""filename={next(Path("dist").glob("jdk4py-*.whl")).parts[1]}""")' >> "$GITHUB_OUTPUT"
+    - run: uv run twine check dist/*
       shell: bash
