@@ -1,4 +1,5 @@
 {% set pyproject = load_file_data("pyproject.toml") %}
+{% set dev_dependencies = pyproject["tool"]["uv"]["dev-dependencies"] %}
 {% set version = load_file_data("src/jdk4py/version.json") %}
 
 package:
@@ -15,11 +16,11 @@ build:
 
 requirements:
   build:
-    # Must be available on anaconda (not conda-forge).
-    # Keep in sync with version in `pyproject.toml`.
-    - hatchling ==1.21.1
     - python {{ python }}
     - pip ==24.2
+  {% for dependency in dev_dependencies if dependency.startswith("hatchling ") %}
+    - {{ dependency }}
+  {% endfor %}
   run:
     - python {{ python }}
 
@@ -27,9 +28,9 @@ test:
   source_files:
     - tests/
   requires:
-    # Must be available on anaconda (not conda-forge).
-    # Keep in sync with version in `pyproject.toml`.
-    - pytest ==7.4.4
+    {% for dependency in dev_dependencies if dependency.startswith("pytest ") %}
+      - {{ dependency }}
+    {% endfor %}
   commands:
     - pytest
 
