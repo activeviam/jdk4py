@@ -27,6 +27,8 @@ jobs:
       - uses: actions/checkout@v4
 
       - uses: ./.github/actions/build-java-runtime
+        with:
+          python-version: ${{ matrix.python}}
 
       - uses: ./.github/actions/build-python-wheel
 
