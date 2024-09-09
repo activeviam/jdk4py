@@ -7,8 +7,11 @@ inputs:
 runs:
   using: composite
   steps:
-    - run: curl -LsSf https://astral.sh/uv/0.4.5/install.sh | sh
-      shell: bash
+    - uses: astral-sh/setup-uv@v2
+      with:
+        cache-dependency-glob: "uv.lock"
+        enable-cache: true
+        version: "0.4.7"
 
     - run: uv python install ${{ inputs.python-version }}
       shell: bash
