@@ -10,7 +10,10 @@ runs:
     - uses: astral-sh/setup-uv@v2
       with:
         cache-dependency-glob: "uv.lock"
+        # The cache key already contains the OS and architecture.
+        cache-suffix: ${{ inputs.python-version }}
         enable-cache: true
+        github-token: ${{ secrets.GITHUB_TOKEN }}
         version: "0.4.7"
 
     - run: uv python install ${{ inputs.python-version }}
