@@ -10,7 +10,7 @@ runs:
     - uses: astral-sh/setup-uv@v2
       with:
         cache-dependency-glob: "uv.lock"
-        # The cache key already contains the OS and architecture.
+        # The cache key already contains the OS and the architecture.
         cache-suffix: ${{ inputs.python-version }}
         enable-cache: true
         version: "0.4.7"
