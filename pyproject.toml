@@ -47,14 +47,17 @@ filterwarnings = ["error"]
 
 [tool.ruff.lint]
 ignore = [
+    "COM812",
     "D100",
     "D101",
     "D102",
     "D103",
     "D104",
+    "D203",
     "D211",
     "D212",
     "EM102",
+    "ISC001",
     "S101",
     "TRY003",
 ]
@@ -68,5 +71,5 @@ dev-dependencies = [
     # Keep pinned to ensure same version is used by `conda build` (version must be available on anaconda).
     "pytest ==7.4.4",
     "ruff",
-    "twine",
 ]
+trusted-publishing = "always"
