@@ -13,7 +13,7 @@ runs:
         # The cache key already contains the OS and the architecture.
         cache-suffix: ${{ inputs.python-version }}
         enable-cache: true
-        version: "0.4.7"
+        version: "0.4.16"
 
     - run: uv python install ${{ inputs.python-version }}
       shell: bash

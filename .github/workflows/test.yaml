@@ -30,15 +30,15 @@ jobs:
         with:
           python-version: ${{ matrix.python}}
 
-      - uses: ./.github/actions/build-python-wheel
+      - run: uv build --wheel
 
       # No need to test each platform and Python version.
       - if: ${{ matrix.runner == 'ubuntu-24.04' && matrix.python == '3.10' }}
-        run: uv run ruff format --check .
+        run: uv run ruff format --check
 
       # No need to test each platform and Python version.
       - if: ${{ matrix.runner == 'ubuntu-24.04' && matrix.python == '3.10' }}
-        run: uv run ruff check .
+        run: uv run ruff check
 
       # No need to test each platform and Python version.
       - if: ${{ matrix.runner == 'ubuntu-24.04' && matrix.python == '3.10' }}

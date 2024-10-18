@@ -27,10 +27,15 @@ PosixPath('/Users/johndoe/dev/jdk4py/jdk4py/java-runtime')
 PosixPath('/Users/johndoe/dev/jdk4py/jdk4py/java-runtime/bin/java')
 >>> JAVA_VERSION
 (21, 0, 4)
->>> from subprocess import check_output
+>>> from subprocess import run
 >>> some_java_options = ["-Xmx16G", "-Xms2G"]
->>> check_output([JAVA, "-jar", "HelloWorld.jar",  *some_java_options])
-b"Hello, World!"
+>>> run(
+...     [JAVA, "-jar", "HelloWorld.jar", *some_java_options],
+...     capture_output=True,
+...     check=True,
+...     text=True,
+... ).stdout.strip()
+"Hello, World!"
 ```
 
 ## Versioning
