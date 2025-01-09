@@ -9,8 +9,6 @@ runs:
   steps:
     - uses: astral-sh/setup-uv@v5
       with:
-        # The cache key already contains the OS and the architecture.
-        cache-suffix: ${{ inputs.python-version }}
         enable-cache: true
         python-version: ${{ inputs.python-version }}
         version: "0.5.16"
