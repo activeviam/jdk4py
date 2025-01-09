@@ -5,7 +5,7 @@ runs:
   steps:
     - uses: conda-incubator/setup-miniconda@v3
       with:
-        conda-build-version: "24.7.1"
+        conda-build-version: "24.11.2"
 
     - run: conda build --no-anaconda-upload --output-folder dist .
       # See https://github.com/conda-incubator/setup-miniconda/blame/059455a698430d8b68fa317268fa2e3da3492a98/README.md#L609-L610.
