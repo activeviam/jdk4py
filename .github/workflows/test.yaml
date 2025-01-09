@@ -10,18 +10,18 @@ jobs:
     strategy:
       matrix:
         runner:
-          # - macos-13 # x64
-          # - macos-14 # arm64
+          - macos-13 # x64
+          - macos-14 # arm64
           - ubuntu-24.04
-          # - ubuntu-24.04-arm64 # GitHub-hosted larger runner in the ActiveViam organization.
-          # - windows-2022
+          - ubuntu-24.04-arm64 # GitHub-hosted larger runner in the ActiveViam organization.
+          - windows-2022
         python:
           - "3.10"
         include:
-          # - runner: ubuntu-24.04
-          #   python: "3.11"
-          # - runner: ubuntu-24.04
-          #   python: "3.12"
+          - runner: ubuntu-24.04
+            python: "3.11"
+          - runner: ubuntu-24.04
+            python: "3.12"
           - runner: ubuntu-24.04
             python: "3.13"
       fail-fast: false
@@ -62,10 +62,10 @@ jobs:
     strategy:
       matrix:
         runner:
-          # - macos-13 # x64
-          # - macos-14 # arm64
+          - macos-13 # x64
+          - macos-14 # arm64
           - ubuntu-24.04
-          # - ubuntu-24.04-arm64 # GitHub-hosted larger runner in the ActiveViam organization.
+          - ubuntu-24.04-arm64 # GitHub-hosted larger runner in the ActiveViam organization.
           - windows-2022
     steps:
       - uses: actions/checkout@v4
