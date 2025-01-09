@@ -6,6 +6,7 @@ runs:
     - uses: conda-incubator/setup-miniconda@v3
       with:
         conda-build-version: "24.11.2"
+        conda-remove-defaults: true
 
     - run: conda build --no-anaconda-upload --output-folder dist .
       env:
