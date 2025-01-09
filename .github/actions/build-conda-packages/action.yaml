@@ -10,7 +10,11 @@ runs:
 
     # See https://github.com/conda/conda/issues/12563#issuecomment-1494264704.
     - if: ${{ runner.os == 'Windows' }}
-      run: echo "LIBARCHIVE=C:\\Miniconda\\Library\\bin\\archive.dll" >> $env:GITHUB_ENV
+      run: echo "LIBARCHIVE=C:\\Miniconda\\Library\\bin\\archive.dll" >> "$GITHUB_ENV"
+      shell: bash -l {0}
+
+    - if: ${{ runner.os == 'Windows' }}
+      run: echo $LIBARCHIVE
       shell: bash -l {0}
 
     - run: conda build --no-anaconda-upload --output-folder dist .
