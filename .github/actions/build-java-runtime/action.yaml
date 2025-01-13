@@ -7,9 +7,11 @@ inputs:
 runs:
   using: composite
   steps:
-    - uses: ./.github/actions/setup-uv
+    - uses: astral-sh/setup-uv@v5
       with:
+        enable-cache: true
         python-version: ${{ inputs.python-version }}
+        version: "0.5.16" # Keep synced with same field in `deployment.yaml`.
 
     - id: get-java-version
       run: uv run python -c 'from jdk4py import JAVA_VERSION; print(f"""version={".".join(str(number) for number in JAVA_VERSION)}""")' >> "$GITHUB_OUTPUT"

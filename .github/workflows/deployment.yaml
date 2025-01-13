@@ -48,9 +48,9 @@ jobs:
       # Required for trusted publishing.
       id-token: write
     steps:
-      - uses: ./.github/actions/setup-uv
+      - uses: astral-sh/setup-uv@v5
         with:
-          python-version: "3.10"
+          version: "0.5.16" # Keep synced with same field in `build-java-runtime/action.yaml`.
 
       - uses: actions/download-artifact@v4
         with:
