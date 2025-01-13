@@ -48,6 +48,10 @@ jobs:
       # Required for trusted publishing.
       id-token: write
     steps:
+      - uses: astral-sh/setup-uv@v5
+        with:
+          version: "0.5.16" # Keep synced with same field in `build-java-runtime/action.yaml`.
+
       - uses: actions/download-artifact@v4
         with:
           merge-multiple: true
