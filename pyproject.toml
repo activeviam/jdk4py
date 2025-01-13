@@ -3,7 +3,7 @@ build-backend = "hatchling.build"
 requires = [
     # Keep pinned to ensure same version is used by `conda build` (version must be available on anaconda).
     # Keep in sync with version in `tool.uv.dev-dependencies`.
-    "hatchling ==1.21.1",
+    "hatchling ==1.27.0",
 ]
 
 [project]
@@ -47,14 +47,17 @@ filterwarnings = ["error"]
 
 [tool.ruff.lint]
 ignore = [
+    "COM812",
     "D100",
     "D101",
     "D102",
     "D103",
     "D104",
+    "D203",
     "D211",
     "D212",
     "EM102",
+    "ISC001",
     "S101",
     "TRY003",
 ]
@@ -63,10 +66,11 @@ select = ["ALL"]
 [tool.uv]
 dev-dependencies = [
     # Keep in sync with version in `build-system.requires`.
-    "hatchling ==1.21.1",
+    "hatchling ==1.27.0",
     "mypy",
     # Keep pinned to ensure same version is used by `conda build` (version must be available on anaconda).
     "pytest ==7.4.4",
     "ruff",
-    "twine",
 ]
+required-version = ">=0.5.16,<0.6"
+trusted-publishing = "always"

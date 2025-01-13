@@ -22,6 +22,8 @@ jobs:
             python: "3.11"
           - runner: ubuntu-24.04
             python: "3.12"
+          - runner: ubuntu-24.04
+            python: "3.13"
       fail-fast: false
     steps:
       - uses: actions/checkout@v4
@@ -30,15 +32,15 @@ jobs:
         with:
           python-version: ${{ matrix.python}}
 
-      - uses: ./.github/actions/build-python-wheel
+      - run: uv build --wheel
 
       # No need to test each platform and Python version.
       - if: ${{ matrix.runner == 'ubuntu-24.04' && matrix.python == '3.10' }}
-        run: uv run ruff format --check .
+        run: uv run ruff format --check
 
       # No need to test each platform and Python version.
       - if: ${{ matrix.runner == 'ubuntu-24.04' && matrix.python == '3.10' }}
-        run: uv run ruff check .
+        run: uv run ruff check
 
       # No need to test each platform and Python version.
       - if: ${{ matrix.runner == 'ubuntu-24.04' && matrix.python == '3.10' }}
