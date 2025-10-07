@@ -6,6 +6,16 @@ requires = [
     "hatchling ==1.27.0",
 ]
 
+[dependency-groups]
+dev = [
+    # Keep in sync with version in `build-system.requires`.
+    "hatchling ==1.27.0",
+    # Keep pinned to ensure same version is used by `conda build` which does not use `uv.lock` (the version must be available on anaconda).
+    "pytest ==8.4.2",
+    "ruff",
+    "ty",
+]
+
 [project]
 authors = [{ email = "dev@atoti.io", name = "ActiveViam" }]
 classifiers = [
@@ -34,14 +44,6 @@ Repository = "https://github.com/activeviam/jdk4py"
 [tool.hatch.build.targets.wheel]
 artifacts = ["java-runtime"]
 
-[tool.mypy]
-# Remove once https://github.com/python/mypy/issues/10428 is fixed.
-files = "build_java_runtime.py,hatch_build.py,src,tests"
-strict = true
-warn_redundant_casts = true
-warn_unused_configs = true
-warn_unused_ignores = true
-
 [tool.pytest.ini_options]
 filterwarnings = ["error"]
 
@@ -63,14 +65,13 @@ ignore = [
 ]
 select = ["ALL"]
 
+[tool.ty.rules]
+unused-ignore-comment = "warn"
+
+[tool.ty.terminal]
+error-on-warning = true
+
 [tool.uv]
-dev-dependencies = [
-    # Keep in sync with version in `build-system.requires`.
-    "hatchling ==1.27.0",
-    "mypy",
-    # Keep pinned to ensure same version is used by `conda build` (version must be available on anaconda).
-    "pytest ==7.4.4",
-    "ruff",
-]
-required-version = ">=0.5.16,<0.6"
+# Keep pinned to ensure same version is used on CI.
+required-version = "==0.8.24"
 trusted-publishing = "always"

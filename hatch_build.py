@@ -23,7 +23,7 @@ def _get_architecture(machine: str) -> _Architecture:
             raise ValueError(f"Unsupported machine: `{machine}`.")
 
 
-def _get_platform_tag(system: str, architecture: _Architecture) -> str:
+def _get_platform_tag(system: str, architecture: _Architecture) -> str: # ty: ignore[invalid-return-type] incorrect `Function can implicitly return None`.
     # Tag values taken from https://pypi.org/project/numpy/2.1.0/#files.
     match system.lower():
         case "darwin":

@@ -44,7 +44,7 @@ jobs:
 
       # No need to test each platform and Python version.
       - if: ${{ matrix.runner == 'ubuntu-24.04' && matrix.python == '3.10' }}
-        run: uv run mypy
+        run: uv run ty check
 
       - run: uv run pytest
 
