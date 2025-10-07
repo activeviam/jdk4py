@@ -81,4 +81,4 @@ jobs:
         with:
           if-no-files-found: error
           name: jdk4py-${{ matrix.runner }}-conda-packages
-          path: dist/*/jdk4py-*.conda
+          path: dist/*/jdk4py-*.tar.bz2
