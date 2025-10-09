@@ -1,10 +1,9 @@
 {% set pyproject = load_file_data("pyproject.toml") %}
 {% set dev_dependencies = pyproject["dependency-groups"]["dev"] %}
-{% set version = load_file_data("src/jdk4py/version.json") %}
 
 package:
   name: {{ pyproject["project"]["name"] }}
-  version: {{ version }}
+  version: {{ pyproject["project"]["version"] }}
 
 source:
   path: ../

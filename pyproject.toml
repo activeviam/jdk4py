@@ -1,15 +1,15 @@
 [build-system]
-build-backend = "hatchling.build"
+build-backend = "uv_build"
 requires = [
     # Keep pinned to ensure same version is used by `conda build` (version must be available on anaconda).
-    # Keep in sync with version in `tool.uv.dev-dependencies`.
-    "hatchling ==1.27.0",
+    # Keep in sync with `dependency-groups.dev.uv-build`.
+    "uv-build ==0.8.24",
 ]
 
 [dependency-groups]
 dev = [
-    # Keep in sync with version in `build-system.requires`.
-    "hatchling ==1.27.0",
+    # Keep in sync with `build-system.requires.uv-build` and `tool.uv.required-version`.
+    "uv-build ==0.8.24",
     # Keep pinned to ensure same version is used by `conda build` which does not use `uv.lock` (the version must be available on anaconda).
     "pytest ==8.4.2",
     "ruff",
@@ -28,21 +28,14 @@ classifiers = [
 ]
 dependencies = []
 description = "A JDK shipped in a Python package"
-dynamic = ["version"]
 keywords = ["jdk", "java", "jvm", "jre"]
 name = "jdk4py"
 readme = "README.md"
 requires-python = ">=3.10"
+version = "21.0.8.0"
 
 [project.urls]
 Repository = "https://github.com/activeviam/jdk4py"
-
-[tool.hatch.build.hooks.custom]
-
-[tool.hatch.metadata.hooks.custom]
-
-[tool.hatch.build.targets.wheel]
-artifacts = ["java-runtime"]
 
 [tool.pytest.ini_options]
 filterwarnings = ["error"]
@@ -73,5 +66,6 @@ error-on-warning = true
 
 [tool.uv]
 # Keep pinned to ensure same version is used on CI.
+# Keep in sync with `dependency-groups.dev.uv-build`.
 required-version = "==0.8.24"
 trusted-publishing = "always"
