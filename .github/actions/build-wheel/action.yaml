@@ -13,5 +13,5 @@ runs:
     - run: uv run python -m wheel tags --platform-tag ${{ env.JDK4PY_PLATFORM_TAG }} --remove dist/*-py3-none-any.whl
       env:
         # Tag values taken from https://pypi.org/project/numpy/2.1.0/#files.
-        JDK4PY_PLATFORM_TAG: ${{ (runner.os == 'Linux' && 'manylinux_2_17_x86_64')) || '' }}
+        JDK4PY_PLATFORM_TAG: ${{ (runner.os == 'Linux' && 'manylinux_2_17_x86_64') || '' }}
       shell: bash
