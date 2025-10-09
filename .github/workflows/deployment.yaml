@@ -11,11 +11,10 @@ jobs:
     strategy:
       matrix:
         runner:
-          - macos-13 # x64
-          - macos-14 # arm64
+          - macos-26
           - ubuntu-24.04
           - ubuntu-24.04-arm64 # GitHub-hosted larger runner in the ActiveViam organization.
-          - windows-2022
+          - windows-2025
     steps:
       - uses: actions/checkout@v4
 
