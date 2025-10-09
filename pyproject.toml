@@ -14,6 +14,8 @@ dev = [
     "pytest ==8.4.2",
     "ruff",
     "ty",
+    # Remove once https://github.com/astral-sh/uv/issues/14827 is closed.
+    "wheel",
 ]
 
 [project]

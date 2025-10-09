@@ -1,0 +1,17 @@
+# Remove this action and inline the first step once https://github.com/astral-sh/uv/issues/14827 is closed.
+name: Build Python wheel
+description: Build platform-specific Python wheel
+runs:
+  using: composite
+  steps:
+    - run: uv build --wheel
+      shell: bash
+
+    - run: echo ${{ runner.arch }}
+      shell: bash
+
+    - run: uv run python -m wheel tags --platform-tag ${{ env.JDK4PY_PLATFORM_TAG }} --remove dist/*-py3-none-any.whl
+      env:
+        # Tag values taken from https://pypi.org/project/numpy/2.1.0/#files.
+        JDK4PY_PLATFORM_TAG: ${{ (runner.os == 'Linux' && 'manylinux_2_17_x86_64')) || '' }}
+      shell: bash

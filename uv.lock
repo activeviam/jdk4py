@@ -43,6 +43,7 @@ dev = [
     { name = "ruff" },
     { name = "ty" },
     { name = "uv-build" },
+    { name = "wheel" },
 ]
 
 [package.metadata]
@@ -53,6 +54,7 @@ dev = [
     { name = "ruff" },
     { name = "ty" },
     { name = "uv-build", specifier = "==0.8.24" },
+    { name = "wheel" },
 ]
 
 [[package]]
@@ -223,4 +225,13 @@ wheels = [
     { url = "https://files.pythonhosted.org/packages/dd/f1/4032a560c8d67edf3e4c8da7ca364da31e65b22e0b8c71f52a093dbaf260/uv_build-0.8.24-py3-none-win32.whl", hash = "sha256:327af1cda22f00a9f3659c6417d68ee9d60a6c2be627e2e9e5ddd29396ae8eef", size = 1332540, upload-time = "2025-10-07T03:33:34.121Z" },
     { url = "https://files.pythonhosted.org/packages/02/5a/1488c6c9addcdbe6ba417813224a8fa2fdae09f6e7241bb27a687c4e6667/uv_build-0.8.24-py3-none-win_amd64.whl", hash = "sha256:9072ff0dacf6ebfb9fed394e181ebd26cb2a16dc95697da8316b3eab49f76cc3", size = 1414396, upload-time = "2025-10-07T03:33:35.475Z" },
     { url = "https://files.pythonhosted.org/packages/bd/88/4ce31b1eee35dc2db6b49dd0f7506fab187a4f96de29a4ed6777166eecf8/uv_build-0.8.24-py3-none-win_arm64.whl", hash = "sha256:81840c4b00a8b7261998e059610f868ee8ef2794a9435c9e264caa9e2f6623d4", size = 1322987, upload-time = "2025-10-07T03:33:36.601Z" },
+]
+
+[[package]]
+name = "wheel"
+version = "0.45.1"
+source = { registry = "https://pypi.org/simple" }
+sdist = { url = "https://files.pythonhosted.org/packages/8a/98/2d9906746cdc6a6ef809ae6338005b3f21bb568bea3165cfc6a243fdc25c/wheel-0.45.1.tar.gz", hash = "sha256:661e1abd9198507b1409a20c02106d9670b2576e916d58f520316666abca6729", size = 107545, upload-time = "2024-11-23T00:18:23.513Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/0b/2c/87f3254fd8ffd29e4c02732eee68a83a1d3c346ae39bc6822dcbcb697f2b/wheel-0.45.1-py3-none-any.whl", hash = "sha256:708e7481cc80179af0e556bbf0cc00b8444c7321e2700b8d8580231d13017248", size = 72494, upload-time = "2024-11-23T00:18:21.207Z" },
 ]

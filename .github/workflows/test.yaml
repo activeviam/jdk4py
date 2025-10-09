@@ -34,7 +34,7 @@ jobs:
         with:
           python-version: ${{ matrix.python}}
 
-      - run: uv build --wheel
+      - uses: ./.github/actions/build-wheel
 
       # No need to test each platform and Python version.
       - if: ${{ matrix.runner == 'ubuntu-24.04' && matrix.python == '3.10' }}
