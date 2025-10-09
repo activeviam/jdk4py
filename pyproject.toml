@@ -11,7 +11,7 @@ dev = [
     # Keep in sync with version in `build-system.requires`.
     "hatchling ==1.27.0",
     # Keep pinned to ensure same version is used by `conda build` which does not use `uv.lock` (the version must be available on anaconda).
-    "pytest ==8.4.2",
+    "pytest ==8.4.1",
     "ruff",
     "ty",
 ]
