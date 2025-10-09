@@ -17,7 +17,7 @@ requirements:
   build:
     - python {{ python }}
     - pip ==25.2
-  {% for dependency in dev_dependencies if dependency.startswith("hatchling ") %}
+  {% for dependency in dev_dependencies if dependency.startswith("uv-build ") %}
     - {{ dependency }}
   {% endfor %}
   run:
