@@ -1,16 +1,16 @@
 [build-system]
 build-backend = "uv_build"
 requires = [
-    # Keep pinned to ensure same version is used by `conda build` (version must be available on anaconda).
+    # Keep pinned to ensure same version is used by `conda build` (version must be available on conda-forge).
     # Keep in sync with `dependency-groups.dev.uv-build`.
-    "uv-build ==0.8.24",
+    "uv-build ==0.9.1",
 ]
 
 [dependency-groups]
 dev = [
     # Keep in sync with `build-system.requires.uv-build` and `tool.uv.required-version`.
-    "uv-build ==0.8.24",
-    # Keep pinned to ensure same version is used by `conda build` which does not use `uv.lock` (the version must be available on anaconda).
+    "uv-build ==0.9.1",
+    # Keep pinned to ensure same version is used by `conda build` which does not use `uv.lock` (the version must be available on conda-forge).
     "pytest ==8.4.2",
     "ruff",
     "ty",
@@ -67,7 +67,7 @@ unused-ignore-comment = "warn"
 error-on-warning = true
 
 [tool.uv]
-# Keep pinned to ensure same version is used on CI.
+# Keep pinned to ensure same version is used on CI (version must be available on conda-forge).
 # Keep in sync with `dependency-groups.dev.uv-build`.
-required-version = "==0.8.24"
+required-version = "==0.9.1"
 trusted-publishing = "always"

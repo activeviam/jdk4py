@@ -16,7 +16,7 @@ build:
 requirements:
   build:
     - python {{ python }}
-    - pip ==25.2
+    - uv {{ pyproject["tool"]["uv"]["required-version"] }}
   {% for dependency in dev_dependencies if dependency.startswith("uv-build ") %}
     - {{ dependency }}
   {% endfor %}
