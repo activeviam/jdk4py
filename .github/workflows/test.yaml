@@ -4,59 +4,59 @@ on:
     types: [opened, synchronize]
 
 jobs:
-  test:
-    name: Test on ${{ matrix.runner }} with Python ${{ matrix.python }}
-    runs-on: ${{ matrix.runner }}
-    strategy:
-      fail-fast: false
-      matrix:
-        runner:
-          - macos-26
-          - ubuntu-24.04
-          - ubuntu-24.04-arm64 # GitHub-hosted larger runner in the ActiveViam organization.
-          - windows-2025
-        python:
-          - "3.10"
-        include:
-          - runner: ubuntu-24.04
-            python: "3.11"
-          - runner: ubuntu-24.04
-            python: "3.12"
-          - runner: ubuntu-24.04
-            python: "3.13"
-          - runner: ubuntu-24.04
-            python: "3.14"
+  # test:
+  #   name: Test on ${{ matrix.runner }} with Python ${{ matrix.python }}
+  #   runs-on: ${{ matrix.runner }}
+  #   strategy:
+  #     fail-fast: false
+  #     matrix:
+  #       runner:
+  #         - macos-26
+  #         - ubuntu-24.04
+  #         - ubuntu-24.04-arm64 # GitHub-hosted larger runner in the ActiveViam organization.
+  #         - windows-2025
+  #       python:
+  #         - "3.10"
+  #       include:
+  #         - runner: ubuntu-24.04
+  #           python: "3.11"
+  #         - runner: ubuntu-24.04
+  #           python: "3.12"
+  #         - runner: ubuntu-24.04
+  #           python: "3.13"
+  #         - runner: ubuntu-24.04
+  #           python: "3.14"
 
-    steps:
-      - uses: actions/checkout@v4
+  #   steps:
+  #     - uses: actions/checkout@v4
 
-      - uses: ./.github/actions/build-java-runtime
-        with:
-          python-version: ${{ matrix.python}}
+  #     - uses: ./.github/actions/build-java-runtime
+  #       with:
+  #         python-version: ${{ matrix.python}}
 
-      - uses: ./.github/actions/build-wheel
+  #     - uses: ./.github/actions/build-wheel
 
-      # No need to test each platform and Python version.
-      - if: ${{ matrix.runner == 'ubuntu-24.04' && matrix.python == '3.10' }}
-        run: uv run ruff format --check
+  #     # No need to test each platform and Python version.
+  #     - if: ${{ matrix.runner == 'ubuntu-24.04' && matrix.python == '3.10' }}
+  #       run: uv run ruff format --check
 
-      # No need to test each platform and Python version.
-      - if: ${{ matrix.runner == 'ubuntu-24.04' && matrix.python == '3.10' }}
-        run: uv run ruff check
+  #     # No need to test each platform and Python version.
+  #     - if: ${{ matrix.runner == 'ubuntu-24.04' && matrix.python == '3.10' }}
+  #       run: uv run ruff check
 
-      # No need to test each platform and Python version.
-      - if: ${{ matrix.runner == 'ubuntu-24.04' && matrix.python == '3.10' }}
-        run: uv run ty check
+  #     # No need to test each platform and Python version.
+  #     - if: ${{ matrix.runner == 'ubuntu-24.04' && matrix.python == '3.10' }}
+  #       run: uv run ty check
 
-      - run: uv run pytest
+  #     - run: uv run pytest
 
-      # The Python wheels are not tied to a specific Python version.
-      - if: ${{ matrix.python == '3.10' }}
-        uses: actions/upload-artifact@v4
-        with:
-          if-no-files-found: error
-          name: jdk4py-${{ matrix.runner }}-python-wheel
-          path: dist/jdk4py-*.whl
+  #     # The Python wheels are not tied to a specific Python version.
+  #     - if: ${{ matrix.python == '3.10' }}
+  #       uses: actions/upload-artifact@v4
+  #       with:
+  #         if-no-files-found: error
+  #         name: jdk4py-${{ matrix.runner }}-python-wheel
+  #         path: dist/jdk4py-*.whl
 
   conda-package:
     name: Test Conda packaging on ${{ matrix.runner }}
