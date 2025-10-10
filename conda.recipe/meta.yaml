@@ -12,6 +12,7 @@ build:
   # Binaries are broken on macOS without it.
   binary_relocation: False
   include_recipe: False
+  script: uv pip install .
 
 requirements:
   build:
