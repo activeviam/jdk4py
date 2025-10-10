@@ -16,7 +16,7 @@ runs:
       run: uv run python -c 'from jdk4py import JAVA_VERSION; print(f"""version={".".join(str(number) for number in JAVA_VERSION)}""")' >> "$GITHUB_OUTPUT"
       shell: bash
 
-    - uses: actions/setup-java@v4
+    - uses: actions/setup-java@v5
       with:
         distribution: temurin
         java-version: ${{ steps.get-java-version.outputs.version }}
