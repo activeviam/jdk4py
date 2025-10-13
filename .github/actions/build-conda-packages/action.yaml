@@ -5,7 +5,7 @@ runs:
   steps:
     - uses: conda-incubator/setup-miniconda@v3
       with:
-        conda-build-version: "24.7.1"
+        conda-build-version: "25.9.0"
         miniforge-version: "25.3.1-0"
 
     # See https://github.com/conda/conda/issues/12563#issuecomment-1494264704.

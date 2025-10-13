@@ -16,20 +16,20 @@ build:
 
 requirements:
   build:
-    - python {{ python }}
-    - pip ==24.2
-  {% for dependency in dev_dependencies if dependency.startswith("hatchling ") %}
-    - {{ dependency }}
+  {% for dependency in dev_dependencies if dependency.startswith("hatchling ==") %}
+    - "{{ dependency }}"
   {% endfor %}
+    - "pip ==24.2"
+    - python
   run:
-    - python {{ python }} # See https://github.com/activeviam/jdk4py/issues/34.
+    - python # See https://github.com/activeviam/jdk4py/issues/34.
 
 test:
   source_files:
     - tests/
   requires:
-    {% for dependency in dev_dependencies if dependency.startswith("pytest ") %}
-      - {{ dependency }}
+    {% for dependency in dev_dependencies if dependency.startswith("pytest ==") %}
+      - "{{ dependency }}"
     {% endfor %}
   commands:
     - pytest
