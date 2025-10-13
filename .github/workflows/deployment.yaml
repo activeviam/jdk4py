@@ -23,7 +23,7 @@ jobs:
         with:
           python-version: "3.10"
 
-      - run: uv build --wheel
+      - uses: ./.github/actions/build-wheel
 
       - uses: actions/upload-artifact@v4
         with:
@@ -48,9 +48,9 @@ jobs:
       # Required for trusted publishing.
       id-token: write
     steps:
-      - uses: astral-sh/setup-uv@v5
+      - uses: astral-sh/setup-uv@v6
         with:
-          version: "0.5.16" # Keep synced with same field in `build-java-runtime/action.yaml`.
+          version-file: pyproject.toml
 
       - uses: actions/download-artifact@v4
         with:

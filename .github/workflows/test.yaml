@@ -34,7 +34,7 @@ jobs:
         with:
           python-version: ${{ matrix.python}}
 
-      - run: uv build --wheel
+      - uses: ./.github/actions/build-wheel
 
       # No need to test each platform and Python version.
       - if: ${{ runner.os == 'Linux' && matrix.python == '3.10' }}
@@ -46,7 +46,7 @@ jobs:
 
       # No need to test each platform and Python version.
       - if: ${{ runner.os == 'Linux' && matrix.python == '3.10' }}
-        run: uv run mypy
+        run: uv run ty check
 
       - run: uv run pytest
 
