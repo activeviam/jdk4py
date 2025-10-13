@@ -1,9 +1,10 @@
 {% set pyproject = load_file_data("pyproject.toml") %}
-{% set dev_dependencies = pyproject["dependency-groups"]["dev"] %}
+{% set dev_dependencies = pyproject["tool"]["uv"]["dev-dependencies"] %}
+{% set version = load_file_data("src/jdk4py/version.json") %}
 
 package:
   name: {{ pyproject["project"]["name"] }}
-  version: {{ pyproject["project"]["version"] }}
+  version: {{ version }}
 
 source:
   path: ../
@@ -16,8 +17,8 @@ build:
 requirements:
   build:
     - python {{ python }}
-    - uv {{ pyproject["tool"]["uv"]["required-version"] }}
-  {% for dependency in dev_dependencies if dependency.startswith("uv-build ") %}
+    - pip ==24.2
+  {% for dependency in dev_dependencies if dependency.startswith("hatchling ") %}
     - {{ dependency }}
   {% endfor %}
   run:

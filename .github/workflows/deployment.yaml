@@ -11,10 +11,11 @@ jobs:
     strategy:
       matrix:
         runner:
-          - macos-26
+          - macos-13 # x64
+          - macos-14 # arm64
           - ubuntu-24.04
           - ubuntu-24.04-arm64 # GitHub-hosted larger runner in the ActiveViam organization.
-          - windows-2025
+          - windows-2022
     steps:
       - uses: actions/checkout@v4
 
@@ -22,7 +23,7 @@ jobs:
         with:
           python-version: "3.10"
 
-      - uses: ./.github/actions/build-wheel
+      - run: uv build --wheel
 
       - uses: actions/upload-artifact@v4
         with:
@@ -36,7 +37,7 @@ jobs:
         with:
           if-no-files-found: error
           name: jdk4py-${{ matrix.runner }}-conda-packages
-          path: dist/*/jdk4py-*.conda
+          path: dist/*/jdk4py-*.tar.bz2
 
   publish:
     environment: deployment
@@ -47,9 +48,9 @@ jobs:
       # Required for trusted publishing.
       id-token: write
     steps:
-      - uses: astral-sh/setup-uv@v6
+      - uses: astral-sh/setup-uv@v5
         with:
-          version-file: pyproject.toml
+          version: "0.5.16" # Keep synced with same field in `build-java-runtime/action.yaml`.
 
       - uses: actions/download-artifact@v4
         with:
@@ -67,7 +68,7 @@ jobs:
           JDK4PY_CONDA_CHANNEL_USERNAME: ${{ vars.CONDA_CHANNEL_USERNAME }}
         run: |
           cd dist/
-          ls */jdk4py-*.conda | \
+          ls */jdk4py-*.tar.bz2 | \
           while read filepath; do
             echo Uploading ${filepath}
             curl --fail --user "$JDK4PY_CONDA_CHANNEL_USERNAME":"$JDK4PY_CONDA_CHANNEL_TOKEN" --upload-file ${filepath} "$JDK4PY_CONDA_CHANNEL_URL/$(dirname $filepath)/"

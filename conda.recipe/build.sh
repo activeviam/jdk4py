@@ -1,1 +1,1 @@
-uv pip install .
+python -m pip install --verbose .
