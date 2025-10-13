@@ -13,6 +13,8 @@ build:
   # Binaries are broken on macOS without it.
   binary_relocation: False
   include_recipe: False
+  missing_dso_whitelist:
+    - "*.dylib"
 
 requirements:
   build:
@@ -22,7 +24,7 @@ requirements:
     - {{ dependency }}
   {% endfor %}
   run:
-    - python {{ python }}
+    - python {{ python }} # See https://github.com/activeviam/jdk4py/issues/34.
 
 test:
   source_files:
