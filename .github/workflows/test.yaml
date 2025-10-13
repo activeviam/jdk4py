@@ -10,11 +10,11 @@ jobs:
     strategy:
       matrix:
         runner:
-          - macos-13 # x64
-          - macos-14 # arm64
+          - macos-15-intel
+          - macos-26
           - ubuntu-24.04
           - ubuntu-24.04-arm64 # GitHub-hosted larger runner in the ActiveViam organization.
-          - windows-2022
+          - windows-2025
         python:
           - "3.10"
         include:
@@ -24,6 +24,8 @@ jobs:
             python: "3.12"
           - runner: ubuntu-24.04
             python: "3.13"
+          - runner: ubuntu-24.04
+            python: "3.14"
       fail-fast: false
     steps:
       - uses: actions/checkout@v4
@@ -35,15 +37,15 @@ jobs:
       - run: uv build --wheel
 
       # No need to test each platform and Python version.
-      - if: ${{ matrix.runner == 'ubuntu-24.04' && matrix.python == '3.10' }}
+      - if: ${{ runner.os == 'Linux' && matrix.python == '3.10' }}
         run: uv run ruff format --check
 
       # No need to test each platform and Python version.
-      - if: ${{ matrix.runner == 'ubuntu-24.04' && matrix.python == '3.10' }}
+      - if: ${{ runner.os == 'Linux' && matrix.python == '3.10' }}
         run: uv run ruff check
 
       # No need to test each platform and Python version.
-      - if: ${{ matrix.runner == 'ubuntu-24.04' && matrix.python == '3.10' }}
+      - if: ${{ runner.os == 'Linux' && matrix.python == '3.10' }}
         run: uv run mypy
 
       - run: uv run pytest
@@ -62,11 +64,11 @@ jobs:
     strategy:
       matrix:
         runner:
-          - macos-13 # x64
-          - macos-14 # arm64
+          - macos-15-intel
+          - macos-26
           - ubuntu-24.04
           - ubuntu-24.04-arm64 # GitHub-hosted larger runner in the ActiveViam organization.
-          - windows-2022
+          - windows-2025
     steps:
       - uses: actions/checkout@v4
 
