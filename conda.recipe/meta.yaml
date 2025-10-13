@@ -1,10 +1,9 @@
 {% set pyproject = load_file_data("pyproject.toml") %}
-{% set dev_dependencies = pyproject["tool"]["uv"]["dev-dependencies"] %}
-{% set version = load_file_data("src/jdk4py/version.json") %}
+{% set dev_dependencies = pyproject["dependency-groups"]["dev"] %}
 
 package:
   name: {{ pyproject["project"]["name"] }}
-  version: {{ version }}
+  version: {{ pyproject["project"]["version"] }}
 
 source:
   path: ../
@@ -19,8 +18,8 @@ requirements:
   {% for dependency in dev_dependencies if dependency.startswith("hatchling ==") %}
     - "{{ dependency }}"
   {% endfor %}
-    - "pip ==24.2"
     - python
+    - uv
   run:
     - python # See https://github.com/activeviam/jdk4py/issues/34.
 
