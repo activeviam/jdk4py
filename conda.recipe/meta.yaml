@@ -18,8 +18,8 @@ requirements:
   {% for dependency in dev_dependencies if dependency.startswith("hatchling ==") %}
     - "{{ dependency }}"
   {% endfor %}
+    - "pip ==25.2"
     - python
-    - uv
   run:
     - python # See https://github.com/activeviam/jdk4py/issues/34.
 
