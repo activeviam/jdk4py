@@ -1,4 +1,4 @@
-name: Build on ${{ inputs.runner }}
+name: Single-platform build
 on:
   workflow_call:
     inputs:
