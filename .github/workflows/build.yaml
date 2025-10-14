@@ -1,0 +1,62 @@
+name: Build
+on:
+  workflow_call
+
+jobs:
+  # build-conda-packages:
+  #   name: Build Conda packages on ${{ matrix.runner }}
+  #   needs: build-java-runtime
+  #   runs-on: ${{ matrix.runner }}
+  #   strategy:
+  #     fail-fast: false
+  #     matrix:
+  #       runner:
+  #         # - macos-15-intel
+  #         # - macos-26
+  #         - ubuntu-24.04
+  #         # - ubuntu-24.04-arm64 # GitHub-hosted larger runner in the ActiveViam organization.
+  #         # - windows-2025
+  #   steps:
+  #     - uses: actions/checkout@v5
+  #     - uses: ./.github/actions/install-java-runtime
+  #     - uses: ./.github/actions/build-conda-packages
+
+  build-java-runtime:
+    name: Build Java runtime on ${{ matrix.runner }}
+    runs-on: ${{ matrix.runner }}
+    strategy:
+      fail-fast: false
+      matrix:
+        runner:
+          # - macos-15-intel
+          # - macos-26
+          - ubuntu-24.04
+          # - ubuntu-24.04-arm64 # GitHub-hosted larger runner in the ActiveViam organization.
+          # - windows-2025
+    steps:
+      - uses: actions/checkout@v5
+      - uses: astral-sh/setup-uv@v6
+        with:
+          version-file: pyproject.toml
+      - uses: ./.github/actions/build-java-runtime
+
+  build-python-wheel:
+    name: Build Python wheel on ${{ matrix.runner }}
+    needs: build-java-runtime
+    runs-on: ${{ matrix.runner }}
+    strategy:
+      fail-fast: false
+      matrix:
+        runner:
+          # - macos-15-intel
+          # - macos-26
+          - ubuntu-24.04
+          # - ubuntu-24.04-arm64 # GitHub-hosted larger runner in the ActiveViam organization.
+          # - windows-2025
+    steps:
+      - uses: actions/checkout@v5
+      - uses: astral-sh/setup-uv@v6
+        with:
+          version-file: pyproject.toml
+      - uses: ./.github/actions/install-java-runtime
+      - uses: ./.github/actions/build-python-wheel

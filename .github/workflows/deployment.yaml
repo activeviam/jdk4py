@@ -57,11 +57,8 @@ jobs:
       - uses: actions/download-artifact@v5
         with:
           merge-multiple: true
+          pattern: jdk4py-*
           path: dist/
-
-      - if: ${{ runner.debug == '1' }}
-        name: List Conda packages and Python wheels
-        run: ls -R dist/
 
       - name: Publish Conda packages
         env:
