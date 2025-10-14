@@ -40,6 +40,11 @@ jobs:
           - ubuntu-24.04-arm64 # GitHub-hosted larger runner in the ActiveViam organization.
           - windows-2025
     steps:
+      - uses: actions/checkout@v5
+      - uses: astral-sh/setup-uv@v6
+        with:
+          python-version: "3.10"
+          version-file: pyproject.toml
       - uses: ./.github/actions/build-java-runtime
 
   build-python-wheels:

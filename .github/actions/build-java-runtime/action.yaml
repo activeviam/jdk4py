@@ -3,13 +3,6 @@ description: Build the Java runtime and upload it as an artifact.
 runs:
   using: composite
   steps:
-    - uses: actions/checkout@v5
-
-    - uses: astral-sh/setup-uv@v6
-      with:
-        python-version: "3.10"
-        version-file: pyproject.toml
-
     - id: get-java-version
       run: uv run python -c 'from jdk4py import JAVA_VERSION; print(f"""version={".".join(str(number) for number in JAVA_VERSION)}""")' >> "$GITHUB_OUTPUT"
       shell: bash
