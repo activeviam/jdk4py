@@ -5,10 +5,10 @@ runs:
   steps:
     - uses: actions/download-artifact@v5
       with:
-        name: ${{ matrix.runner }}-java-runtime
+        name: ${{ runner-os }}-java-runtime
         path: artifact.tar
 
-    - run: tar -fx archive.tar --directory src/jdk4py/java-runtime/
+    - run: tar -xf archive.tar --directory src/jdk4py/java-runtime/
       shell: bash
 
     - run: ls -R src/jdk4py/java-runtime/
