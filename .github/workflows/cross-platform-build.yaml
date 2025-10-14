@@ -8,11 +8,11 @@ jobs:
       fail-fast: false
       matrix:
         runner:
-          # - macos-15-intel
+          - macos-15-intel
           - macos-26
           - ubuntu-24.04
-          # - ubuntu-24.04-arm64 # GitHub-hosted larger runner in the ActiveViam organization.
-          # - windows-2025
+          - ubuntu-24.04-arm64 # GitHub-hosted larger runner in the ActiveViam organization.
+          - windows-2025
     uses: ./.github/workflows/platform-specific-build.yaml
     with:
       runner: ${{ matrix.runner }}
