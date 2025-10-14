@@ -48,8 +48,11 @@ jobs:
       # Required for trusted publishing.
       id-token: write
     steps:
+      - uses: actions/checkout@v5
+
       - uses: astral-sh/setup-uv@v6
         with:
+          python-version: "3.10"
           version-file: pyproject.toml
 
       - uses: actions/download-artifact@v5

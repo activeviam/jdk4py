@@ -9,12 +9,13 @@ jobs:
     needs: build-java-runtime
     runs-on: ${{ matrix.runner }}
     strategy:
+      fail-fast: false
       matrix:
         runner:
-          # - macos-15-intel
-          # - macos-26
+          - macos-15-intel
+          - macos-26
           - ubuntu-24.04
-          # - ubuntu-24.04-arm64 # GitHub-hosted larger runner in the ActiveViam organization.
+          - ubuntu-24.04-arm64 # GitHub-hosted larger runner in the ActiveViam organization.
           - windows-2025
     steps:
       - uses: actions/checkout@v5
@@ -23,7 +24,7 @@ jobs:
       - uses: actions/upload-artifact@v4
         with:
           if-no-files-found: error
-          name: ${{ matrix.runner }}-conda-packages
+          name: jdk4py-${{ runner-os }}-${{ runner-arch }}-conda-packages
           path: dist/*/jdk4py-*.conda
 
   build-java-runtime:
@@ -33,10 +34,10 @@ jobs:
       fail-fast: false
       matrix:
         runner:
-          # - macos-15-intel
-          # - macos-26
+          - macos-15-intel
+          - macos-26
           - ubuntu-24.04
-          # - ubuntu-24.04-arm64 # GitHub-hosted larger runner in the ActiveViam organization.
+          - ubuntu-24.04-arm64 # GitHub-hosted larger runner in the ActiveViam organization.
           - windows-2025
     steps:
       - uses: actions/checkout@v5
@@ -54,10 +55,10 @@ jobs:
       fail-fast: false
       matrix:
         runner:
-          # - macos-15-intel
-          # - macos-26
+          - macos-15-intel
+          - macos-26
           - ubuntu-24.04
-          # - ubuntu-24.04-arm64 # GitHub-hosted larger runner in the ActiveViam organization.
+          - ubuntu-24.04-arm64 # GitHub-hosted larger runner in the ActiveViam organization.
           - windows-2025
     steps:
       - uses: actions/checkout@v5
@@ -70,51 +71,37 @@ jobs:
       - uses: actions/upload-artifact@v4
         with:
           if-no-files-found: error
-          name: ${{ matrix.runner }}-python-wheel
+          name: jdk4py-${{ runner.os }}-${{ runner-arch }}-python-wheel
           path: dist/jdk4py-*.whl
 
-  runtime-test:
-    name: Runtime test on ${{ matrix.runner }} with Python ${{ matrix.python }}
+  test:
+    name: Test
     needs: build-java-runtime
-    runs-on: ${{ matrix.runner }}
-    strategy:
-      matrix:
-        runner:
-          # - macos-15-intel
-          # - macos-26
-          - ubuntu-24.04
-          # - ubuntu-24.04-arm64 # GitHub-hosted larger runner in the ActiveViam organization.
-          - windows-2025
-        python:
-          - "3.10"
-        # include:
-        #   - runner: ubuntu-24.04
-        #     python: "3.11"
-        #   - runner: ubuntu-24.04
-        #     python: "3.12"
-        #   - runner: ubuntu-24.04
-        #     python: "3.13"
-        #   - runner: ubuntu-24.04
-        #     python: "3.14"
-      fail-fast: false
+    runs-on: ubuntu-24.04
     steps:
       - uses: actions/checkout@v5
       - uses: astral-sh/setup-uv@v6
         with:
-          python-version: ${{ matrix.python }}
+          python-version: "3.10"
           version-file: pyproject.toml
       - uses: ./.github/actions/install-java-runtime
+      - run: uv run ruff format --check
+      - run: uv run ruff check
+      - run: uv run ty check
+      # This is also tested on all supported OS/arch combinations by `conda build`.
       - run: uv run pytest
 
-  # static-test:
-  #   name: Static test
-  #   runs-on: ubuntu-24.04
-  #   steps:
-  #     - uses: actions/checkout@v5
-  #     - uses: astral-sh/setup-uv@v6
-  #       with:
-  #         python-version: "3.10"
-  #         version-file: pyproject.toml
-  #     - run: uv run ruff format --check
-  #     - run: uv run ruff check
-  #     - run: uv run ty check
+  agg:
+    name: Agg
+    needs:
+      - build-conda-packages
+      - build-python-wheel
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/download-artifact@v5
+        with:
+          merge-multiple: true
+          path: dist/
+          pattern: jdk4py-*
+      - run: ls -R dist/
