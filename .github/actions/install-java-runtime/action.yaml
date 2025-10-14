@@ -8,6 +8,12 @@ runs:
         name: ${{ runner.os }}-${{ runner.arch }}-java-runtime
         path: artifact.tar
 
+    - run: ls -l .
+      shell: bash
+
+    - run: ls -R .
+      shell: bash
+
     # See https://github.com/actions/upload-artifact/blob/v4.6.2/README.md#permission-loss.
     - run: tar -xf artifact.tar --directory src/jdk4py/java-runtime/
       shell: bash

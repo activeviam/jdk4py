@@ -88,15 +88,15 @@ jobs:
           # - windows-2025
         python:
           - "3.10"
-        include:
-          - runner: ubuntu-24.04
-            python: "3.11"
-          - runner: ubuntu-24.04
-            python: "3.12"
-          - runner: ubuntu-24.04
-            python: "3.13"
-          - runner: ubuntu-24.04
-            python: "3.14"
+        # include:
+        #   - runner: ubuntu-24.04
+        #     python: "3.11"
+        #   - runner: ubuntu-24.04
+        #     python: "3.12"
+        #   - runner: ubuntu-24.04
+        #     python: "3.13"
+        #   - runner: ubuntu-24.04
+        #     python: "3.14"
       fail-fast: false
     steps:
       - uses: actions/checkout@v5
