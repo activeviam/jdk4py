@@ -7,15 +7,12 @@ runs:
       with:
         name: ${{ runner.os }}-${{ runner.arch }}-java-runtime
 
-    - run: mkdir -p src/jdk4py/java-runtime/
-      shell: bash
-
     # See https://github.com/actions/upload-artifact/blob/v4.6.2/README.md#permission-loss.
-    - run: tar -xf artifact.tar --directory src/jdk4py/java-runtime/
-      shell: bash
-
-    - run: ls -R src/jdk4py/java-runtime/
+    - run: tar -xf artifact.tar
       shell: bash
 
     - run: rm artifact.tar
+      shell: bash
+
+    - run: ls -R src/jdk4py/java-runtime/
       shell: bash
