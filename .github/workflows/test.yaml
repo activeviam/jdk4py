@@ -38,7 +38,7 @@ jobs:
           # - macos-26
           - ubuntu-24.04
           # - ubuntu-24.04-arm64 # GitHub-hosted larger runner in the ActiveViam organization.
-          # - windows-2025
+          - windows-2025
     steps:
       - uses: actions/checkout@v5
       - uses: astral-sh/setup-uv@v6
@@ -59,7 +59,7 @@ jobs:
           # - macos-26
           - ubuntu-24.04
           # - ubuntu-24.04-arm64 # GitHub-hosted larger runner in the ActiveViam organization.
-          # - windows-2025
+          - windows-2025
     steps:
       - uses: actions/checkout@v5
       - uses: astral-sh/setup-uv@v6
@@ -85,7 +85,7 @@ jobs:
           # - macos-26
           - ubuntu-24.04
           # - ubuntu-24.04-arm64 # GitHub-hosted larger runner in the ActiveViam organization.
-          # - windows-2025
+          - windows-2025
         python:
           - "3.10"
         # include:

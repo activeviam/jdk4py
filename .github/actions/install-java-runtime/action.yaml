@@ -13,6 +13,3 @@ runs:
 
     - run: rm artifact.tar
       shell: bash
-
-    - run: ls -R src/jdk4py/java-runtime/
-      shell: bash
