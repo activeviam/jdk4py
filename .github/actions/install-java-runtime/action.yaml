@@ -7,10 +7,7 @@ runs:
       with:
         name: ${{ runner.os }}-${{ runner.arch }}-java-runtime
 
-    - run: ls -l .
-      shell: bash
-
-    - run: ls -R .
+    - run: mkdir -p src/jdk4py/java-runtime/
       shell: bash
 
     # See https://github.com/actions/upload-artifact/blob/v4.6.2/README.md#permission-loss.
