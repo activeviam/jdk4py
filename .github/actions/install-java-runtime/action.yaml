@@ -1,0 +1,15 @@
+name: Install Java runtime
+description: Download the Java runtime artifact and extract it.
+runs:
+  using: composite
+  steps:
+    - uses: actions/download-artifact@v5
+      with:
+        name: java-runtime-${{ runner.os }}-${{ runner.arch }}
+
+    # See https://github.com/actions/upload-artifact/blob/v4.6.2/README.md#permission-loss.
+    - run: tar -xf artifact.tar
+      shell: bash
+
+    - run: rm artifact.tar
+      shell: bash

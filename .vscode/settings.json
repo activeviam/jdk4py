@@ -1,7 +1,4 @@
 {
-  "[json]": {
-    "editor.defaultFormatter": "esbenp.prettier-vscode"
-  },
   "[python]": {
     "editor.codeActionsOnSave": {
       "source.fixAll": "explicit",
@@ -17,6 +14,6 @@
   "files.trimFinalNewlines": true,
   "files.trimTrailingWhitespace": true,
   "python.analysis.autoImportCompletions": true,
-  "python.languageServer": "Pylance",
+  "python.languageServer": "None",
   "python.testing.pytestEnabled": true,
 }

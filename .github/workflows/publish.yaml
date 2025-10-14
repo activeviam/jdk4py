@@ -1,0 +1,47 @@
+name: Publish Conda packages and Python wheels
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+    uses: ./.github/workflows/cross-platform-build.yaml
+
+  publish:
+    environment: deployment
+    name: Publish Conda packages and Python wheels
+    needs: build
+    runs-on: ubuntu-24.04
+    permissions:
+      # Required for trusted publishing.
+      id-token: write
+    steps:
+      - uses: actions/checkout@v5
+
+      - uses: astral-sh/setup-uv@v6
+        with:
+          version-file: pyproject.toml
+
+      - uses: actions/download-artifact@v5
+        with:
+          merge-multiple: true
+          path: dist/
+          pattern: jdk4py-*
+
+      - name: Publish Conda packages
+        env:
+          JDK4PY_CONDA_CHANNEL_TOKEN: ${{ secrets.CONDA_CHANNEL_TOKEN }}
+          JDK4PY_CONDA_CHANNEL_URL: ${{ vars.CONDA_CHANNEL_URL }}
+          JDK4PY_CONDA_CHANNEL_USERNAME: ${{ vars.CONDA_CHANNEL_USERNAME }}
+        run: |
+          cd dist/
+          ls */jdk4py-*.conda | \
+          while read filepath; do
+            echo Uploading ${filepath}
+            curl --fail --user "$JDK4PY_CONDA_CHANNEL_USERNAME":"$JDK4PY_CONDA_CHANNEL_TOKEN" --upload-file ${filepath} "$JDK4PY_CONDA_CHANNEL_URL/$(dirname $filepath)/"
+          done
+        shell: bash
+
+      - name: Publish Python wheels
+        run: uv publish

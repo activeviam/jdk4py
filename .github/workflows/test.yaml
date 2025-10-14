@@ -4,81 +4,17 @@ on:
     types: [opened, synchronize]
 
 jobs:
+  build:
+    uses: ./.github/workflows/cross-platform-build.yaml
+
   test:
-    name: Test on ${{ matrix.runner }} with Python ${{ matrix.python }}
-    runs-on: ${{ matrix.runner }}
-    strategy:
-      matrix:
-        runner:
-          - macos-13 # x64
-          - macos-14 # arm64
-          - ubuntu-24.04
-          - ubuntu-24.04-arm64 # GitHub-hosted larger runner in the ActiveViam organization.
-          - windows-2022
-        python:
-          - "3.10"
-        include:
-          - runner: ubuntu-24.04
-            python: "3.11"
-          - runner: ubuntu-24.04
-            python: "3.12"
-          - runner: ubuntu-24.04
-            python: "3.13"
-      fail-fast: false
+    name: Test
+    runs-on: ubuntu-24.04
     steps:
-      - uses: actions/checkout@v4
-
+      - uses: actions/checkout@v5
       - uses: ./.github/actions/build-java-runtime
-        with:
-          python-version: ${{ matrix.python}}
-
-      - run: uv build --wheel
-
-      # No need to test each platform and Python version.
-      - if: ${{ matrix.runner == 'ubuntu-24.04' && matrix.python == '3.10' }}
-        run: uv run ruff format --check
-
-      # No need to test each platform and Python version.
-      - if: ${{ matrix.runner == 'ubuntu-24.04' && matrix.python == '3.10' }}
-        run: uv run ruff check
-
-      # No need to test each platform and Python version.
-      - if: ${{ matrix.runner == 'ubuntu-24.04' && matrix.python == '3.10' }}
-        run: uv run mypy
-
+      - run: uv run ruff format --check
+      - run: uv run ruff check
+      - run: uv run ty check
+      # This is also tested on all supported OS/arch combinations by `conda build`.
       - run: uv run pytest
-
-      # The Python wheels are not tied to a specific Python version.
-      - if: ${{ matrix.python == '3.10' }}
-        uses: actions/upload-artifact@v4
-        with:
-          if-no-files-found: error
-          name: jdk4py-${{ matrix.runner }}-python-wheel
-          path: dist/jdk4py-*.whl
-
-  conda-package:
-    name: Test Conda packaging on ${{ matrix.runner }}
-    runs-on: ${{ matrix.runner }}
-    strategy:
-      matrix:
-        runner:
-          - macos-13 # x64
-          - macos-14 # arm64
-          - ubuntu-24.04
-          - ubuntu-24.04-arm64 # GitHub-hosted larger runner in the ActiveViam organization.
-          - windows-2022
-    steps:
-      - uses: actions/checkout@v4
-
-      - uses: ./.github/actions/build-java-runtime
-        with:
-          # No need to test each Python version.
-          python-version: "3.10"
-
-      - uses: ./.github/actions/build-conda-packages
-
-      - uses: actions/upload-artifact@v4
-        with:
-          if-no-files-found: error
-          name: jdk4py-${{ matrix.runner }}-conda-packages
-          path: dist/*/jdk4py-*.tar.bz2
