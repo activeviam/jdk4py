@@ -1,0 +1,18 @@
+name: Install Java runtime
+description: Download the Java runtime artifact and extract it.
+runs:
+  using: composite
+  steps:
+    - uses: actions/download-artifact@v5
+      with:
+        name: ${{ matrix.runner }}-java-runtime
+        path: artifact.tar
+
+    - run: tar -fx archive.tar --directory src/jdk4py/java-runtime/
+      shell: bash
+
+    - run: ls -R src/jdk4py/java-runtime/
+      shell: bash
+
+    - run: rm artifact.tar
+      shell: bash

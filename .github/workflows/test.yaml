@@ -47,8 +47,8 @@ jobs:
           version-file: pyproject.toml
       - uses: ./.github/actions/build-java-runtime
 
-  build-python-wheels:
-    name: Build Python wheels on ${{ matrix.runner }}
+  build-python-wheel:
+    name: Build Python wheel on ${{ matrix.runner }}
     needs: build-java-runtime
     runs-on: ${{ matrix.runner }}
     strategy:
@@ -66,11 +66,8 @@ jobs:
         with:
           python-version: "3.10"
           version-file: pyproject.toml
-      - uses: actions/download-artifact@v5
-        with:
-          name: ${{ matrix.runner }}-java-runtime
-          path: src/jdk4py/java-runtime/
-      - uses: ./.github/actions/build-wheel
+      - uses: ./.github/actions/install-java-runtime
+      - uses: ./.github/actions/build-python-wheel
       - uses: actions/upload-artifact@v4
         with:
           if-no-files-found: error
@@ -107,10 +104,7 @@ jobs:
         with:
           python-version: ${{ matrix.python }}
           version-file: pyproject.toml
-      - uses: actions/download-artifact@v5
-        with:
-          name: ${{ matrix.runner }}-java-runtime
-          path: src/jdk4py/java-runtime/
+      - uses: ./.github/actions/install-java-runtime
       - run: uv run pytest
 
   static-test:
