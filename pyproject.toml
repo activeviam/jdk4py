@@ -1,10 +1,6 @@
 [build-system]
 build-backend = "uv_build"
-requires = [
-    # Keep pinned to ensure same version is used by `conda build` (see `conda.recipe/meta.yaml`).
-    # Keep in sync with `tool.uv.required-version`.
-    "uv-build ==0.9.2",
-]
+requires = ["uv-build"]
 
 [dependency-groups]
 dev = [
@@ -65,7 +61,6 @@ unused-ignore-comment = "warn"
 error-on-warning = true
 
 [tool.uv]
-# Keep pinned to ensure same version is used on CI.
-# Keep in sync with `dependency-groups.dev.uv-build`.
+# Keep pinned to ensure same version is used on CI and by `conda build` (see `conda.recipe/meta.yaml`).
 required-version = "==0.9.2"
 trusted-publishing = "always"

@@ -12,14 +12,12 @@ build:
   # Binaries are broken on macOS without it.
   binary_relocation: False
   include_recipe: False
+  script: "uv pip install ."
 
 requirements:
   build:
-  {% for dependency in dev_dependencies if dependency.startswith("hatchling ==") %}
-    - "{{ dependency }}"
-  {% endfor %}
-    - "pip ==25.2"
     - python
+    - "uv {{ pyproject["tool"]["uv"]["required-version"] }}"
   run:
     - python # See https://github.com/activeviam/jdk4py/issues/34.
 
