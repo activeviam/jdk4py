@@ -1,15 +1,13 @@
 name: Build Java runtime
-description: Build the Java runtime after installing the required dependencies.
-inputs:
-  python-version:
-    description: The version of Python to set up.
-    required: true
+description: Build the Java runtime and upload it as an artifact.
 runs:
   using: composite
   steps:
+    - uses: actions/checkout@v5
+
     - uses: astral-sh/setup-uv@v6
       with:
-        python-version: ${{ inputs.python-version }}
+        python-version: "3.10"
         version-file: pyproject.toml
 
     - id: get-java-version
@@ -23,3 +21,9 @@ runs:
 
     - run: uv run python build_java_runtime.py
       shell: bash
+
+    - uses: actions/upload-artifact@v4
+      with:
+        if-no-files-found: error
+        name: ${{ matrix.runner }}-java-runtime
+        path: src/jdk4py/java-runtime/

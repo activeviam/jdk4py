@@ -4,8 +4,77 @@ on:
     types: [opened, synchronize]
 
 jobs:
-  test:
-    name: Test on ${{ matrix.runner }} with Python ${{ matrix.python }}
+  # build-conda-packages:
+  #   name: Test Conda packaging on ${{ matrix.runner }}
+  #   needs: build-python-wheels
+  #   runs-on: ${{ matrix.runner }}
+  #   strategy:
+  #     matrix:
+  #       runner:
+  #         - macos-15-intel
+  #         - macos-26
+  #         - ubuntu-24.04
+  #         - ubuntu-24.04-arm64 # GitHub-hosted larger runner in the ActiveViam organization.
+  #         - windows-2025
+  #   steps:
+  #     - uses: ./.github/actions/build-java-runtime
+  #       with:
+  #         python-version: "3.10"
+  #     - uses: ./.github/actions/build-conda-packages
+  #     - uses: actions/upload-artifact@v4
+  #       with:
+  #         if-no-files-found: error
+  #         name: ${{ matrix.runner }}-conda-packages
+  #         path: dist/*/jdk4py-*.conda
+
+  build-java-runtime:
+    name: Build Java runtime on ${{ matrix.runner }}
+    runs-on: ${{ matrix.runner }}
+    strategy:
+      fail-fast: false
+      matrix:
+        runner:
+          - macos-15-intel
+          - macos-26
+          - ubuntu-24.04
+          - ubuntu-24.04-arm64 # GitHub-hosted larger runner in the ActiveViam organization.
+          - windows-2025
+    steps:
+      - uses: ./.github/actions/build-java-runtime
+
+  build-python-wheels:
+    name: Build Python wheels on ${{ matrix.runner }}
+    needs: build-java-runtime
+    runs-on: ${{ matrix.runner }}
+    strategy:
+      fail-fast: false
+      matrix:
+        runner:
+          - macos-15-intel
+          - macos-26
+          - ubuntu-24.04
+          - ubuntu-24.04-arm64 # GitHub-hosted larger runner in the ActiveViam organization.
+          - windows-2025
+    steps:
+      - uses: actions/checkout@v5
+      - uses: astral-sh/setup-uv@v6
+        with:
+          python-version: "3.10"
+          version-file: pyproject.toml
+      - uses: actions/download-artifact@v5
+        with:
+          name: ${{ matrix.runner }}-java-runtime
+          path: src/jdk4py/java-runtime/
+      - uses: ./.github/actions/build-wheel
+      - uses: actions/upload-artifact@v4
+        with:
+          if-no-files-found: error
+          name: ${{ matrix.runner }}-python-wheel
+          path: dist/jdk4py-*.whl
+
+  runtime-test:
+    name: Runtime test on ${{ matrix.runner }} with Python ${{ matrix.python }}
+    needs: build-java-runtime
     runs-on: ${{ matrix.runner }}
     strategy:
       matrix:
@@ -29,58 +98,25 @@ jobs:
       fail-fast: false
     steps:
       - uses: actions/checkout@v5
-
-      - uses: ./.github/actions/build-java-runtime
+      - uses: astral-sh/setup-uv@v6
         with:
-          python-version: ${{ matrix.python}}
-
-      - uses: ./.github/actions/build-wheel
-
-      # No need to test each platform and Python version.
-      - if: ${{ runner.os == 'Linux' && matrix.python == '3.10' }}
-        run: uv run ruff format --check
-
-      # No need to test each platform and Python version.
-      - if: ${{ runner.os == 'Linux' && matrix.python == '3.10' }}
-        run: uv run ruff check
-
-      # No need to test each platform and Python version.
-      - if: ${{ runner.os == 'Linux' && matrix.python == '3.10' }}
-        run: uv run ty check
-
+          python-version: ${{ matrix.python }}
+          version-file: pyproject.toml
+      - uses: actions/download-artifact@v5
+        with:
+          name: ${{ matrix.runner }}-java-runtime
+          path: src/jdk4py/java-runtime/
       - run: uv run pytest
 
-      # The Python wheels are not tied to a specific Python version.
-      - if: ${{ matrix.python == '3.10' }}
-        uses: actions/upload-artifact@v4
-        with:
-          if-no-files-found: error
-          name: jdk4py-${{ matrix.runner }}-python-wheel
-          path: dist/jdk4py-*.whl
-
-  conda-package:
-    name: Test Conda packaging on ${{ matrix.runner }}
-    runs-on: ${{ matrix.runner }}
-    strategy:
-      matrix:
-        runner:
-          - macos-15-intel
-          - macos-26
-          - ubuntu-24.04
-          - ubuntu-24.04-arm64 # GitHub-hosted larger runner in the ActiveViam organization.
-          - windows-2025
+  static-test:
+    name: Static test
+    runs-on: ubuntu-24.04
     steps:
       - uses: actions/checkout@v5
-
-      - uses: ./.github/actions/build-java-runtime
+      - uses: astral-sh/setup-uv@v6
         with:
-          # No need to test each Python version.
           python-version: "3.10"
-
-      - uses: ./.github/actions/build-conda-packages
-
-      - uses: actions/upload-artifact@v4
-        with:
-          if-no-files-found: error
-          name: jdk4py-${{ matrix.runner }}-conda-packages
-          path: dist/*/jdk4py-*.conda
+          version-file: pyproject.toml
+      - run: uv run ruff format --check
+      - run: uv run ruff check
+      - run: uv run ty check

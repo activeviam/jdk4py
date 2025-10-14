@@ -28,7 +28,7 @@ jobs:
       - uses: actions/upload-artifact@v4
         with:
           if-no-files-found: error
-          name: jdk4py-${{ matrix.runner }}-python-wheel
+          name: ${{ matrix.runner }}-python-wheel
           path: dist/jdk4py-*.whl
 
       - uses: ./.github/actions/build-conda-packages
@@ -36,7 +36,7 @@ jobs:
       - uses: actions/upload-artifact@v4
         with:
           if-no-files-found: error
-          name: jdk4py-${{ matrix.runner }}-conda-packages
+          name: ${{ matrix.runner }}-conda-packages
           path: dist/*/jdk4py-*.conda
 
   publish:
