@@ -6,6 +6,7 @@ runs:
     - uses: conda-incubator/setup-miniconda@v3
       # Adapted from https://github.com/conda-incubator/setup-miniconda/blob/v3.2.0/README.md#example-14-remove-defaults-channel.
       with:
+        channels: conda-forge
         conda-build-version: "25.9.0"
         miniforge-version: "25.3.1-0"
 
@@ -14,4 +15,7 @@ runs:
 
     - run: conda build --output-folder dist .
       # See https://github.com/conda-incubator/setup-miniconda/blame/059455a698430d8b68fa317268fa2e3da3492a98/README.md#L609-L610.
+      shell: bash -el {0}
+
+    - run: cat ~/.condarc
       shell: bash -el {0}
