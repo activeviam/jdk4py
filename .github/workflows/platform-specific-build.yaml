@@ -1,4 +1,4 @@
-name: Single-platform build
+name: Platform-specific build
 on:
   workflow_call:
     inputs:
@@ -12,8 +12,8 @@ jobs:
     needs: build-java-runtime
     runs-on: ${{ inputs.runner }}
     steps:
-      - uses: ./.github/actions/install-java-runtime
       - uses: actions/checkout@v5
+      - uses: ./.github/actions/install-java-runtime
       - uses: ./.github/actions/build-conda-packages
 
   build-java-runtime:
@@ -22,21 +22,7 @@ jobs:
     steps:
       - uses: actions/checkout@v5
 
-      - uses: astral-sh/setup-uv@v6
-        with:
-          version-file: pyproject.toml
-
-      - id: get-java-version
-        run: uv run python -c 'from jdk4py import JAVA_VERSION; print(f"""version={".".join(str(number) for number in JAVA_VERSION)}""")' >> "$GITHUB_OUTPUT"
-        shell: bash
-
-      - uses: actions/setup-java@v5
-        with:
-          distribution: temurin
-          java-version: ${{ steps.get-java-version.outputs.version }}
-
-      - run: uv run python build_java_runtime.py
-        shell: bash
+      - uses: ./.github/actions/build-java-runtime
 
       # See https://github.com/actions/upload-artifact/blob/v4.6.2/README.md#permission-loss.
       - run: tar -cf artifact.tar src/jdk4py/java-runtime/

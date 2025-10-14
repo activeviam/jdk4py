@@ -13,6 +13,6 @@ jobs:
           - ubuntu-24.04
           # - ubuntu-24.04-arm64 # GitHub-hosted larger runner in the ActiveViam organization.
           # - windows-2025
-    uses: ./.github/workflows/build.yaml
+    uses: ./.github/workflows/platform-specific-build.yaml
     with:
       runner: ${{ matrix.runner }}
