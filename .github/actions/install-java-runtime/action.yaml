@@ -5,7 +5,7 @@ runs:
   steps:
     - uses: actions/download-artifact@v5
       with:
-        name: ${{ runner.os }}-java-runtime
+        name: ${{ runner.os }}-${{ runner.arch }}-java-runtime
         path: artifact.tar
 
     # See https://github.com/actions/upload-artifact/blob/v4.6.2/README.md#permission-loss.
