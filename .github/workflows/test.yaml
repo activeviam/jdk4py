@@ -12,11 +12,11 @@ jobs:
       fail-fast: false
       matrix:
         runner:
-          - macos-15-intel
+          # - macos-15-intel
           - macos-26
           - ubuntu-24.04
-          - ubuntu-24.04-arm64 # GitHub-hosted larger runner in the ActiveViam organization.
-          - windows-2025
+          # - ubuntu-24.04-arm64 # GitHub-hosted larger runner in the ActiveViam organization.
+          # - windows-2025
     steps:
       - uses: actions/checkout@v5
       - uses: ./.github/actions/install-java-runtime
@@ -29,11 +29,11 @@ jobs:
       fail-fast: false
       matrix:
         runner:
-          - macos-15-intel
+          # - macos-15-intel
           - macos-26
           - ubuntu-24.04
-          - ubuntu-24.04-arm64 # GitHub-hosted larger runner in the ActiveViam organization.
-          - windows-2025
+          # - ubuntu-24.04-arm64 # GitHub-hosted larger runner in the ActiveViam organization.
+          # - windows-2025
     steps:
       - uses: actions/checkout@v5
       - uses: astral-sh/setup-uv@v6
@@ -49,11 +49,11 @@ jobs:
       fail-fast: false
       matrix:
         runner:
-          - macos-15-intel
+          # - macos-15-intel
           - macos-26
           - ubuntu-24.04
-          - ubuntu-24.04-arm64 # GitHub-hosted larger runner in the ActiveViam organization.
-          - windows-2025
+          # - ubuntu-24.04-arm64 # GitHub-hosted larger runner in the ActiveViam organization.
+          # - windows-2025
     steps:
       - uses: actions/checkout@v5
       - uses: astral-sh/setup-uv@v6
