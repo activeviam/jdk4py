@@ -4,23 +4,23 @@ on:
     types: [opened, synchronize]
 
 jobs:
-  build-conda-packages:
-    name: Build Conda packages on ${{ matrix.runner }}
-    needs: build-java-runtime
-    runs-on: ${{ matrix.runner }}
-    strategy:
-      fail-fast: false
-      matrix:
-        runner:
-          # - macos-15-intel
-          # - macos-26
-          - ubuntu-24.04
-          # - ubuntu-24.04-arm64 # GitHub-hosted larger runner in the ActiveViam organization.
-          # - windows-2025
-    steps:
-      - uses: actions/checkout@v5
-      - uses: ./.github/actions/install-java-runtime
-      - uses: ./.github/actions/build-conda-packages
+  # build-conda-packages:
+  #   name: Build Conda packages on ${{ matrix.runner }}
+  #   needs: build-java-runtime
+  #   runs-on: ${{ matrix.runner }}
+  #   strategy:
+  #     fail-fast: false
+  #     matrix:
+  #       runner:
+  #         # - macos-15-intel
+  #         # - macos-26
+  #         - ubuntu-24.04
+  #         # - ubuntu-24.04-arm64 # GitHub-hosted larger runner in the ActiveViam organization.
+  #         # - windows-2025
+  #   steps:
+  #     - uses: actions/checkout@v5
+  #     - uses: ./.github/actions/install-java-runtime
+  #     - uses: ./.github/actions/build-conda-packages
 
   build-java-runtime:
     name: Build Java runtime on ${{ matrix.runner }}
@@ -63,11 +63,11 @@ jobs:
       - uses: ./.github/actions/build-python-wheel
 
   deploy:
-    environment: deployment
+    environment:
+      name: test
+      url: https://pypi.org/project/jdk4py/21.0.8.0
     name: Publish Conda packages and Python wheels
-    needs:
-      - build-conda-packages
-      - build-python-wheel
+    needs: build-python-wheel
     runs-on: ubuntu-24.04
     permissions:
       # Required for trusted publishing.
@@ -85,8 +85,7 @@ jobs:
           pattern: jdk4py-*
           path: dist/
 
-      - if: ${{ runner.debug == '1' }}
-        name: List Conda packages and Python wheels
+      - name: List Conda packages and Python wheels
         run: ls -R dist/
 
   test:
