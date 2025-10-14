@@ -27,8 +27,7 @@ description = "A JDK shipped in a Python package"
 keywords = ["jdk", "java", "jvm", "jre"]
 name = "jdk4py"
 readme = "README.md"
-# Keep pinned to ensure same version is used on CI.
-requires-python = "==3.10.*"
+requires-python = ">=3.10"
 version = "21.0.8.0"
 
 [project.urls]
