@@ -8,6 +8,7 @@ runs:
       with:
         channels: conda-forge
         conda-build-version: "25.9.0"
+        conda-remove-defaults: "true"
         miniforge-version: "25.3.1-0"
 
     - run: cat ~/.condarc
