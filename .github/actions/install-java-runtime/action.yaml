@@ -6,7 +6,6 @@ runs:
     - uses: actions/download-artifact@v5
       with:
         name: ${{ runner.os }}-${{ runner.arch }}-java-runtime
-        path: artifact.tar
 
     - run: ls -l .
       shell: bash
