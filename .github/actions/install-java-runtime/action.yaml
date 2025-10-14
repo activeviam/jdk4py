@@ -5,9 +5,10 @@ runs:
   steps:
     - uses: actions/download-artifact@v5
       with:
-        name: ${{ runner-os }}-java-runtime
+        name: ${{ runner.os }}-java-runtime
         path: artifact.tar
 
+    # See https://github.com/actions/upload-artifact/blob/v4.6.2/README.md#permission-loss.
     - run: tar -xf archive.tar --directory src/jdk4py/java-runtime/
       shell: bash
 

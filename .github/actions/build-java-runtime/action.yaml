@@ -15,14 +15,14 @@ runs:
     - run: uv run python build_java_runtime.py
       shell: bash
 
-    # See https://github.com/actions/upload-artifact/blob/main/README.md#permission-loss.
+    # See https://github.com/actions/upload-artifact/blob/v4.6.2/README.md#permission-loss.
     - run: tar -cf artifact.tar src/jdk4py/java-runtime/
       shell: bash
 
     - uses: actions/upload-artifact@v4
       with:
         if-no-files-found: error
-        name: ${{ runner-os }}-java-runtime
+        name: ${{ runner.os }}-java-runtime
         path: artifact.tar
 
     - run: rm artifact.tar
