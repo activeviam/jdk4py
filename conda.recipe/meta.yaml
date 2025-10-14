@@ -14,10 +14,7 @@ build:
 
 requirements:
   build:
-    - python
     - "uv {{ pyproject["tool"]["uv"]["required-version"] }}"
-  run:
-    - python # See https://github.com/activeviam/jdk4py/issues/34.
 
 test:
   source_files:
