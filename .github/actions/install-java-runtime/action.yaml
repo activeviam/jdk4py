@@ -9,7 +9,7 @@ runs:
         path: artifact.tar
 
     # See https://github.com/actions/upload-artifact/blob/v4.6.2/README.md#permission-loss.
-    - run: tar -xf archive.tar --directory src/jdk4py/java-runtime/
+    - run: tar -xf artifact.tar --directory src/jdk4py/java-runtime/
       shell: bash
 
     - run: ls -R src/jdk4py/java-runtime/
