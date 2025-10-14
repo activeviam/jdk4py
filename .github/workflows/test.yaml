@@ -12,11 +12,11 @@ jobs:
       fail-fast: false
       matrix:
         runner:
-          # - macos-15-intel
+          - macos-15-intel
           - macos-26
           - ubuntu-24.04
-          # - ubuntu-24.04-arm64 # GitHub-hosted larger runner in the ActiveViam organization.
-          # - windows-2025
+          - ubuntu-24.04-arm64 # GitHub-hosted larger runner in the ActiveViam organization.
+          - windows-2025
     steps:
       - uses: actions/checkout@v5
       - uses: ./.github/actions/install-java-runtime
@@ -29,11 +29,11 @@ jobs:
       fail-fast: false
       matrix:
         runner:
-          # - macos-15-intel
+          - macos-15-intel
           - macos-26
           - ubuntu-24.04
-          # - ubuntu-24.04-arm64 # GitHub-hosted larger runner in the ActiveViam organization.
-          # - windows-2025
+          - ubuntu-24.04-arm64 # GitHub-hosted larger runner in the ActiveViam organization.
+          - windows-2025
     steps:
       - uses: actions/checkout@v5
       - uses: astral-sh/setup-uv@v6
@@ -49,11 +49,11 @@ jobs:
       fail-fast: false
       matrix:
         runner:
-          # - macos-15-intel
+          - macos-15-intel
           - macos-26
           - ubuntu-24.04
-          # - ubuntu-24.04-arm64 # GitHub-hosted larger runner in the ActiveViam organization.
-          # - windows-2025
+          - ubuntu-24.04-arm64 # GitHub-hosted larger runner in the ActiveViam organization.
+          - windows-2025
     steps:
       - uses: actions/checkout@v5
       - uses: astral-sh/setup-uv@v6
@@ -77,18 +77,3 @@ jobs:
       - run: uv run ty check
       # This is also tested on all supported OS/arch combinations by `conda build`.
       - run: uv run pytest
-
-  agg:
-    name: Agg
-    needs:
-      - build-conda-packages
-      - build-python-wheel
-    runs-on: ubuntu-24.04
-    steps:
-      - uses: actions/checkout@v5
-      - uses: actions/download-artifact@v5
-        with:
-          merge-multiple: true
-          path: dist/
-          pattern: jdk4py-*
-      - run: ls -R dist/
