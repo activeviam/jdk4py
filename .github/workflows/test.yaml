@@ -4,28 +4,27 @@ on:
     types: [opened, synchronize]
 
 jobs:
-  # build-conda-packages:
-  #   name: Test Conda packaging on ${{ matrix.runner }}
-  #   needs: build-python-wheels
-  #   runs-on: ${{ matrix.runner }}
-  #   strategy:
-  #     matrix:
-  #       runner:
-  #         - macos-15-intel
-  #         - macos-26
-  #         - ubuntu-24.04
-  #         - ubuntu-24.04-arm64 # GitHub-hosted larger runner in the ActiveViam organization.
-  #         - windows-2025
-  #   steps:
-  #     - uses: ./.github/actions/build-java-runtime
-  #       with:
-  #         python-version: "3.10"
-  #     - uses: ./.github/actions/build-conda-packages
-  #     - uses: actions/upload-artifact@v4
-  #       with:
-  #         if-no-files-found: error
-  #         name: ${{ matrix.runner }}-conda-packages
-  #         path: dist/*/jdk4py-*.conda
+  build-conda-packages:
+    name: Test Conda packaging on ${{ matrix.runner }}
+    needs: build-java-runtime
+    runs-on: ${{ matrix.runner }}
+    strategy:
+      matrix:
+        runner:
+          # - macos-15-intel
+          # - macos-26
+          - ubuntu-24.04
+          # - ubuntu-24.04-arm64 # GitHub-hosted larger runner in the ActiveViam organization.
+          - windows-2025
+    steps:
+      - uses: actions/checkout@v5
+      - uses: ./.github/actions/install-java-runtime
+      - uses: ./.github/actions/build-conda-packages
+      - uses: actions/upload-artifact@v4
+        with:
+          if-no-files-found: error
+          name: ${{ matrix.runner }}-conda-packages
+          path: dist/*/jdk4py-*.conda
 
   build-java-runtime:
     name: Build Java runtime on ${{ matrix.runner }}
