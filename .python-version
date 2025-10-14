@@ -1,0 +1,2 @@
+# Keep pinned to ensure same version is used on CI.
+3.10
