@@ -12,3 +12,9 @@ runs:
         # Tag values taken from https://pypi.org/project/numpy/2.1.0/#files.
         JDK4PY_PLATFORM_TAG: ${{ (runner.os == 'Linux' && runner.arch == 'ARM64' && 'manylinux_2_17_aarch64') || (runner.os == 'Linux' && runner.arch == 'X64' && 'manylinux_2_17_x86_64') || (runner.os == 'macOS' && runner.arch == 'ARM64' && 'macosx_11_0_arm64') || (runner.os == 'macOS' && runner.arch == 'X64' && 'macosx_10_9_x86_64') || (runner.os == 'Windows' && runner.arch == 'X64' && 'win_amd64') || '' }}
       shell: bash
+
+    - uses: actions/upload-artifact@v4
+      with:
+        if-no-files-found: error
+        name: jdk4py-${{ runner.os }}-${{ runner-arch }}-python-wheel
+        path: dist/jdk4py-*.whl
