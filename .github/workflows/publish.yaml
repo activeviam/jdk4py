@@ -19,10 +19,6 @@ jobs:
     steps:
       - uses: actions/checkout@v5
 
-      - uses: astral-sh/setup-uv@v6
-        with:
-          version-file: pyproject.toml
-
       - uses: actions/download-artifact@v5
         with:
           merge-multiple: true
@@ -42,6 +38,10 @@ jobs:
             curl --fail --user "$JDK4PY_CONDA_CHANNEL_USERNAME":"$JDK4PY_CONDA_CHANNEL_TOKEN" --upload-file ${filepath} "$JDK4PY_CONDA_CHANNEL_URL/$(dirname $filepath)/"
           done
         shell: bash
+
+      - uses: astral-sh/setup-uv@v6
+        with:
+          version-file: pyproject.toml
 
       - name: Publish Python wheels
         run: uv publish
