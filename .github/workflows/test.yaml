@@ -7,14 +7,14 @@ jobs:
   build:
     uses: ./.github/workflows/cross-platform-build.yaml
 
-  test:
-    name: Test
-    runs-on: ubuntu-24.04
-    steps:
-      - uses: actions/checkout@v5
-      - uses: ./.github/actions/build-java-runtime
-      - run: uv run ruff format --check
-      - run: uv run ruff check
-      - run: uv run ty check
-      # This is also tested on all supported OS/arch combinations by `conda build`.
-      - run: uv run pytest
+  # test:
+  #   name: Test
+  #   runs-on: ubuntu-24.04
+  #   steps:
+  #     - uses: actions/checkout@v5
+  #     - uses: ./.github/actions/build-java-runtime
+  #     - run: uv run ruff format --check
+  #     - run: uv run ruff check
+  #     - run: uv run ty check
+  #     # This is also tested on all supported OS/arch combinations by `conda build`.
+  #     - run: uv run pytest

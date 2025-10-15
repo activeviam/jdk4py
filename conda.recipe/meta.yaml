@@ -9,12 +9,19 @@ source:
   path: ../
 
 build:
+  # See https://github.com/conda/conda-build/issues/3956#issuecomment-845711269.
+  ignore_run_exports:
+    - python_abi
   include_recipe: False
   script: "uv pip install ."
 
 requirements:
   build:
+    - python
     - "uv {{ pyproject["tool"]["uv"]["required-version"] }}"
+  run:
+    # See https://github.com/activeviam/jdk4py/issues/34.
+    - python
 
 test:
   source_files:
