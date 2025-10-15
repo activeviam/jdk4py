@@ -37,14 +37,14 @@ jobs:
       - run: rm artifact.tar
         shell: bash
 
-  # build-python-wheel:
-  #   name: Build Python wheel on ${{ inputs.runner }}
-  #   needs: build-java-runtime
-  #   runs-on: ${{ inputs.runner }}
-  #   steps:
-  #     - uses: actions/checkout@v5
-  #     - uses: ./.github/actions/install-java-runtime
-  #     - uses: astral-sh/setup-uv@v6
-  #       with:
-  #         version-file: pyproject.toml
-  #     - uses: ./.github/actions/build-python-wheel
+  build-python-wheel:
+    name: Build Python wheel on ${{ inputs.runner }}
+    needs: build-java-runtime
+    runs-on: ${{ inputs.runner }}
+    steps:
+      - uses: actions/checkout@v5
+      - uses: ./.github/actions/install-java-runtime
+      - uses: astral-sh/setup-uv@v6
+        with:
+          version-file: pyproject.toml
+      - uses: ./.github/actions/build-python-wheel
