@@ -5,7 +5,7 @@ requires = ["uv-build"]
 [dependency-groups]
 dev = [
     # Keep pinned to ensure same version is used by `conda build` (see `conda.recipe/meta.yaml`).
-    "pytest ==8.4.2",
+    "pytest ==9.0.3",
     "ruff",
     "ty",
     # Remove once https://github.com/astral-sh/uv/issues/14827 is closed.
@@ -28,12 +28,12 @@ keywords = ["jdk", "java", "jvm", "jre"]
 name = "jdk4py"
 readme = "README.md"
 requires-python = ">=3.10"
-version = "21.0.8.1"
+version = "21.0.8.2"
 
 [project.urls]
 Repository = "https://github.com/activeviam/jdk4py"
 
-[tool.pytest.ini_options]
+[tool.pytest]
 filterwarnings = ["error"]
 
 [tool.ruff.lint]
@@ -54,13 +54,10 @@ ignore = [
 ]
 select = ["ALL"]
 
-[tool.ty.rules]
-unused-ignore-comment = "warn"
-
 [tool.ty.terminal]
 error-on-warning = true
 
 [tool.uv]
 # Keep pinned to ensure same version is used on CI and by `conda build` (see `conda.recipe/meta.yaml`).
-required-version = "==0.9.2"
+required-version = "==0.11.6"
 trusted-publishing = "always"
