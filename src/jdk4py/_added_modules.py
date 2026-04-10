@@ -4,6 +4,7 @@ ADDED_MODULES = frozenset(
         "jdk.crypto.ec",
         "jdk.httpserver",
         "jdk.jcmd",
+        "jdk.jdwp.agent",
         "jdk.jfr",
         "jdk.localedata",
         "jdk.management.agent",
