@@ -60,28 +60,55 @@ NO_BREAK_SPACE = chr(0x00A0)
 
 
 _NUMBER_FORMATTING_EXPECTED_SEPARATORS = {
-    "bn-IN": NumberFormattingSeparators(decimal_separator=DOT, grouping_separator=COMMA),
-    "da-DK": NumberFormattingSeparators(decimal_separator=COMMA, grouping_separator=DOT),
-    "de-DE": NumberFormattingSeparators(decimal_separator=COMMA, grouping_separator=DOT),
-    "en-GB": NumberFormattingSeparators(decimal_separator=DOT, grouping_separator=COMMA),
-    "en-US": NumberFormattingSeparators(decimal_separator=DOT, grouping_separator=COMMA),
-    "es-ES": NumberFormattingSeparators(decimal_separator=COMMA, grouping_separator=DOT),
-    "es-MX": NumberFormattingSeparators(decimal_separator=COMMA, grouping_separator=DOT),
-    "fr-FR": NumberFormattingSeparators(decimal_separator=COMMA, grouping_separator=NARROW_NO_BREAK_SPACE),
-    "it-IT": NumberFormattingSeparators(decimal_separator=COMMA, grouping_separator=DOT),
-    "ja-JP": NumberFormattingSeparators(decimal_separator=DOT, grouping_separator=COMMA),
-    "pt-BR": NumberFormattingSeparators(decimal_separator=COMMA, grouping_separator=DOT),
-    "ru-RU": NumberFormattingSeparators(decimal_separator=COMMA, grouping_separator=NO_BREAK_SPACE),
+    "bn-IN": NumberFormattingSeparators(
+        decimal_separator=DOT, grouping_separator=COMMA
+    ),
+    "da-DK": NumberFormattingSeparators(
+        decimal_separator=COMMA, grouping_separator=DOT
+    ),
+    "de-DE": NumberFormattingSeparators(
+        decimal_separator=COMMA, grouping_separator=DOT
+    ),
+    "en-GB": NumberFormattingSeparators(
+        decimal_separator=DOT, grouping_separator=COMMA
+    ),
+    "en-US": NumberFormattingSeparators(
+        decimal_separator=DOT, grouping_separator=COMMA
+    ),
+    "es-ES": NumberFormattingSeparators(
+        decimal_separator=COMMA, grouping_separator=DOT
+    ),
+    "es-MX": NumberFormattingSeparators(
+        decimal_separator=COMMA, grouping_separator=DOT
+    ),
+    "fr-FR": NumberFormattingSeparators(
+        decimal_separator=COMMA, grouping_separator=NARROW_NO_BREAK_SPACE
+    ),
+    "it-IT": NumberFormattingSeparators(
+        decimal_separator=COMMA, grouping_separator=DOT
+    ),
+    "ja-JP": NumberFormattingSeparators(
+        decimal_separator=DOT, grouping_separator=COMMA
+    ),
+    "pt-BR": NumberFormattingSeparators(
+        decimal_separator=COMMA, grouping_separator=DOT
+    ),
+    "ru-RU": NumberFormattingSeparators(
+        decimal_separator=COMMA, grouping_separator=NO_BREAK_SPACE
+    ),
 }
 
 
 def test_locale_data_is_loaded() -> None:
     """
+    Check that each included locale uses its expected number formatting separators.
+
     `jlink --include-locales=fr-FR` does not retain `FormatData_fr.class`,
     so `DecimalFormatSymbols.getInstance(Locale.forLanguageTag("fr-FR"))`
     silently returns ROOT symbols.
 
-    `INCLUDED_LOCALES` must therefore list each region tag alongside its bare-language parent.
+    `INCLUDED_LOCALES` must therefore list each region tag alongside its
+    bare-language parent.
     """
     completed_process = run(  # noqa: S603
         [JAVA, "-jar", _TEST_RESOURCES_DIRECTORY / "PrintLocaleNumberFormats.jar"],
