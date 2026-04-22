@@ -79,7 +79,7 @@ _NUMBER_FORMATTING_EXPECTED_SEPARATORS = {
         decimal_separator=COMMA, grouping_separator=DOT
     ),
     "es-MX": NumberFormattingSeparators(
-        decimal_separator=COMMA, grouping_separator=DOT
+        decimal_separator=DOT, grouping_separator=COMMA
     ),
     "fr-FR": NumberFormattingSeparators(
         decimal_separator=COMMA, grouping_separator=NARROW_NO_BREAK_SPACE
@@ -119,7 +119,10 @@ def test_locale_data_is_loaded() -> None:
     actual = {}
     for line in completed_process.stdout.strip().splitlines():
         tag, decimal_cp, grouping_cp = line.split("\t")
-        actual[tag] = (chr(int(decimal_cp)), chr(int(grouping_cp)))
+        actual[tag] = NumberFormattingSeparators(
+            decimal_separator=chr(int(decimal_cp)),
+            grouping_separator=chr(int(grouping_cp)),
+        )
 
     mismatches = {
         tag: {"expected": expected, "actual": actual.get(tag)}
