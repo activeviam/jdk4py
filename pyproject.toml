@@ -28,7 +28,7 @@ keywords = ["jdk", "java", "jvm", "jre"]
 name = "jdk4py"
 readme = "README.md"
 requires-python = ">=3.10"
-version = "25.0.2.0"
+version = "25.0.2.1"
 
 [project.urls]
 Repository = "https://github.com/activeviam/jdk4py"
