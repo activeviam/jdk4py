@@ -28,7 +28,7 @@ keywords = ["jdk", "java", "jvm", "jre"]
 name = "jdk4py"
 readme = "README.md"
 requires-python = ">=3.10"
-version = "25.0.2.0"
+version = "25.0.2.1"
 
 [project.urls]
 Repository = "https://github.com/activeviam/jdk4py"
@@ -47,6 +47,7 @@ ignore = [
     "D203",
     "D211",
     "D212",
+    "E501",
     "EM102",
     "ISC001",
     "S101",
