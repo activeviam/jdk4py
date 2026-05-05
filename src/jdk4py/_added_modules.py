@@ -2,6 +2,7 @@ ADDED_MODULES = frozenset(
     {
         "java.se",
         "jdk.crypto.ec",
+        "jdk.incubator.vector",
         "jdk.httpserver",
         "jdk.jcmd",
         "jdk.jdwp.agent",
