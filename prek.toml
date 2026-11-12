@@ -1,0 +1,35 @@
+[[repos]]
+repo = "local"
+
+[[repos.hooks]]
+id = "ruff-check"
+name = "ruff check"
+language = "system"
+entry = "uv run ruff check"
+types = ["python"]
+require_serial = true
+
+[[repos.hooks]]
+id = "ruff-format"
+name = "ruff format"
+language = "system"
+entry = "uv run ruff format"
+types = ["python"]
+require_serial = true
+
+[[repos.hooks]]
+id = "ty"
+name = "ty check"
+language = "system"
+entry = "uv run ty check"
+pass_filenames = false
+types = ["python"]
+
+# From npm directly, with a Node that prek installs itself: nothing for contributors to install.
+[[repos.hooks]]
+id = "prettier"
+name = "prettier"
+language = "node"
+additional_dependencies = ["prettier@3.9.10"]
+entry = "prettier --write --ignore-unknown"
+files = '\.(md|ya?ml)$'

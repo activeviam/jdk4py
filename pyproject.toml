@@ -4,6 +4,7 @@ requires = ["uv-build"]
 
 [dependency-groups]
 dev = [
+    "prek",
     "pytest",
     "ruff",
     "ty",
@@ -34,6 +35,9 @@ Repository = "https://github.com/activeviam/jdk4py"
 
 [tool.pytest]
 filterwarnings = ["error"]
+
+[tool.ruff]
+fix = true
 
 [tool.ruff.lint]
 ignore = [

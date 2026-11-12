@@ -1,5 +1,5 @@
 # The file name and the `pypi` environment are registered as this project's trusted publisher on PyPI.
-# Pull requests lint, build, and test; pushes to `main` only build and publish.
+# Pull requests run prek, build, and test; pushes to `main` only build and publish.
 name: Build, test, and publish
 on:
   pull_request:
@@ -15,7 +15,7 @@ permissions:
   contents: read
 
 jobs:
-  lint:
+  prek:
     if: github.event_name == 'pull_request'
     runs-on: ubuntu-24.04
     steps:
@@ -25,9 +25,7 @@ jobs:
       - uses: astral-sh/setup-uv@v10.3.3
         with:
           version-file: pyproject.toml
-      - run: uv run ruff format --check
-      - run: uv run ruff check
-      - run: uv run ty check
+      - run: uv run prek run --all-files --show-diff-on-failure
 
   build:
     name: Build on ${{ matrix.runner }}
