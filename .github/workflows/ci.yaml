@@ -34,10 +34,14 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        # Platform tags taken from https://pypi.org/project/numpy/2.1.0/#files.
+        # Each platform tag is the oldest platform the Temurin binaries run on.
+        # - On Linux, they need at most glibc 2.17.
+        # - On macOS, they need at most macOS 11.0.
+        #
+        # Checked on Temurin 25.0.5.
         include:
           - runner: macos-15-intel
-            platform-tag: macosx_10_9_x86_64
+            platform-tag: macosx_11_0_x86_64
           - runner: macos-26
             platform-tag: macosx_11_0_arm64
           - runner: ubuntu-24.04
