@@ -1,11 +1,11 @@
 from collections.abc import Collection
 from shutil import rmtree
 from subprocess import check_call
-from typing import Literal, TypeAlias, get_args
+from typing import Final, Literal, TypeAlias, get_args
 
 from jdk4py import JAVA_HOME
 
-_ADDED_MODULES = frozenset(
+_ADDED_MODULES: Final = frozenset(
     {
         "java.se",
         "jdk.crypto.ec",
@@ -38,9 +38,9 @@ _RegionSpecificLocale: TypeAlias = Literal[
     "ru-RU",
     "zh-CN",
 ]
-_REGION_SPECIFIC_LOCALES: Collection[str] = get_args(_RegionSpecificLocale)
+_REGION_SPECIFIC_LOCALES: Final[Collection[str]] = get_args(_RegionSpecificLocale)
 
-_INCLUDED_LOCALES = frozenset(
+_INCLUDED_LOCALES: Final = frozenset(
     {
         locale
         for tag in _REGION_SPECIFIC_LOCALES

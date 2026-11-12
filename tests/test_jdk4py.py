@@ -2,12 +2,12 @@ import re
 from dataclasses import dataclass
 from pathlib import Path
 from subprocess import run
-from typing import get_args
+from typing import Final, get_args
 
 from build_java_runtime import _INCLUDED_LOCALES, _RegionSpecificLocale
 from jdk4py import JAVA, JAVA_VERSION
 
-_TEST_RESOURCES_DIRECTORY = Path(__file__).parent / "resources"
+_TEST_RESOURCES_DIRECTORY: Final = Path(__file__).parent / "resources"
 
 
 def test_java_version() -> None:
@@ -54,10 +54,10 @@ class _NumberFormattingSeparators:
     grouping_separator: str
 
 
-_COMMA = ","
-_DOT = "."
-_NARROW_NO_BREAK_SPACE = chr(0x202F)
-_NO_BREAK_SPACE = chr(0x00A0)
+_COMMA: Final = ","
+_DOT: Final = "."
+_NARROW_NO_BREAK_SPACE: Final = chr(0x202F)
+_NO_BREAK_SPACE: Final = chr(0x00A0)
 
 
 def _get_number_formatting_separators(
