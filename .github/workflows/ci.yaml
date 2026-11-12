@@ -79,8 +79,10 @@ jobs:
       - run: uv run python -m wheel tags --platform-tag "$PLATFORM_TAG" --remove dist/*-py3-none-any.whl
         env:
           PLATFORM_TAG: ${{ matrix.platform-tag }}
-      # uv refuses to install a wheel tagged for another platform, so this fails if the matrix pairs a runner with the wrong tag.
-      - run: uv run --isolated --no-project --with dist/jdk4py-*.whl python -c 'import jdk4py'
+
+      # Run the README command with the built wheel.
+      # uv refuses to install a wheel tagged for another platform, so this also fails if the matrix pairs a runner with the wrong tag.
+      - run: uvx --from dist/jdk4py-*.whl jdk4py java -version
 
       - uses: actions/upload-artifact@v7.0.2
         with:

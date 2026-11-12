@@ -10,7 +10,24 @@ A JDK shipped in a Python package.
 pip install jdk4py
 ```
 
+or
+
+```bash
+uv add jdk4py
+```
+
 ## Usage
+
+### Command line
+
+The `jdk4py` command runs a tool of the bundled JDK, such as `java`, `keytool`, or `jcmd`.
+With [uvx](https://docs.astral.sh/uv/guides/tools/), it runs without installing jdk4py first:
+
+```bash
+uvx jdk4py java -version
+```
+
+### Python API
 
 ```python
 >>> from jdk4py import JAVA, JAVA_HOME, JAVA_VERSION
