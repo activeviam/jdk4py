@@ -38,6 +38,7 @@ filterwarnings = ["error"]
 [tool.ruff.lint]
 ignore = [
     "COM812",
+    "CPY001",
     "D100",
     "D101",
     "D102",
@@ -59,5 +60,5 @@ error-on-warning = true
 
 [tool.uv]
 # Keep pinned to ensure same version is used on CI.
-required-version = "==0.11.6"
+required-version = "==0.13.7"
 trusted-publishing = "always"
