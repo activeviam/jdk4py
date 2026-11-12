@@ -1,6 +1,6 @@
 from collections.abc import Collection
 from shutil import rmtree
-from subprocess import check_call
+from subprocess import run
 from typing import Final, Literal, TypeAlias, get_args
 
 from jdk4py import JAVA_HOME
@@ -54,7 +54,7 @@ _INCLUDED_LOCALES: Final = frozenset(
 def build_java_runtime() -> None:
     rmtree(JAVA_HOME, ignore_errors=True)
 
-    check_call(  # noqa: S603
+    run(  # noqa: S603
         [  # noqa: S607
             "jlink",
             "--no-man-pages",
@@ -65,6 +65,7 @@ def build_java_runtime() -> None:
             "--output",
             JAVA_HOME,
         ],
+        check=True,
     )
 
 
