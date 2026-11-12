@@ -23,12 +23,12 @@ PosixPath('/Users/johndoe/dev/jdk4py/jdk4py/java-runtime/bin/java')
 >>> from subprocess import run
 >>> some_java_options = ["-Xmx16G", "-Xms2G"]
 >>> run(
-...     [JAVA, "-jar", "HelloWorld.jar", *some_java_options],
+...     [JAVA, *some_java_options, "-jar", "HelloWorld.jar"],
 ...     capture_output=True,
 ...     check=True,
 ...     text=True,
 ... ).stdout.strip()
-"Hello, World!"
+'Hello, World'
 ```
 
 ## Versioning
