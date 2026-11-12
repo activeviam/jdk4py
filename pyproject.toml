@@ -38,6 +38,7 @@ Repository = "https://github.com/activeviam/jdk4py"
 
 [tool.pytest]
 filterwarnings = ["error"]
+strict = true
 
 [tool.ruff]
 fix = true
