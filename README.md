@@ -10,13 +10,6 @@ A JDK shipped in a Python package.
 pip install jdk4py
 ```
 
-or as a Conda package:
-
-```bash
-conda config --add channels https://conda.atoti.io
-conda install jdk4py
-```
-
 ## Usage
 
 ```python

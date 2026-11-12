@@ -16,5 +16,3 @@ jobs:
       - run: uv run ruff format --check
       - run: uv run ruff check
       - run: uv run ty check
-      # This is also tested on all supported OS/arch combinations by `conda build`.
-      - run: uv run pytest

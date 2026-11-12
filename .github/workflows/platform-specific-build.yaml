@@ -7,15 +7,6 @@ on:
         type: string
 
 jobs:
-  build-conda-packages:
-    name: Build Conda packages on ${{ inputs.runner }}
-    needs: build-java-runtime
-    runs-on: ${{ inputs.runner }}
-    steps:
-      - uses: actions/checkout@v5
-      - uses: ./.github/actions/install-java-runtime
-      - uses: ./.github/actions/build-conda-packages
-
   build-java-runtime:
     name: Build Java runtime on ${{ inputs.runner }}
     runs-on: ${{ inputs.runner }}
@@ -47,4 +38,5 @@ jobs:
       - uses: astral-sh/setup-uv@v6
         with:
           version-file: pyproject.toml
+      - run: uv run pytest
       - uses: ./.github/actions/build-python-wheel
