@@ -1,8 +1,10 @@
 # jdk4py
 
-A JDK shipped in a Python package.
+[![PyPI](https://img.shields.io/pypi/v/jdk4py?style=flat-square)](https://pypi.org/project/jdk4py)
+[![Python](https://img.shields.io/python/required-version-toml?tomlFilePath=https%3A%2F%2Fraw.githubusercontent.com%2Factiveviam%2Fjdk4py%2Fmain%2Fpyproject.toml&style=flat-square)](https://github.com/activeviam/jdk4py/blob/main/pyproject.toml)
+[![License](https://img.shields.io/badge/license-GPL--2.0%20with%20Classpath%20exception-blue?style=flat-square)](https://github.com/activeviam/jdk4py/blob/main/LICENSE)
 
-[![PyPI version](https://badge.fury.io/py/jdk4py.svg)](https://badge.fury.io/py/jdk4py)
+A JDK shipped in a Python package.
 
 ## Install
 
