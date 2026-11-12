@@ -4,8 +4,8 @@ from pathlib import Path
 from subprocess import run
 from typing import get_args
 
+from build_java_runtime import _INCLUDED_LOCALES, _RegionSpecificLocale
 from jdk4py import JAVA, JAVA_VERSION
-from jdk4py._included_locales import INCLUDED_LOCALES, _RegionSpecificLocale
 
 _TEST_RESOURCES_DIRECTORY = Path(__file__).parent / "resources"
 
@@ -45,7 +45,7 @@ def test_included_locales() -> None:
         locale.replace("_", "-")
         for locale in completed_process.stdout.strip().splitlines()
     }
-    assert locales >= INCLUDED_LOCALES
+    assert locales >= _INCLUDED_LOCALES
 
 
 @dataclass(frozen=True)
@@ -91,7 +91,7 @@ def test_locale_data_inclusion() -> None:
     so ``DecimalFormatSymbols.getInstance(Locale.forLanguageTag("fr-FR"))``
     silently returns ROOT symbols.
 
-    ``INCLUDED_LOCALES`` must therefore list each region-specific locale alongside its language-only parent.
+    ``_INCLUDED_LOCALES`` must therefore list each region-specific locale alongside its language-only parent.
     """
     expected = {
         locale: _get_number_formatting_separators(locale)
