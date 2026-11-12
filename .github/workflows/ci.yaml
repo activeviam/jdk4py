@@ -11,12 +11,17 @@ defaults:
   run:
     shell: bash
 
+permissions:
+  contents: read
+
 jobs:
   lint:
     if: github.event_name == 'pull_request'
     runs-on: ubuntu-24.04
     steps:
       - uses: actions/checkout@v7.0.1
+        with:
+          persist-credentials: false
       - uses: astral-sh/setup-uv@v10.3.3
         with:
           version-file: pyproject.toml
@@ -44,6 +49,8 @@ jobs:
     runs-on: ${{ matrix.runner }}
     steps:
       - uses: actions/checkout@v7.0.1
+        with:
+          persist-credentials: false
       - uses: astral-sh/setup-uv@v10.3.3
         with:
           version-file: pyproject.toml
@@ -85,10 +92,13 @@ jobs:
     environment: pypi
     runs-on: ubuntu-24.04
     permissions:
+      contents: read
       # Trusted publishing.
       id-token: write
     steps:
       - uses: actions/checkout@v7.0.1
+        with:
+          persist-credentials: false
 
       - uses: actions/download-artifact@v8.0.2
         with:
