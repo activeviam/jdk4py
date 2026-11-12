@@ -97,7 +97,7 @@ jobs:
     runs-on: ubuntu-24.04
     permissions:
       contents: read
-      # Trusted publishing.
+      # Attestations and trusted publishing.
       id-token: write
     steps:
       - uses: actions/checkout@v7.0.1
@@ -114,4 +114,5 @@ jobs:
         with:
           version-file: pyproject.toml
 
+      - uses: astral-sh/attest-action@v0.0.7
       - run: uv publish
