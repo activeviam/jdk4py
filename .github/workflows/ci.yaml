@@ -1,0 +1,103 @@
+# The file name and the `pypi` environment are registered as this project's trusted publisher on PyPI.
+# Pull requests lint, build, and test; pushes to `main` only build and publish.
+name: Build, test, and publish
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+
+defaults:
+  run:
+    shell: bash
+
+jobs:
+  lint:
+    if: github.event_name == 'pull_request'
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v5
+      - uses: astral-sh/setup-uv@v6
+        with:
+          version-file: pyproject.toml
+      - run: uv run ruff format --check
+      - run: uv run ruff check
+      - run: uv run ty check
+
+  build:
+    name: Build on ${{ matrix.runner }}
+    strategy:
+      fail-fast: false
+      matrix:
+        # Platform tags taken from https://pypi.org/project/numpy/2.1.0/#files.
+        include:
+          - runner: macos-15-intel
+            platform-tag: macosx_10_9_x86_64
+          - runner: macos-26
+            platform-tag: macosx_11_0_arm64
+          - runner: ubuntu-24.04
+            platform-tag: manylinux_2_17_x86_64
+          - runner: ubuntu-24.04-arm64 # GitHub-hosted larger runner in the ActiveViam organization.
+            platform-tag: manylinux_2_17_aarch64
+          - runner: windows-2025
+            platform-tag: win_amd64
+    runs-on: ${{ matrix.runner }}
+    steps:
+      - uses: actions/checkout@v5
+      - uses: astral-sh/setup-uv@v6
+        with:
+          version-file: pyproject.toml
+
+      - id: get-java-version
+        run: |
+          uv run python - >> "$GITHUB_OUTPUT" <<'EOF'
+          from jdk4py import JAVA_VERSION
+
+          version = ".".join(str(number) for number in JAVA_VERSION)
+          print(f"version={version}")
+          EOF
+      - uses: actions/setup-java@v5
+        with:
+          distribution: temurin
+          java-version: ${{ steps.get-java-version.outputs.version }}
+      - run: uv run python build_java_runtime.py
+
+      - if: github.event_name == 'pull_request'
+        run: uv run pytest
+
+      # Replace these two steps with `uv build --wheel` and a platform tag option once https://github.com/astral-sh/uv/issues/14827 is closed.
+      - run: uv build --wheel
+      - run: uv run python -m wheel tags --platform-tag "$PLATFORM_TAG" --remove dist/*-py3-none-any.whl
+        env:
+          PLATFORM_TAG: ${{ matrix.platform-tag }}
+      # uv refuses to install a wheel tagged for another platform, so this fails if the matrix pairs a runner with the wrong tag.
+      - run: uv run --isolated --no-project --with dist/jdk4py-*.whl python -c 'import jdk4py'
+
+      - uses: actions/upload-artifact@v4
+        with:
+          if-no-files-found: error
+          name: jdk4py-${{ runner.os }}-${{ runner.arch }}
+          path: dist/jdk4py-*.whl
+
+  publish:
+    if: github.event_name == 'push'
+    needs: build
+    environment: pypi
+    runs-on: ubuntu-24.04
+    permissions:
+      # Trusted publishing.
+      id-token: write
+    steps:
+      - uses: actions/checkout@v5
+
+      - uses: actions/download-artifact@v5
+        with:
+          merge-multiple: true
+          path: dist/
+          pattern: jdk4py-*
+
+      - uses: astral-sh/setup-uv@v6
+        with:
+          version-file: pyproject.toml
+
+      - run: uv publish
