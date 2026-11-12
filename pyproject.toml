@@ -13,13 +13,15 @@ dev = [
 ]
 
 [project]
-authors = [{ email = "dev@atoti.io", name = "ActiveViam" }]
+authors = [{ email = "atoti-dev@activeviam.com", name = "ActiveViam" }]
 classifiers = [
     "Development Status :: 5 - Production/Stable",
     "Operating System :: MacOS",
     "Operating System :: Microsoft :: Windows",
     "Operating System :: POSIX :: Linux",
+    "Programming Language :: Java",
     "Programming Language :: Python :: 3",
+    "Typing :: Typed",
 ]
 dependencies = []
 description = "A JDK shipped in a Python package"
