@@ -17,11 +17,11 @@ def test_java_version() -> None:
         check=True,
         text=True,
     )
-    match = re.match(r'^openjdk version "(?P<version>[^"]+)"', completed_process.stderr)
-    assert match, f"Unexpected output:\n{completed_process.stdout}"
+    output = completed_process.stderr
+    match = re.match(r'^openjdk version "(?P<version>[^"]+)"', output)
+    assert match, f"Unexpected output:\n{output}"
     version = match.group("version")
-    assert isinstance(version, str)
-    assert tuple([int(number) for number in version.split(".")][:3]) == JAVA_VERSION
+    assert tuple(int(number) for number in version.split(".")[:3]) == JAVA_VERSION
 
 
 def test_jar_execution() -> None:
