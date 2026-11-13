@@ -1,6 +1,3 @@
-# The file name and the `pypi` environment are registered as this project's trusted publisher on PyPI.
-# Pull requests run prek, build, and test; pushes to `main` only build and publish.
-name: Build, test, and publish
 on:
   pull_request:
   push:
@@ -93,6 +90,7 @@ jobs:
   publish:
     if: github.event_name == 'push'
     needs: build
+    # The file name and this environment are registered as this project's trusted publisher on PyPI.
     environment: pypi
     runs-on: ubuntu-24.04
     permissions:
