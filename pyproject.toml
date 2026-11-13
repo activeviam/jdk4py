@@ -4,8 +4,8 @@ requires = ["uv-build"]
 
 [dependency-groups]
 dev = [
-    # Keep pinned to ensure same version is used by `conda build` (see `conda.recipe/meta.yaml`).
-    "pytest ==9.0.3",
+    "prek",
+    "pytest",
     "ruff",
     "ty",
     # Remove once https://github.com/astral-sh/uv/issues/14827 is closed.
@@ -13,32 +13,43 @@ dev = [
 ]
 
 [project]
-authors = [{ email = "dev@atoti.io", name = "ActiveViam" }]
+authors = [{ email = "atoti-dev@activeviam.com", name = "ActiveViam" }]
 classifiers = [
     "Development Status :: 5 - Production/Stable",
-    "License :: OSI Approved :: GNU General Public License v2 (GPLv2)",
     "Operating System :: MacOS",
     "Operating System :: Microsoft :: Windows",
     "Operating System :: POSIX :: Linux",
+    "Programming Language :: Java",
     "Programming Language :: Python :: 3",
+    "Typing :: Typed",
 ]
 dependencies = []
 description = "A JDK shipped in a Python package"
 keywords = ["jdk", "java", "jvm", "jre"]
+license = "GPL-2.0-only WITH Classpath-exception-2.0"
+license-files = ["LICENSE"]
 name = "jdk4py"
 readme = "README.md"
 requires-python = ">=3.10"
-version = "25.0.2.1"
+version = "25.0.5.0"
+
+[project.scripts]
+jdk4py = "jdk4py.__main__:main"
 
 [project.urls]
 Repository = "https://github.com/activeviam/jdk4py"
 
 [tool.pytest]
 filterwarnings = ["error"]
+strict = true
+
+[tool.ruff]
+fix = true
 
 [tool.ruff.lint]
 ignore = [
     "COM812",
+    "CPY001",
     "D100",
     "D101",
     "D102",
@@ -59,6 +70,6 @@ select = ["ALL"]
 error-on-warning = true
 
 [tool.uv]
-# Keep pinned to ensure same version is used on CI and by `conda build` (see `conda.recipe/meta.yaml`).
-required-version = "==0.11.6"
+# Keep pinned to ensure same version is used on CI.
+required-version = "==0.13.7"
 trusted-publishing = "always"

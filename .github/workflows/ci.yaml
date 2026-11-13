@@ -1,0 +1,116 @@
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+
+defaults:
+  run:
+    shell: bash
+
+permissions:
+  contents: read
+
+jobs:
+  prek:
+    if: github.event_name == 'pull_request'
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v7.0.1
+        with:
+          persist-credentials: false
+      - uses: astral-sh/setup-uv@v10.3.3
+        with:
+          version-file: pyproject.toml
+      - run: uv run prek run --all-files --show-diff-on-failure
+
+  build:
+    name: Build on ${{ matrix.runner }}
+    strategy:
+      fail-fast: false
+      matrix:
+        # Each platform tag is the oldest platform the Temurin binaries run on.
+        # - On Linux, they need at most glibc 2.17.
+        # - On macOS, they need at most macOS 11.0.
+        #
+        # Checked on Temurin 25.0.5.
+        include:
+          - runner: macos-15-intel
+            platform-tag: macosx_11_0_x86_64
+          - runner: macos-26
+            platform-tag: macosx_11_0_arm64
+          - runner: ubuntu-24.04
+            platform-tag: manylinux_2_17_x86_64
+          - runner: ubuntu-24.04-arm
+            platform-tag: manylinux_2_17_aarch64
+          - runner: windows-2025
+            platform-tag: win_amd64
+    runs-on: ${{ matrix.runner }}
+    steps:
+      - uses: actions/checkout@v7.0.1
+        with:
+          persist-credentials: false
+      - uses: astral-sh/setup-uv@v10.3.3
+        with:
+          version-file: pyproject.toml
+
+      - id: get-java-version
+        run: |
+          uv run python - >> "$GITHUB_OUTPUT" <<'EOF'
+          from jdk4py import JAVA_VERSION
+
+          version = ".".join(str(number) for number in JAVA_VERSION)
+          print(f"version={version}")
+          EOF
+      - uses: actions/setup-java@v6.2.0
+        with:
+          distribution: temurin
+          java-version: ${{ steps.get-java-version.outputs.version }}
+      - run: uv run python build_java_runtime.py
+
+      - if: github.event_name == 'pull_request'
+        run: uv run pytest
+
+      # Replace these two steps with `uv build --wheel` and a platform tag option once https://github.com/astral-sh/uv/issues/14827 is closed.
+      - run: uv build --wheel
+      - run: uv run python -m wheel tags --platform-tag "$PLATFORM_TAG" --remove dist/*-py3-none-any.whl
+        env:
+          PLATFORM_TAG: ${{ matrix.platform-tag }}
+
+      # Run the README command with the built wheel.
+      # uv refuses to install a wheel tagged for another platform, so this also fails if the matrix pairs a runner with the wrong tag.
+      - run: uvx --from dist/jdk4py-*.whl jdk4py java -version
+
+      - uses: actions/upload-artifact@v7.0.2
+        with:
+          if-no-files-found: error
+          name: jdk4py-${{ runner.os }}-${{ runner.arch }}
+          path: dist/jdk4py-*.whl
+
+  publish:
+    if: github.event_name == 'push'
+    needs: build
+    # The file name and this environment are registered as this project's trusted publisher on PyPI.
+    environment: pypi
+    runs-on: ubuntu-24.04
+    permissions:
+      contents: read
+      # Attestations and trusted publishing.
+      id-token: write
+    steps:
+      - uses: actions/checkout@v7.0.1
+        with:
+          persist-credentials: false
+
+      - uses: actions/download-artifact@v8.0.2
+        with:
+          merge-multiple: true
+          path: dist/
+          pattern: jdk4py-*
+
+      - uses: astral-sh/setup-uv@v10.3.3
+        with:
+          version-file: pyproject.toml
+
+      - uses: astral-sh/attest-action@v0.0.7
+      - run: uv publish
