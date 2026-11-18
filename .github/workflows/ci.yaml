@@ -1,0 +1,150 @@
+# The 21 line of jdk4py, for Atoti 6.1. `main` has moved to JDK 25.
+#
+# Laid out like `main`'s workflow, for two reasons:
+# - The repository requires every action to be locked in `actions.lock`, which cannot cover local actions.
+# - The file name and the `pypi` environment are registered as this project's trusted publisher on PyPI.
+#
+# Unlike `main`, it also builds the Conda packages that Atoti 6.1 installs.
+# They are kept as artifacts of the run and uploaded to the Conda channel by hand: the credentials to upload them were removed with Conda support on `main`.
+on:
+  pull_request:
+  push:
+    branches:
+      - "21"
+
+defaults:
+  run:
+    shell: bash
+
+permissions:
+  contents: read
+
+jobs:
+  lint:
+    if: github.event_name == 'pull_request'
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v7.0.1
+        with:
+          persist-credentials: false
+      - uses: astral-sh/setup-uv@v10.3.3
+        with:
+          version-file: pyproject.toml
+      - run: uv run ruff format --check
+      - run: uv run ruff check
+      - run: uv run ty check
+
+  build:
+    name: Build on ${{ matrix.runner }}
+    strategy:
+      fail-fast: false
+      matrix:
+        # Tag values taken from https://pypi.org/project/numpy/2.1.0/#files, as in the previous releases of the 21 line.
+        include:
+          - runner: macos-15-intel
+            platform-tag: macosx_10_9_x86_64
+          - runner: macos-26
+            platform-tag: macosx_11_0_arm64
+          - runner: ubuntu-24.04
+            platform-tag: manylinux_2_17_x86_64
+          - runner: ubuntu-24.04-arm
+            platform-tag: manylinux_2_17_aarch64
+          - runner: windows-2025
+            platform-tag: win_amd64
+    runs-on: ${{ matrix.runner }}
+    steps:
+      - uses: actions/checkout@v7.0.1
+        with:
+          persist-credentials: false
+      - uses: astral-sh/setup-uv@v10.3.3
+        with:
+          version-file: pyproject.toml
+
+      - id: get-java-version
+        run: |
+          uv run python - >> "$GITHUB_OUTPUT" <<'EOF'
+          from jdk4py import JAVA_VERSION
+
+          # setup-java does not match a 4-number version such as 21.0.13.1 against Temurin's builds,
+          # but resolves 21.0.13 to the newest 21.0.13.x build, 4-number ones included.
+          # `test_java_version` checks that this build is the one that JAVA_VERSION names.
+          version = ".".join(str(number) for number in JAVA_VERSION[:3])
+          print(f"version={version}")
+          EOF
+      - uses: actions/setup-java@v6.2.0
+        with:
+          distribution: temurin
+          java-version: ${{ steps.get-java-version.outputs.version }}
+      - run: uv run python build_java_runtime.py
+
+      - if: github.event_name == 'pull_request'
+        run: uv run pytest
+
+      # Replace these two steps with `uv build --wheel` and a platform tag option once https://github.com/astral-sh/uv/issues/14827 is closed.
+      - run: uv build --wheel
+      - run: uv run python -m wheel tags --platform-tag "$PLATFORM_TAG" --remove dist/*-py3-none-any.whl
+        env:
+          PLATFORM_TAG: ${{ matrix.platform-tag }}
+
+      - uses: actions/upload-artifact@v7.0.2
+        with:
+          if-no-files-found: error
+          name: jdk4py-${{ runner.os }}-${{ runner.arch }}-python-wheel
+          path: dist/jdk4py-*.whl
+
+      - uses: conda-incubator/setup-miniconda@v3.3.0
+        # Adapted from https://github.com/conda-incubator/setup-miniconda/blob/v3.2.0/README.md#example-14-remove-defaults-channel.
+        with:
+          channels: conda-forge
+          conda-build-version: "25.9.0"
+          conda-remove-defaults: "true"
+          miniforge-version: "25.3.1-0"
+      # `conda build` copies the whole source directory: keep only the sources and the Java runtime, as in the separate job of the previous releases.
+      - run: rm -rf .venv dist
+      # `conda build` also runs the tests on each platform.
+      - run: conda build --output-folder conda-dist .
+        # See https://github.com/conda-incubator/setup-miniconda/blame/059455a698430d8b68fa317268fa2e3da3492a98/README.md#L609-L610.
+        shell: bash -el {0}
+      - uses: actions/upload-artifact@v7.0.2
+        with:
+          if-no-files-found: error
+          name: jdk4py-${{ runner.os }}-${{ runner.arch }}-conda-packages
+          path: conda-dist/*/jdk4py-*.conda
+
+  publish:
+    if: github.event_name == 'push'
+    needs: build
+    # The file name and this environment are registered as this project's trusted publisher on PyPI.
+    environment: pypi
+    runs-on: ubuntu-24.04
+    permissions:
+      contents: read
+      # Trusted publishing.
+      id-token: write
+    steps:
+      - uses: actions/checkout@v7.0.1
+        with:
+          persist-credentials: false
+
+      - uses: actions/download-artifact@v8.0.2
+        with:
+          merge-multiple: true
+          path: dist/
+          pattern: jdk4py-*-python-wheel
+
+      - uses: astral-sh/setup-uv@v10.3.3
+        with:
+          version-file: pyproject.toml
+
+      # A push that keeps the version, such as a CI change, has nothing to publish: PyPI rejects a version it already has.
+      - id: check-version
+        run: |
+          version="$(uv version --short)"
+          if curl --fail --silent --output /dev/null "https://pypi.org/pypi/jdk4py/$version/json"; then
+            echo "jdk4py $version is already on PyPI."
+            echo "publish=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "publish=true" >> "$GITHUB_OUTPUT"
+          fi
+      - if: steps.check-version.outputs.publish == 'true'
+        run: uv publish
