@@ -9,7 +9,6 @@ workflows:
         - 'actions/setup-java@v6.2.0'
         - 'actions/upload-artifact@v7.0.2'
         - 'astral-sh/setup-uv@v10.3.3'
-        - 'conda-incubator/setup-miniconda@v3.3.0'
 dependencies:
     'actions/checkout@v7.0.1':
         ref: 'v7.0.1'
@@ -36,8 +35,3 @@ dependencies:
         commit: 'sha1-68559e99cc807c1eb7e9238fd43a15bba460eec2'
         owner_id: 115962839
         repo_id: 846733598
-    'conda-incubator/setup-miniconda@v3.3.0':
-        ref: 'v3.3.0'
-        commit: 'sha1-fc2d68f6413eb2d87b895e92f8584b5b94a10167'
-        owner_id: 68608217
-        repo_id: 228279841

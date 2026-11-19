@@ -1,11 +1,8 @@
-# The 21 line of jdk4py, for Atoti 6.1. `main` has moved to JDK 25.
+# The 21 line of jdk4py. `main` has moved to JDK 25.
 #
 # Laid out like `main`'s workflow, for two reasons:
 # - The repository requires every action to be locked in `actions.lock`, which cannot cover local actions.
 # - The file name and the `pypi` environment are registered as this project's trusted publisher on PyPI.
-#
-# Unlike `main`, it also builds the Conda packages that Atoti 6.1 installs.
-# They are kept as artifacts of the run and uploaded to the Conda channel by hand: the credentials to upload them were removed with Conda support on `main`.
 on:
   pull_request:
   push:
@@ -97,27 +94,8 @@ jobs:
       - uses: actions/upload-artifact@v7.0.2
         with:
           if-no-files-found: error
-          name: jdk4py-${{ runner.os }}-${{ runner.arch }}-python-wheel
+          name: jdk4py-${{ runner.os }}-${{ runner.arch }}
           path: dist/jdk4py-*.whl
-
-      - uses: conda-incubator/setup-miniconda@v3.3.0
-        # Adapted from https://github.com/conda-incubator/setup-miniconda/blob/v3.2.0/README.md#example-14-remove-defaults-channel.
-        with:
-          channels: conda-forge
-          conda-build-version: "25.9.0"
-          conda-remove-defaults: "true"
-          miniforge-version: "25.3.1-0"
-      # `conda build` copies the whole source directory: keep only the sources and the Java runtime, as in the separate job of the previous releases.
-      - run: rm -rf .venv dist
-      # `conda build` also runs the tests on each platform.
-      - run: conda build --output-folder conda-dist .
-        # See https://github.com/conda-incubator/setup-miniconda/blame/059455a698430d8b68fa317268fa2e3da3492a98/README.md#L609-L610.
-        shell: bash -el {0}
-      - uses: actions/upload-artifact@v7.0.2
-        with:
-          if-no-files-found: error
-          name: jdk4py-${{ runner.os }}-${{ runner.arch }}-conda-packages
-          path: conda-dist/*/jdk4py-*.conda
 
   publish:
     if: github.event_name == 'push'
@@ -138,7 +116,7 @@ jobs:
         with:
           merge-multiple: true
           path: dist/
-          pattern: jdk4py-*-python-wheel
+          pattern: jdk4py-*
 
       - uses: astral-sh/setup-uv@v10.3.3
         with:
