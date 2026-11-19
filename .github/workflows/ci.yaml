@@ -52,6 +52,9 @@ jobs:
           - runner: windows-2025
             platform-tag: win_amd64
     runs-on: ${{ matrix.runner }}
+    env:
+      # Temurin's build number for the JDK version in pyproject.toml, such as 9 for jdk-21.0.8+9: bump both together.
+      TEMURIN_BUILD: "9"
     steps:
       - uses: actions/checkout@v7.0.1
         with:
@@ -63,13 +66,18 @@ jobs:
       - id: get-java-version
         run: |
           uv run python - >> "$GITHUB_OUTPUT" <<'EOF'
+          import os
+
           from jdk4py import JAVA_VERSION
 
-          # setup-java does not match a 4-number version such as 21.0.13.1 against Temurin's builds,
-          # but resolves 21.0.13 to the newest 21.0.13.x build, 4-number ones included.
-          # `test_java_version` checks that this build is the one that JAVA_VERSION names.
-          version = ".".join(str(number) for number in JAVA_VERSION[:3])
-          print(f"version={version}")
+          # The exact Temurin build, in OpenJDK notation, which omits a trailing 0: 21.0.8+9, 21.0.13.1+2.
+          # setup-java then installs this build or fails.
+          # It never falls back to another build that matches the same numbers, such as one preinstalled on the runner.
+          numbers = list(JAVA_VERSION)
+          while len(numbers) > 3 and numbers[-1] == 0:
+              numbers.pop()
+          version = ".".join(str(number) for number in numbers)
+          print(f"version={version}+{os.environ['TEMURIN_BUILD']}")
           EOF
       - uses: actions/setup-java@v6.2.0
         with:
