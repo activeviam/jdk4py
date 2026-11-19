@@ -46,6 +46,11 @@ jobs:
           - runner: windows-2025
             platform-tag: win_amd64
     runs-on: ${{ matrix.runner }}
+    env:
+      # The exact Temurin build to bundle, in OpenJDK notation, such as 25.0.5+8 or 25.0.5.1+2.
+      # Its first 3 numbers are the ones of the version in pyproject.toml, which `test_java_version` checks.
+      # setup-java installs this build or fails: it never falls back to another build with the same numbers, such as one preinstalled on the runner.
+      TEMURIN_VERSION: 25.0.5+8
     steps:
       - uses: actions/checkout@v7.0.1
         with:
@@ -54,18 +59,10 @@ jobs:
         with:
           version-file: pyproject.toml
 
-      - id: get-java-version
-        run: |
-          uv run python - >> "$GITHUB_OUTPUT" <<'EOF'
-          from jdk4py import JAVA_VERSION
-
-          version = ".".join(str(number) for number in JAVA_VERSION)
-          print(f"version={version}")
-          EOF
       - uses: actions/setup-java@v6.2.0
         with:
           distribution: temurin
-          java-version: ${{ steps.get-java-version.outputs.version }}
+          java-version: ${{ env.TEMURIN_VERSION }}
       - run: uv run python build_java_runtime.py
 
       - if: github.event_name == 'pull_request'
