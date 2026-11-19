@@ -50,8 +50,10 @@ jobs:
             platform-tag: win_amd64
     runs-on: ${{ matrix.runner }}
     env:
-      # Temurin's build number for the JDK version in pyproject.toml, such as 9 for jdk-21.0.8+9: bump both together.
-      TEMURIN_BUILD: "9"
+      # The exact Temurin build to bundle, in OpenJDK notation, such as 21.0.8+9 or 21.0.13.1+2.
+      # Its first 3 numbers are the ones of the version in pyproject.toml, which `test_java_version` checks.
+      # setup-java installs this build or fails: it never falls back to another build with the same numbers, such as one preinstalled on the runner.
+      TEMURIN_VERSION: 21.0.8+9
     steps:
       - uses: actions/checkout@v7.0.1
         with:
@@ -60,26 +62,10 @@ jobs:
         with:
           version-file: pyproject.toml
 
-      - id: get-java-version
-        run: |
-          uv run python - >> "$GITHUB_OUTPUT" <<'EOF'
-          import os
-
-          from jdk4py import JAVA_VERSION
-
-          # The exact Temurin build, in OpenJDK notation, which omits a trailing 0: 21.0.8+9, 21.0.13.1+2.
-          # setup-java then installs this build or fails.
-          # It never falls back to another build that matches the same numbers, such as one preinstalled on the runner.
-          numbers = list(JAVA_VERSION)
-          while len(numbers) > 3 and numbers[-1] == 0:
-              numbers.pop()
-          version = ".".join(str(number) for number in numbers)
-          print(f"version={version}+{os.environ['TEMURIN_BUILD']}")
-          EOF
       - uses: actions/setup-java@v6.2.0
         with:
           distribution: temurin
-          java-version: ${{ steps.get-java-version.outputs.version }}
+          java-version: ${{ env.TEMURIN_VERSION }}
       - run: uv run python build_java_runtime.py
 
       - if: github.event_name == 'pull_request'
