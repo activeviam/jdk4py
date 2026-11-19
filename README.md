@@ -32,13 +32,15 @@ uvx jdk4py java -version
 ### Python API
 
 ```python
->>> from jdk4py import JAVA, JAVA_HOME, JAVA_VERSION
+>>> from jdk4py import JAVA, JAVA_FULL_VERSION, JAVA_HOME, JAVA_VERSION
 >>> JAVA_HOME
 PosixPath('/Users/johndoe/dev/jdk4py/jdk4py/java-runtime')
 >>> JAVA
 PosixPath('/Users/johndoe/dev/jdk4py/jdk4py/java-runtime/bin/java')
 >>> JAVA_VERSION
 (25, 0, 5)
+>>> JAVA_FULL_VERSION
+'25.0.5+8'
 >>> from subprocess import run
 >>> some_java_options = ["-Xmx16G", "-Xms2G"]
 >>> run(
@@ -54,5 +56,14 @@ PosixPath('/Users/johndoe/dev/jdk4py/jdk4py/java-runtime/bin/java')
 
 `jdk4py`'s version contains 4 numbers:
 
-- The first 3 numbers correspond to the JDK version.
-- The fourth number is the library API version.
+- The first 3 numbers are the version line of the bundled JDK, such as 25.0.5. `JAVA_VERSION` holds them.
+- The fourth number counts the releases of jdk4py in that line. A new release can bundle another build of the JDK, such as an OpenJDK patch release, or change the library.
+
+The fourth number is not part of the JDK version, even when they look alike.
+`JAVA_FULL_VERSION` holds the exact version of the bundled JDK with its build number, such as 25.0.5.1+2: the version can have more than 3 numbers.
+
+| jdk4py   | JDK       |
+| -------- | --------- |
+| 25.0.5.0 | 25.0.5+8  |
+| 25.0.2.1 | 25.0.2+10 |
+| 25.0.2.0 | 25.0.2+10 |

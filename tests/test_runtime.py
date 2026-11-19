@@ -5,7 +5,7 @@ from subprocess import run
 from typing import Final, get_args
 
 from build_java_runtime import _INCLUDED_LOCALES, _RegionSpecificLocale
-from jdk4py import JAVA, JAVA_VERSION
+from jdk4py import JAVA, JAVA_FULL_VERSION, JAVA_VERSION
 
 _TEST_RESOURCES_DIRECTORY: Final = Path(__file__).parent / "resources"
 
@@ -22,6 +22,13 @@ def test_java_version() -> None:
     assert match, f"Unexpected output:\n{output}"
     version = match.group("version")
     assert tuple(int(number) for number in version.split(".")[:3]) == JAVA_VERSION
+    build_match = re.search(r"\(build (?P<build>[^)]+)\)", output)
+    assert build_match, f"Unexpected output:\n{output}"
+    # The build can end with an optional suffix, such as `-LTS` in 25.0.5.1+2-LTS.
+    assert re.fullmatch(
+        rf"{re.escape(JAVA_FULL_VERSION)}(-.+)?", build_match.group("build")
+    )
+    assert JAVA_FULL_VERSION.startswith(f"{version}+")
 
 
 def _run_jar(name: str, /) -> str:
