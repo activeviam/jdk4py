@@ -34,7 +34,7 @@ wheels = [
 
 [[package]]
 name = "jdk4py"
-version = "21.0.8.2"
+version = "21.0.13.1"
 source = { editable = "." }
 
 [package.dev-dependencies]

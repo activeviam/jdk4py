@@ -19,9 +19,9 @@ PosixPath('/Users/johndoe/dev/jdk4py/jdk4py/java-runtime')
 >>> JAVA
 PosixPath('/Users/johndoe/dev/jdk4py/jdk4py/java-runtime/bin/java')
 >>> JAVA_VERSION
-(21, 0, 8)
+(21, 0, 13)
 >>> JAVA_FULL_VERSION
-'21.0.8+9'
+'21.0.13.1+2'
 >>> from subprocess import run
 >>> some_java_options = ["-Xmx16G", "-Xms2G"]
 >>> run(
@@ -43,8 +43,9 @@ PosixPath('/Users/johndoe/dev/jdk4py/jdk4py/java-runtime/bin/java')
 The fourth number is not part of the JDK version, even when they look alike.
 `JAVA_FULL_VERSION` holds the exact version of the bundled JDK with its build number, such as 21.0.13.1+2: the version can have more than 3 numbers.
 
-| jdk4py   | JDK      |
-| -------- | -------- |
-| 21.0.8.2 | 21.0.8+9 |
-| 21.0.8.1 | 21.0.8+9 |
-| 21.0.8.0 | 21.0.8+9 |
+| jdk4py    | JDK         |
+| --------- | ----------- |
+| 21.0.13.1 | 21.0.13.1+2 |
+| 21.0.8.2  | 21.0.8+9    |
+| 21.0.8.1  | 21.0.8+9    |
+| 21.0.8.0  | 21.0.8+9    |
