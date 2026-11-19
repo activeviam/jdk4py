@@ -40,7 +40,7 @@ PosixPath('/Users/johndoe/dev/jdk4py/jdk4py/java-runtime/bin/java')
 >>> JAVA_VERSION
 (25, 0, 5)
 >>> JAVA_FULL_VERSION
-'25.0.5+8'
+'25.0.5.1+2'
 >>> from subprocess import run
 >>> some_java_options = ["-Xmx16G", "-Xms2G"]
 >>> run(
@@ -62,8 +62,9 @@ PosixPath('/Users/johndoe/dev/jdk4py/jdk4py/java-runtime/bin/java')
 The fourth number is not part of the JDK version, even when they look alike.
 `JAVA_FULL_VERSION` holds the exact version of the bundled JDK with its build number, such as 25.0.5.1+2: the version can have more than 3 numbers.
 
-| jdk4py   | JDK       |
-| -------- | --------- |
-| 25.0.5.0 | 25.0.5+8  |
-| 25.0.2.1 | 25.0.2+10 |
-| 25.0.2.0 | 25.0.2+10 |
+| jdk4py   | JDK        |
+| -------- | ---------- |
+| 25.0.5.1 | 25.0.5.1+2 |
+| 25.0.5.0 | 25.0.5+8   |
+| 25.0.2.1 | 25.0.2+10  |
+| 25.0.2.0 | 25.0.2+10  |
