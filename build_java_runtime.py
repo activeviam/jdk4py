@@ -1,10 +1,9 @@
 from collections.abc import Collection
-from pathlib import Path
-from shutil import rmtree, which
+from shutil import rmtree
 from subprocess import run
 from typing import Final, Literal, TypeAlias, get_args
 
-from jdk4py import JAVA_HOME, _get_release_property
+from jdk4py import JAVA_HOME
 
 _ADDED_MODULES: Final = frozenset(
     {
@@ -53,27 +52,16 @@ _INCLUDED_LOCALES: Final = frozenset(
 
 
 def build_java_runtime() -> None:
-    jlink = which("jlink")
-    if jlink is None:
-        message = "jlink not found."
-        raise RuntimeError(message)
-    # The JDK that jlink comes from, whose `release` file has the version with its build number, such as 25.0.5.1+2-LTS.
-    # jlink only keeps the version without it, so it is added back for `JAVA_FULL_VERSION`.
-    source_java_home = Path(jlink).resolve().parent.parent
-    runtime_version = _get_release_property(source_java_home, "JAVA_RUNTIME_VERSION")
-
     rmtree(JAVA_HOME, ignore_errors=True)
 
     run(  # noqa: S603
-        [
-            jlink,
+        [  # noqa: S607
+            "jlink",
             "--no-man-pages",
             "--strip-debug",
             "--add-modules",
             ",".join(_ADDED_MODULES),
             f"--include-locales={','.join(_INCLUDED_LOCALES)}",
-            "--release-info",
-            f'add:JAVA_RUNTIME_VERSION="{runtime_version}"',
             "--output",
             JAVA_HOME,
         ],

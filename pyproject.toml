@@ -71,5 +71,5 @@ error-on-warning = true
 
 [tool.uv]
 # Keep pinned to ensure same version is used on CI.
-required-version = "==0.13.7"
+required-version = "==0.13.8"
 trusted-publishing = "always"
