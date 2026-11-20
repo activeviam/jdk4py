@@ -2,7 +2,7 @@ on:
   pull_request:
   push:
     branches:
-      - main
+      - "21"
 
 defaults:
   run:
@@ -58,7 +58,7 @@ jobs:
         with:
           distribution: temurin
           # The exact build, so that setup-java never falls back to the JDK preinstalled on the runner.
-          java-version: 25.0.5.1+2
+          java-version: 21.0.13.1+2
       - run: uv run python build_java_runtime.py
 
       - if: github.event_name == 'pull_request'
