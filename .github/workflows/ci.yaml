@@ -57,6 +57,7 @@ jobs:
       - uses: actions/setup-java@v6.2.0
         with:
           distribution: temurin
+          # The exact build, so that setup-java never falls back to the JDK preinstalled on the runner.
           java-version: 25.0.5.1+2
       - run: uv run python build_java_runtime.py
 
