@@ -54,18 +54,11 @@ jobs:
         with:
           version-file: pyproject.toml
 
-      - id: get-java-version
-        run: |
-          uv run python - >> "$GITHUB_OUTPUT" <<'EOF'
-          from jdk4py import JAVA_VERSION
-
-          version = ".".join(str(number) for number in JAVA_VERSION)
-          print(f"version={version}")
-          EOF
       - uses: actions/setup-java@v6.2.0
         with:
           distribution: temurin
-          java-version: ${{ steps.get-java-version.outputs.version }}
+          # The exact build, so that setup-java never falls back to the JDK preinstalled on the runner.
+          java-version: 25.0.5.1+2
       - run: uv run python build_java_runtime.py
 
       - if: github.event_name == 'pull_request'

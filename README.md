@@ -54,5 +54,6 @@ PosixPath('/Users/johndoe/dev/jdk4py/jdk4py/java-runtime/bin/java')
 
 `jdk4py`'s version contains 4 numbers:
 
-- The first 3 numbers correspond to the JDK version.
-- The fourth number is the library API version.
+- The first 3 numbers are the first 3 numbers of the bundled JDK version.
+  `JAVA_VERSION` holds them.
+- The fourth number starts at 0 and goes up by 1 with each release that keeps the first 3, for instance to bundle a JDK patch or to change the library.

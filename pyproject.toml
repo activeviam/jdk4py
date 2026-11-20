@@ -31,7 +31,7 @@ license-files = ["LICENSE"]
 name = "jdk4py"
 readme = "README.md"
 requires-python = ">=3.10"
-version = "25.0.5.0"
+version = "25.0.5.1"
 
 [project.scripts]
 jdk4py = "jdk4py.__main__:main"
@@ -71,5 +71,5 @@ error-on-warning = true
 
 [tool.uv]
 # Keep pinned to ensure same version is used on CI.
-required-version = "==0.13.7"
+required-version = "==0.13.8"
 trusted-publishing = "always"
