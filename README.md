@@ -38,7 +38,7 @@ PosixPath('/Users/johndoe/dev/jdk4py/jdk4py/java-runtime')
 >>> JAVA
 PosixPath('/Users/johndoe/dev/jdk4py/jdk4py/java-runtime/bin/java')
 >>> JAVA_VERSION
-(25, 0, 5)
+(21, 0, 13)
 >>> from subprocess import run
 >>> some_java_options = ["-Xmx16G", "-Xms2G"]
 >>> run(
